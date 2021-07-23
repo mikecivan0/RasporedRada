@@ -70,9 +70,12 @@ public class Alati {
 			System.out.println(poruka);
 
 			unos = scanner.nextLine();
-			if (unos.length() > minLength || unos.length() > maxLength) {
-				System.out.println("Unos ne smije sadržavati manje od " + minLength + " znakova, niti više od "
-						+ maxLength + " znakova");
+			if(unos.trim().equals("")) {
+				System.out.println(porukaGreske);
+			}
+			if (unos.length() < minLength || unos.length() > maxLength) {
+				System.out.println("Najmanji dopušteni broj znakova je " + minLength + ", a najveći "
+						+ maxLength);
 				continue;
 			}
 			break;

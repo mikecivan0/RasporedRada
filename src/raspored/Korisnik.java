@@ -1,7 +1,5 @@
 package raspored;
 
-import java.util.Date;
-
 public class Korisnik extends Osoba{
 
 	private Osoba osoba;
@@ -10,8 +8,20 @@ public class Korisnik extends Osoba{
 	private String osobniBroj;
 	private Integer razina;
 	private boolean aktivan;
-	private Date pocetakUgovora;
-	private Date krajUgovora;
+	
+	public Korisnik() {
+		
+	}
+	
+	public Korisnik(Osoba osoba,
+			String korisnickoIme, String lozinka, String osobniBroj, Integer razina, boolean aktivan) {
+		this.osoba = osoba;
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.osobniBroj = osobniBroj;
+		this.razina = razina;
+		this.aktivan = aktivan;
+	}
 	
 	public Osoba getOsoba() {
 		return osoba;
@@ -48,18 +58,6 @@ public class Korisnik extends Osoba{
 	}
 	public void setAktivan(boolean aktivan) {
 		this.aktivan = aktivan;
-	}
-	public Date getPocetakUgovora() {
-		return pocetakUgovora;
-	}
-	public void setPocetakUgovora(Date pocetakUgovora) {
-		this.pocetakUgovora = pocetakUgovora;
-	}
-	public Date getKrajUgovora() {
-		return krajUgovora;
-	}
-	public void setKrajUgovora(Date krajUgovora) {
-		this.krajUgovora = krajUgovora;
 	}
 	
 	@Override
