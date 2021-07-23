@@ -54,6 +54,6 @@ public class Osoba {
 
 	@Override
 	public String toString() {
-		return this.ime + " " + this.prezime;
+		return this.ime + " " + this.prezime + ", " + this.adresa;
 	}
 }

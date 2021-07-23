@@ -15,7 +15,7 @@ public class Alati {
 		SimpleDateFormat formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
 
 		while (true) {
-			System.out.println(poruka);
+			System.out.print(poruka);
 			try {
 				formatDatuma.parse(scanner.nextLine());
 			} catch (Exception e) {
@@ -45,7 +45,7 @@ public class Alati {
 		int broj = 0;
 
 		while (true) {
-			System.out.println(poruka);
+			System.out.print(poruka);
 			try {
 				broj = Integer.parseInt(scanner.nextLine());
 
@@ -67,7 +67,7 @@ public class Alati {
 		String unos = "";
 
 		while (true) {
-			System.out.println(poruka);
+			System.out.print(poruka);
 
 			unos = scanner.nextLine();
 			if(unos.trim().equals("")) {
@@ -88,7 +88,7 @@ public class Alati {
 		String unos;
 		
 		while(true) {
-			System.out.println(poruka);
+			System.out.print(poruka);
 			
 			unos = scanner.nextLine().trim().toLowerCase();
 			if(unos.equals("da")) {
@@ -99,5 +99,21 @@ public class Alati {
 			}
 			System.out.println(porukaGreske);
 		}
+	}
+
+	public static void ispisZaglavlja(String naslov, boolean unesite) {
+		naslov = "-" + naslov + "-";
+		String crtice = "";
+		for(int i=1;i<=naslov.length();i++) {
+			crtice+="-";
+		}
+		System.out.println();
+		System.out.println(crtice);
+		System.out.println(naslov);
+		System.out.println(crtice);
+		if(unesite) {
+			System.out.println("Unesite");
+		}
+		
 	}
 }

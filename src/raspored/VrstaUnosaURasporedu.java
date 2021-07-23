@@ -1,6 +1,6 @@
 package raspored;
 
-public class ElementRasporeda {
+public class VrstaUnosaURasporedu {
 
 	private String naziv;
 	private String oznaka;
