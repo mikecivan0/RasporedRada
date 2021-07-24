@@ -49,7 +49,7 @@ public class Start {
 		case 1 -> login();
 		case 2 -> {
 			otvoriGithub();
-			povratakUGlavniIzbornik();
+			ponovniPokusaj();
 		}
 		}
 	}
@@ -63,11 +63,11 @@ public class Start {
 		}
 	}
 
-	private void povratakUGlavniIzbornik() {
-		if (Alati.daNe("Želite li se vratiti u glavni izbornik? (da/ne): ", "Unesite da ili ne")) {
-			glavniIzbornik();
+	private void ponovniPokusaj() {
+		if (Alati.daNe("Želite li pokušati ponovno? (da/ne): ", "Unesite da ili ne")) {
+			login();
 		} else {
-			System.out.println("Doviđenja.");
+			glavniIzbornik();
 		}
 
 	}
@@ -78,7 +78,7 @@ public class Start {
 		korisnik.setKorisnickoIme(Alati.ucitajString("korisničko ime: ", porukaGreskePraznogUnosa, 1, 15));
 		korisnik.setLozinka(Alati.ucitajString("lozinka: ", porukaGreskePraznogUnosa, 1, 30));
 
-		korisnikProvjeraVjerodajnica(korisnik.getKorisnickoIme(), korisnik.getLozinka());
+		provjeraVjerodajnicaKorisnika(korisnik);
 	}
 
 	private void logout() {
@@ -87,31 +87,25 @@ public class Start {
 
 	}
 
-	private void korisnikProvjeraVjerodajnica(String korisnickoIme, String lozinka) {
-		valjanost = true;
+	private void provjeraVjerodajnicaKorisnika(Korisnik k) {
+		valjanost = false;
 		for (Korisnik korisnik : korisnici) {
-			if (!korisnik.getKorisnickoIme().contains(korisnickoIme)) {
-				valjanost = false;
-			}
-			if (!korisnik.getLozinka().contains(lozinka)) {
-				valjanost = false;
-			}
-
-			if (valjanost) {
+			if (korisnik.getKorisnickoIme().equals(k.getKorisnickoIme()) && korisnik.getLozinka().equals(k.getLozinka())) {
+				valjanost = true;
 				break;
 			}
-
+			
 		}
 
 		if (valjanost) {
-			korisnikGlavniIzbornik();
+			glavniIzbornikAutentificiranogKorisnika();
 		} else {
 			System.out.println("Nevaljana kombinacija korisničkog imena i lozinke");
-			povratakUGlavniIzbornik();
+			ponovniPokusaj();
 		}
 	}
 
-	private void korisnikGlavniIzbornik() {
+	private void glavniIzbornikAutentificiranogKorisnika() {
 		Alati.ispisZaglavlja("IZBORNIK ZA KORISNIKE", true);
 		System.out.println("1 za rad sa osobama");
 		System.out.println("2 za rad sa korisnicima");
@@ -128,9 +122,15 @@ public class Start {
 	private void korisnikIzborGlavneAkcije() {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 8)) {
 		case 1 -> osobeIzbornik();
+		case 2 -> korisniciIzbornik();
 		case 8 -> logout();
 		}
 
+	}
+
+	private Object korisniciIzbornik() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private void osobeIzbornik() {
@@ -157,7 +157,7 @@ public class Start {
 			osobeDetalji();
 			osobeIzbornik();
 		}
-		case 6 -> korisnikGlavniIzbornik();
+		case 6 -> glavniIzbornikAutentificiranogKorisnika();
 		}
 
 	}
@@ -195,7 +195,7 @@ public class Start {
 			Integer offsetCounter = 1;
 			for (int i = 0; i < osobe.size(); i++) {
 				Osoba osoba = osobe.get(i);
-				if (osobeJeLiUvjetZadovoljen(osoba, uvjet)) {
+				if (osobeJeLiToOsobaPoImenuIPrezimenu(osoba, uvjet)) {
 					if (offsetCounter.equals(offset)) {
 						Alati.ispisZaglavlja("Detalji osobe", false);
 						osobe.get(i).ispisiDetalje();		
@@ -251,7 +251,7 @@ public class Start {
 			Integer offsetCounter = 1;
 			for (int i = 0; i < osobe.size(); i++) {
 				Osoba osoba = osobe.get(i);
-				if (osobeJeLiUvjetZadovoljen(osoba, uvjet)) {
+				if (osobeJeLiToOsobaPoImenuIPrezimenu(osoba, uvjet)) {
 					if (offsetCounter.equals(offset)) {
 						if(Alati.daNe("Želite li zaista obrisati odabranu osobu (" + osoba.toString() + "): ", "Molimo unesite da ili ne")) {
 							osobe.remove(i);
@@ -332,7 +332,7 @@ public class Start {
 			Integer offsetCounter = 1;
 			for (int i = 0; i < osobe.size(); i++) {
 				Osoba osoba = osobe.get(i);
-				if (osobeJeLiUvjetZadovoljen(osoba, uvjet)) {
+				if (osobeJeLiToOsobaPoImenuIPrezimenu(osoba, uvjet)) {
 					if (offsetCounter.equals(offset)) {
 						osobeIzmjena(osoba, i);
 					} else {
@@ -356,14 +356,14 @@ public class Start {
 	private List<Osoba> osobePronadjiPoUvjetu(String uvjet) {
 		List<Osoba> listaOsobaZaIzmjenu = new ArrayList<Osoba>();
 		for (Osoba osoba : osobe) {
-			if (osobeJeLiUvjetZadovoljen(osoba, uvjet)) {
+			if (osobeJeLiToOsobaPoImenuIPrezimenu(osoba, uvjet)) {
 				listaOsobaZaIzmjenu.add(osoba);
 			}
 		}
 		return listaOsobaZaIzmjenu;
 	}
 
-	public boolean osobeJeLiUvjetZadovoljen(Osoba osoba, String uvjet) {
+	public boolean osobeJeLiToOsobaPoImenuIPrezimenu(Osoba osoba, String uvjet) {
 		if ((osoba.getIme().toLowerCase() + " " + osoba.getPrezime().toLowerCase()).contains(uvjet.toLowerCase())
 				|| (osoba.getPrezime().toLowerCase() + " " + osoba.getIme().toLowerCase())
 						.contains(uvjet.toLowerCase())) {
