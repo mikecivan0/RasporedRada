@@ -56,4 +56,14 @@ public class Osoba {
 	public String toString() {
 		return this.ime + " " + this.prezime + ", " + this.adresa;
 	}
+
+	public void ispisiDetalje() {
+		System.out.println("Ime: " + this.ime + "\n"
+			+ "Prezime: " + this.prezime + "\n"
+			+ "Adresa: " + this.adresa  + "\n"
+			+ "Telefon: " + this.telefon + "\n"
+			+ "Email: " + this.email
+	);
+		
+	}
 }

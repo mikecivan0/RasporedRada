@@ -139,7 +139,8 @@ public class Start {
 		System.out.println("2 za izmjenu postojeće osobe");
 		System.out.println("3 za brisanje postojeće osobe");
 		System.out.println("4 za pregled svih osoba");
-		System.out.println("5 za povratak u glavni korsinički izbornik");
+		System.out.println("5 za pregled detalja potojeće osobe");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
 		osobeOdabirAkcije();
 	}
 
@@ -147,17 +148,77 @@ public class Start {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 5)) {
 		case 1 -> osobeUnosNove();
 		case 2 -> osobeIzmjena();
-		case 3 -> brisanjeOsobe();
+		case 3 -> osobeBrisanje();
 		case 4 -> {
 			osobeIzlistanje("Osobe koje se nalaze u bazi", osobe);
 			osobeIzbornik();
 		}
-		case 5 -> korisnikGlavniIzbornik();
+		case 5 -> {
+			osobeDetalji();
+			osobeIzbornik();
+		}
+		case 6 -> korisnikGlavniIzbornik();
 		}
 
 	}
 
-	private void brisanjeOsobe() {
+	private void osobeDetalji() {
+		Alati.ispisZaglavlja("Detalji osobe", true);
+		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
+		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
+		osobeUcitajOdabirPretrageZaIspisDetalja();	
+	}
+
+	private void osobeUcitajOdabirPretrageZaIspisDetalja() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+		case 1 -> osobeDetaljiPoIndeksu();
+		case 2 -> osobeDetaljiPoImenu();
+	}
+		
+	}
+
+	private void osobeDetaljiPoImenu() {
+		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
+				30);
+		List<Osoba> nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
+		if (nadjeneOsobe.isEmpty()) {
+			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
+			if (Alati.daNe("Želite li pokušati opet? (da/ne)", "Unesite da ili ne")) {
+				osobeIzmjenaPoImenu();
+			} else {
+				osobeIzbornik();
+			}
+		} else {
+			osobeIzlistanje("Pronađene osobe", nadjeneOsobe);
+			Integer offset = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije,
+					1, nadjeneOsobe.size());
+			Integer offsetCounter = 1;
+			for (int i = 0; i < osobe.size(); i++) {
+				Osoba osoba = osobe.get(i);
+				if (osobeJeLiUvjetZadovoljen(osoba, uvjet)) {
+					if (offsetCounter.equals(offset)) {
+						Alati.ispisZaglavlja("Detalji osobe", false);
+						osobe.get(i).ispisiDetalje();		
+						osobeIzbornik();						
+					} else {
+						offsetCounter++;
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	private void osobeDetaljiPoIndeksu() {
+		osobeIzlistanje("Osobe koje se nalaze u bazi", osobe);
+		int i = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+				osobe.size()) - 1;
+		Alati.ispisZaglavlja("Detalji osobe", false);
+		osobe.get(i).ispisiDetalje();
+		osobeIzbornik();
+	}
+
+	private void osobeBrisanje() {
 		Alati.ispisZaglavlja("Brisanje osobe", true);
 		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
 		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
