@@ -64,4 +64,22 @@ public class Korisnik extends Osoba{
 	public String toString() {
 		return this.korisnickoIme + ", " + this.osobniBroj;
 	}
+	
+	public String getAktivan() {
+		return (this.aktivan) ? "da" : "ne";
+	}
+	
+	public void ispisiDetalje() {
+		System.out.println("Ime i prezime: " + this.getOsoba().getIme() + " " + this.getOsoba().getPrezime() + "\n"
+			+ "Korisničko ime: " + this.korisnickoIme  + "\n"
+			+ "Osobni broj: " + this.osobniBroj  + "\n"
+			+ "Aktivan: " + getAktivan() + "\n"
+			+ "Razina: " + this.razina
+			);
+		
+	}
+	
+	public String korisnikZaPrikaz() {
+		return this.toString() + ", " + this.getOsoba().getIme() + " " + this.getOsoba().getPrezime();
+	}
 }

@@ -63,7 +63,7 @@ public class Osoba {
 			+ "Adresa: " + this.adresa  + "\n"
 			+ "Telefon: " + this.telefon + "\n"
 			+ "Email: " + this.email
-	);
+			);
 		
 	}
 }
