@@ -25,8 +25,8 @@ public class Start {
 		osobe.add(new Osoba("Netko", "Drugi", "091", "email", "adresa"));
 		osobe.add(new Osoba("Netko1", "treći", "091", "email", "adresa"));
 
-		Korisnik k = new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true);
-		korisnici.add(k);
+		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true));
+		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));
 		// kraj probnih podataka
 
 		
@@ -130,33 +130,94 @@ public class Start {
 
 	private void korisniciIzbornik() {
 		Alati.ispisZaglavlja("Rad sa korisnicima", true);
-		System.out.println("1 za unos novog korisnika");
-		System.out.println("2 za izmjenu postojećeg korisnika");
-		System.out.println("3 za brisanje postojećeg korisnika");
-		System.out.println("4 za pregled svih korisnika");
-		System.out.println("5 za pregled detalja postojećeg korisnika");
-		System.out.println("6 za povratak u glavni korisnički izbornik");
+		System.out.println("1 za unos postojeće osobe kao novog korisnika");
+		System.out.println("2 za unos nove osobe kao novog korisnika");
+		System.out.println("3 za izmjenu postojećeg korisnika");
+		System.out.println("4 za brisanje postojećeg korisnika");
+		System.out.println("5 za pregled svih korisnika");
+		System.out.println("6 za pregled detalja postojećeg korisnika");
+		System.out.println("7 za povratak u glavni korisnički izbornik");
 		korisniciOdabirAkcije();
 
 	}
 
 	private void korisniciOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
-			case 1 -> korisniciUnosNovog();
-			case 2 -> korisniciIzmjena();
-			case 3 -> korisniciBrisanje();
-			case 4 -> {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 7)) {
+			case 1 -> korisniciUnosPostojeceOsobeKaoNovogKorisnika();
+			case 2 -> korisniciUnosNoveOsobeKaoNovogKorisnika();
+			case 3 -> korisniciIzmjena();
+			case 4 -> korisniciBrisanje();
+			case 5 -> {
 				korisniciIzlistanje("Korisnici koji se nalaze u bazi", korisnici);
 				korisniciIzbornik();
 			}
-			case 5 -> {
+			case 6 -> {
 				korisniciDetalji();
 				korisniciIzbornik();
 			}
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 7 -> autentificiraniKorisnikGlavniIzbornik();
 		}
 		
 	}
+	
+	private void korisniciUnosNoveOsobeKaoNovogKorisnika() {
+		Korisnik korisnik = new Korisnik();
+		osobeUnosNove();
+		korisnik.setOsoba(osobe.get(osobe.size()-1));
+		korisnik = korisniciPostaviVrijednosti(korisnik);
+		korisnici.add(korisnik);
+		System.out.println();
+		System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
+		korisniciIzbornik();
+	}
+
+	private Korisnik korisniciPostaviVrijednosti(Korisnik korisnik) {		
+		korisnik.setKorisnickoIme(Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50));
+		korisnik.setLozinka(Alati.ucitajString("Unesite lozinku novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50));
+		korisnik.setOsobniBroj(Alati.ucitajString("Unesite osobni broj novoga korisnika: ", porukaGreskePraznogUnosa, 1, 10));
+		korisnik.setAktivan(Alati.daNe("Hoće li korisnik biti aktivan (da/ne): ", porukaGreskeIzboraAkcije));
+		korisnik.setRazina(Alati.ucitajBroj("Unesite razinu korisnika: ", porukaGreskeIzboraAkcije, 1, 2));
+		
+		return korisnik;
+	}
+
+	private void korisniciUnosPostojeceOsobeKaoNovogKorisnika() {
+		osobeIzlistanje("Osobe koje se nalaze u bazi", osobe);
+		Osoba osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", "Unos ne smije biti prazan", 1, osobe.size())-1);
+		if(!korisniciPostojiLiOsobaKaoKorisnik(osoba)) {
+			Korisnik korisnik = new Korisnik();
+			korisnik.setOsoba(osoba);
+			korisnik = korisniciPostaviVrijednosti(korisnik);
+			korisnici.add(korisnik);
+			System.out.println();
+			System.out.println("Osoba je postavljena kao novi korisnik");
+			korisniciIzbornik();
+		}else {
+			if(Alati.daNe("Osoba je već unešena kao korisnik. Želite li odabrati drugu osobu? (da/ne): ", "Molimo unesite da ili ne")) {
+				korisniciUnosPostojeceOsobeKaoNovogKorisnika();
+			}else {
+				korisniciIzbornik();
+			}
+		}
+	}
+
+	private boolean korisniciPostojiLiOsobaKaoKorisnik(Osoba osoba) {
+		boolean mark = false;
+		for(Korisnik korisnik: korisnici) {
+			if(korisnik.getOsoba().equals(osoba)) {
+				mark = true;
+				break;
+			}
+			continue;
+		}
+		return mark;
+		
+	}
+
+	private void korisniciIzmjena() {
+		
+	}
+
 
 	private void korisniciDetalji() {
 		Alati.ispisZaglavlja("Detalji korisnika", true);
@@ -301,7 +362,7 @@ public class Start {
 	}
 
 	private void korisniciBrisanjePoIndeksu() {
-		korisniciIzlistanje("Korisnici koje se nalaze u bazi", korisnici);
+		korisniciIzlistanje("Korisnici koj1 se nalaze u bazi", korisnici);
 		int i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 				korisnici.size()) - 1;
 		if(Alati.daNe("Želite li zaista obrisati korisnika (" + korisnici.get(i).korisnikZaPrikaz() + "): ", "Molimo unesite da ili ne")) {
@@ -310,14 +371,6 @@ public class Start {
 			System.out.println("Korisnik je obrisan.");
 		}		
 		korisniciIzbornik();
-	}
-
-	private void korisniciIzmjena() {
-		
-	}
-
-	private void korisniciUnosNovog() {
-		
 	}
 
 	private void osobeIzbornik() {
@@ -332,8 +385,13 @@ public class Start {
 	}
 
 	private void osobeOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 5)) {
-			case 1 -> osobeUnosNove();
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+			case 1 -> {
+				osobeUnosNove();
+				System.out.println();
+				System.out.println("Osoba je spremljena. Što želite dalje?");
+				osobeIzbornik();
+			}
 			case 2 -> osobeIzmjena();
 			case 3 -> osobeBrisanje();
 			case 4 -> {
@@ -566,16 +624,12 @@ public class Start {
 		Osoba osoba = new Osoba();
 		osoba = osobaUnosPodataka(osoba);
 		osobe.add(osoba);
-		System.out.println();
-		System.out.println("Osoba je spremljena. Što želite dalje?");
-		osobeIzbornik();
-
 	}
 
 	private Osoba osobaUnosPodataka(Osoba osoba) {
 		osoba.setIme(Alati.ucitajString("ime osobe: ", porukaGreskePraznogUnosa, 1, 15));
 		osoba.setPrezime(Alati.ucitajString("prezime osobe: ", porukaGreskePraznogUnosa, 1, 25));
-		osoba.setAdresa(Alati.ucitajString("adresa osobe ", porukaGreskePraznogUnosa, 1, 100));
+		osoba.setAdresa(Alati.ucitajString("adresa osobe: ", porukaGreskePraznogUnosa, 1, 100));
 		if (Alati.daNe("Želite li unijeti telefon osobe? (da/ne): ", "Unesite da ili ne")) {
 			osoba.setTelefon(Alati.ucitajString("telefon osobe: ", porukaGreskePraznogUnosa, 1, 20));
 		} else {
