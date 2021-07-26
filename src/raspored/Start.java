@@ -163,16 +163,39 @@ public class Start {
 	private void korisniciUnosNoveOsobeKaoNovogKorisnika() {
 		Korisnik korisnik = new Korisnik();
 		osobeUnosNove();
-		korisnik.setOsoba(osobe.get(osobe.size()-1));
-		korisnik = korisniciPostaviVrijednosti(korisnik);
-		korisnici.add(korisnik);
-		System.out.println();
-		System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
-		korisniciIzbornik();
+		korisnik.setOsoba(osobe.get(osobe.size()-1));		
+		while(true) {
+			String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+			if(provjeriKorisnickoIme(korisnickoIme)) {
+				korisnik.setKorisnickoIme(korisnickoIme);
+				korisnik = korisniciPostaviOstaleVrijednosti(korisnik);
+				korisnici.add(korisnik);
+				System.out.println();
+				System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");	
+			}else {
+				if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
+					continue;
+				}else {
+					osobe.remove(osobe.size()-1);
+				}
+			}
+			korisniciIzbornik();
+			break;
+		}
+		
 	}
 
-	private Korisnik korisniciPostaviVrijednosti(Korisnik korisnik) {		
-		korisnik.setKorisnickoIme(Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50));
+	private boolean provjeriKorisnickoIme(String ime) {
+		boolean valjanost = true;
+		for(Korisnik k : korisnici) {
+			if(k.getKorisnickoIme().equals(ime)) {
+				valjanost = false;
+			}
+		}
+		return valjanost;
+	}
+
+	private Korisnik korisniciPostaviOstaleVrijednosti(Korisnik korisnik) {		
 		korisnik.setLozinka(Alati.ucitajString("Unesite lozinku novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50));
 		korisnik.setOsobniBroj(Alati.ucitajString("Unesite osobni broj novoga korisnika: ", porukaGreskePraznogUnosa, 1, 10));
 		korisnik.setAktivan(Alati.daNe("Hoće li korisnik biti aktivan (da/ne): ", porukaGreskeIzboraAkcije));
@@ -184,14 +207,25 @@ public class Start {
 	private void korisniciUnosPostojeceOsobeKaoNovogKorisnika() {
 		osobeIzlistanje("Osobe koje se nalaze u bazi", osobe);
 		Osoba osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", "Unos ne smije biti prazan", 1, osobe.size())-1);
-		if(!korisniciPostojiLiOsobaKaoKorisnik(osoba)) {
+		if(!korisniciJeLiOsobaVecKorisnik(osoba)) {
 			Korisnik korisnik = new Korisnik();
 			korisnik.setOsoba(osoba);
-			korisnik = korisniciPostaviVrijednosti(korisnik);
-			korisnici.add(korisnik);
-			System.out.println();
-			System.out.println("Osoba je postavljena kao novi korisnik");
-			korisniciIzbornik();
+			while(true) {
+				String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+				if(provjeriKorisnickoIme(korisnickoIme)) {
+					korisnik.setKorisnickoIme(korisnickoIme);
+					korisnik = korisniciPostaviOstaleVrijednosti(korisnik);
+					korisnici.add(korisnik);
+					System.out.println();
+					System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
+				}else {
+					if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
+						continue;
+					}
+				}
+				korisniciIzbornik();
+				break;
+			}			
 		}else {
 			if(Alati.daNe("Osoba je već unešena kao korisnik. Želite li odabrati drugu osobu? (da/ne): ", "Molimo unesite da ili ne")) {
 				korisniciUnosPostojeceOsobeKaoNovogKorisnika();
@@ -201,7 +235,7 @@ public class Start {
 		}
 	}
 
-	private boolean korisniciPostojiLiOsobaKaoKorisnik(Osoba osoba) {
+	private boolean korisniciJeLiOsobaVecKorisnik(Osoba osoba) {
 		boolean mark = false;
 		for(Korisnik korisnik: korisnici) {
 			if(korisnik.getOsoba().equals(osoba)) {
@@ -215,14 +249,78 @@ public class Start {
 	}
 
 	private void korisniciIzmjena() {
+		ispisIzboraPretrageKorisnika("Izmjena podataka korisnika");
+		korisniciUcitajOdabirPretrage();
+	}
+	
+	private void korisniciUcitajOdabirPretrage() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+			case 1 -> korisniciIzmjenaPoIndeksu();
+			case 2 -> korisniciIzmjenaPoImenu();
+		}
 		
 	}
 
 
+	private void korisniciIzmjenaPoImenu() {
+		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime korisnika kojeg tražite: ", porukaGreskePraznogUnosa, 0,
+				30);
+		List<Korisnik> nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
+		if (nadjeniKorisnici.isEmpty()) {
+			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
+			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", "Unesite da ili ne")) {
+				korisniciIzmjenaPoImenu();
+			} else {
+				korisniciIzbornik();
+			}
+		} else {
+			korisniciIzlistanje("Pronađeni korsnici", nadjeniKorisnici);
+			Integer offset = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije,
+					1, nadjeniKorisnici.size());
+			Integer offsetCounter = 1;
+			for (int i = 0; i < korisnici.size(); i++) {
+				Korisnik korisnik = korisnici.get(i);
+				if (korisniciJeLiToKorisnikPoNazivu(korisnik, uvjet)) {
+					if (offsetCounter.equals(offset)) {
+						korisniciIzmjenaPodataka(korisnik, i);
+					} else {
+						offsetCounter++;
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	private void korisniciIzmjenaPoIndeksu() {
+		korisniciIzlistanje("Korisnici koji se nalaze u bazi", korisnici);
+		int i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
+				korisnici.size()) - 1;
+		Korisnik korisnik = korisnici.get(i);
+		korisniciIzmjenaPodataka(korisnik, i);
+	}
+
+	private void korisniciIzmjenaPodataka(Korisnik korisnik, int i) {
+		while(true) {
+			String korisnickoIme = Alati.ucitajString("Unesite korisničko ime korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+			if(provjeriKorisnickoIme(korisnickoIme)) {
+				korisnik.setKorisnickoIme(korisnickoIme);
+				korisnik = korisniciPostaviOstaleVrijednosti(korisnik);
+				korisnici.set(i, korisnik);
+				System.out.println("");
+				System.out.println("Novi podaci korisnika su spremljeni");
+			}else {
+				if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
+					continue;
+				}
+			}
+			korisniciIzbornik();
+			break;
+		}		
+	}
+
 	private void korisniciDetalji() {
-		Alati.ispisZaglavlja("Detalji korisnika", true);
-		System.out.println("1 za izlistanje svih korisnika od kojih će te izabrati onog kojeg želite");
-		System.out.println("2 za pretragu korisnika po imenu i/ili prezimenu");
+		ispisIzboraPretrageKorisnika("Detalji korisnika");
 		korisniciUcitajOdabirPretrageZaIspisDetalja();	
 		
 	}
@@ -311,9 +409,7 @@ public class Start {
 	}
 
 	private void korisniciBrisanje() {
-		Alati.ispisZaglavlja("Brisanje korisnika", true);
-		System.out.println("1 za izlistanje svih korisnika od kojih će te izabrati željenog");
-		System.out.println("2 za pretragu korisnika po imenu i/ili prezimenu");
+		ispisIzboraPretrageKorisnika("Brisanje korisnika");
 		korisniciUcitajOdabirPretrageZaBrisanje();
 	}
 
@@ -408,9 +504,7 @@ public class Start {
 	}
 
 	private void osobeDetalji() {
-		Alati.ispisZaglavlja("Detalji osobe", true);
-		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
-		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
+		ispisIzboraPretrageOsoba("Detalji osobe");
 		osobeUcitajOdabirPretrageZaIspisDetalja();	
 	}
 
@@ -464,9 +558,7 @@ public class Start {
 	}
 
 	private void osobeBrisanje() {
-		Alati.ispisZaglavlja("Brisanje osobe", true);
-		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
-		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
+		ispisIzboraPretrageOsoba("Brisanje osobe");
 		osobeUcitajOdabirPretrageZaBrisanje();
 	}
 
@@ -528,9 +620,7 @@ public class Start {
 	}
 
 	private void osobeIzmjena() {
-		Alati.ispisZaglavlja("Izmjena podataka osobe", true);
-		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
-		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
+		ispisIzboraPretrageOsoba("Izmjena podataka osobe");
 		osobeUcitajOdabirPretrage();
 	}
 
@@ -542,8 +632,8 @@ public class Start {
 
 	}
 
-	private void osobeIzmjena(Osoba osoba, int i) {
-		osoba = osobaUnosPodataka(osoba);
+	private void osobeIzmjenaPodataka(Osoba osoba, int i) {
+		osoba = osobeUnosPodataka(osoba);
 		osobe.set(i, osoba);
 		System.out.println("");
 		System.out.println("Podaci osobe su uspješno izmjenjeni. Što želite dalje?");
@@ -556,7 +646,7 @@ public class Start {
 		int i = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
 				osobe.size()) - 1;
 		Osoba osoba = osobe.get(i);
-		osobeIzmjena(osoba, i);
+		osobeIzmjenaPodataka(osoba, i);
 	}
 
 	private void osobeIzmjenaPoImenu() {
@@ -579,7 +669,7 @@ public class Start {
 				Osoba osoba = osobe.get(i);
 				if (osobeJeLiToOsobaPoImenuIPrezimenu(osoba, uvjet)) {
 					if (offsetCounter.equals(offset)) {
-						osobeIzmjena(osoba, i);
+						osobeIzmjenaPodataka(osoba, i);
 					} else {
 						offsetCounter++;
 						continue;
@@ -622,11 +712,11 @@ public class Start {
 	private void osobeUnosNove() {
 		Alati.ispisZaglavlja("Podaci nove osobe", true);
 		Osoba osoba = new Osoba();
-		osoba = osobaUnosPodataka(osoba);
+		osoba = osobeUnosPodataka(osoba);
 		osobe.add(osoba);
 	}
 
-	private Osoba osobaUnosPodataka(Osoba osoba) {
+	private Osoba osobeUnosPodataka(Osoba osoba) {
 		osoba.setIme(Alati.ucitajString("ime osobe: ", porukaGreskePraznogUnosa, 1, 15));
 		osoba.setPrezime(Alati.ucitajString("prezime osobe: ", porukaGreskePraznogUnosa, 1, 25));
 		osoba.setAdresa(Alati.ucitajString("adresa osobe: ", porukaGreskePraznogUnosa, 1, 100));
@@ -645,6 +735,18 @@ public class Start {
 
 	}
 
+	private void ispisIzboraPretrageKorisnika(String naslov) {
+		Alati.ispisZaglavlja(naslov, true);
+		System.out.println("1 za izlistanje svih korisnika od kojih će te izabrati željenog");
+		System.out.println("2 za pretragu korisnika po imenu i/ili prezimenu ili korisničkom imenu");
+	}
+	
+	private void ispisIzboraPretrageOsoba(String naslov) {
+		Alati.ispisZaglavlja(naslov, true);
+		System.out.println("1 za izlistanje svih osoba od kojih će te izabrati željenu osobu");
+		System.out.println("2 za pretragu osoba po imenu i/ili prezimenu");
+	}
+	
 	public static void main(String[] args) {
 		new Start();
 	}
