@@ -5,6 +5,7 @@ import java.util.Date;
 public class RedovnoRadnoVrijeme {
 
 	private Date vrijediOd;
+	private Date vrijediDo;
 	private Date ponedjeljakOd;
 	private Date ponedjeljakDo;
 	private Date utorakOd;
@@ -20,11 +21,44 @@ public class RedovnoRadnoVrijeme {
 	private Date nedjeljaOd;
 	private Date nedjeljaDo;
 	private Integer trajanjePauzeUMinutama;
+	
+	public RedovnoRadnoVrijeme() {
+		
+	}
+	
+	public RedovnoRadnoVrijeme(Date vrijediOd, Date vrijediDo,Date ponedjeljakOd, Date ponedjeljakDo, Date utorakOd, Date utorakDo,
+			Date srijedaOd, Date srijedaDo, Date cetvrtakOd, Date cetvrtakDo, Date petakOd, Date petakDo, Date subotaOd,
+			Date subotaDo, Date nedjeljaOd, Date nedjeljaDo, Integer trajanjePauzeUMinutama) {
+		this.vrijediOd = vrijediOd;
+		this.vrijediDo = vrijediDo;
+		this.ponedjeljakOd = ponedjeljakOd;
+		this.ponedjeljakDo = ponedjeljakDo;
+		this.utorakOd = utorakOd;
+		this.utorakDo = utorakDo;
+		this.srijedaOd = srijedaOd;
+		this.srijedaDo = srijedaDo;
+		this.cetvrtakOd = cetvrtakOd;
+		this.cetvrtakDo = cetvrtakDo;
+		this.petakOd = petakOd;
+		this.petakDo = petakDo;
+		this.subotaOd = subotaOd;
+		this.subotaDo = subotaDo;
+		this.nedjeljaOd = nedjeljaOd;
+		this.nedjeljaDo = nedjeljaDo;
+		this.trajanjePauzeUMinutama = trajanjePauzeUMinutama;
+	}
+	
 	public Date getVrijediOd() {
 		return vrijediOd;
 	}
 	public void setVrijediOd(Date vrijediOd) {
 		this.vrijediOd = vrijediOd;
+	}
+	public Date getVrijediDo() {
+		return vrijediDo;
+	}
+	public void setVrijediDo(Date vrijediDo) {
+		this.vrijediDo = vrijediDo;
 	}
 	public Date getPonedjeljakOd() {
 		return ponedjeljakOd;
@@ -115,6 +149,17 @@ public class RedovnoRadnoVrijeme {
 	}
 	public void setTrajanjePauzeUMinutama(Integer trajanjePauzeUMinutama) {
 		this.trajanjePauzeUMinutama = trajanjePauzeUMinutama;
+	}
+
+	public void ispisiDetalje() {
+		System.out.println("Datum primjene: " + Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediDo));
+		System.out.println("Radno vrijeme ponedjeljkom: " + Alati.hrVrijeme(this.ponedjeljakOd) + " - " + Alati.hrVrijeme(this.ponedjeljakDo));
+		System.out.println("Radno vrijeme utorkom: " + Alati.hrVrijeme(this.utorakOd) + " - " + Alati.hrVrijeme(this.utorakDo));
+		System.out.println("Radno vrijeme srijedom: " + Alati.hrVrijeme(this.srijedaOd) + " - " + Alati.hrVrijeme(this.srijedaDo));
+		System.out.println("Radno vrijeme četvrtkom: " + Alati.hrVrijeme(this.cetvrtakOd) + " - " + Alati.hrVrijeme(this.cetvrtakDo));
+		System.out.println("Radno vrijeme petkom: " + Alati.hrVrijeme(this.petakOd) + " - " + Alati.hrVrijeme(this.petakDo));
+		System.out.println("Radno vrijeme subotom: " + Alati.hrVrijeme(this.subotaOd) + " - " + Alati.hrVrijeme(this.subotaDo));
+		System.out.println("Radno vrijeme nedjeljom: " + Alati.hrVrijeme(this.nedjeljaOd) + " - " + Alati.hrVrijeme(this.nedjeljaDo));		
 	}
 	
 }

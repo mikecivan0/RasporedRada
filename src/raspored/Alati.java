@@ -9,15 +9,17 @@ public class Alati {
 	public static Scanner scanner;
 	public static final String FORMAT_DATUMA = "dd.MM.yyyy.";
 	public static final String FORMAT_VREMENA = "HH:mm";
+	private static SimpleDateFormat formatDatuma;
+	private static SimpleDateFormat formatVremena;
+	
+	public static Date ucitajDatum(String poruka) {
 
-	private static Date ucitajDatum(String poruka) {
-
-		SimpleDateFormat formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
+		formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
 
 		while (true) {
 			System.out.print(poruka);
 			try {
-				formatDatuma.parse(scanner.nextLine());
+				return formatDatuma.parse(scanner.nextLine());
 			} catch (Exception e) {
 				System.out.println("Molim unesite datum u formatu " + formatDatuma.format(new Date()));
 			}
@@ -25,14 +27,14 @@ public class Alati {
 
 	}
 
-	private static Date ucitajVrijeme(String poruka) {
+	public static Date ucitajVrijeme(String poruka) {
 
-		SimpleDateFormat formatVremena = new SimpleDateFormat(FORMAT_VREMENA);
+		formatVremena = new SimpleDateFormat(FORMAT_VREMENA);
 
 		while (true) {
-			System.out.println(poruka);
+			System.out.print(poruka);
 			try {
-				formatVremena.parse(scanner.nextLine());
+				return formatVremena.parse(scanner.nextLine());
 			} catch (Exception e) {
 				System.out.println("Molim unesite vrijeme u formatu " + formatVremena.format(new Date()));
 			}
@@ -116,4 +118,16 @@ public class Alati {
 		}
 		
 	}
+	
+	public static String hrDatum(Date datum) {
+		formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
+		return formatDatuma.format(datum);
+	}
+	
+	public static String hrVrijeme(Date datum) {
+		formatDatuma = new SimpleDateFormat(FORMAT_VREMENA);
+		return formatDatuma.format(datum);
+	}
+	
+	
 }
