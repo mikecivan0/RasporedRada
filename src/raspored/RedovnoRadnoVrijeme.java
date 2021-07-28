@@ -150,6 +150,11 @@ public class RedovnoRadnoVrijeme {
 	public void setTrajanjePauzeUMinutama(Integer trajanjePauzeUMinutama) {
 		this.trajanjePauzeUMinutama = trajanjePauzeUMinutama;
 	}
+	
+	@Override
+	public String toString() {
+		return Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediOd);
+	}
 
 	public void ispisiDetalje() {
 		System.out.println("Datum primjene: " + Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediDo));
