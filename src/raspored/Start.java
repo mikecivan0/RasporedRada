@@ -15,10 +15,12 @@ public class Start {
 	private List<Osoba> osobe;
 	private List<Korisnik> korisnici;
 	private List<RedovnoRadnoVrijeme> redovnaRadnaVremena;
+	private List<IznimnoRadnoVrijeme> iznimnaRadnaVremena;
 	private boolean valjanost = false;
 	private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
 	private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
 	private String porukaGreskePraznogUnosa = "Unos ne smije bti prazan";
+	private String porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
 	SimpleDateFormat formatDatuma;
 	SimpleDateFormat formatVremena;
 
@@ -26,6 +28,7 @@ public class Start {
 		korisnici = new ArrayList<Korisnik>();
 		osobe = new ArrayList<Osoba>();
 		redovnaRadnaVremena = new ArrayList<RedovnoRadnoVrijeme>();
+		iznimnaRadnaVremena = new ArrayList<IznimnoRadnoVrijeme>();
 
 		// početak probnih podataka
 		osobe.add(new Osoba("Ivan", "Mikec", "091", "email", "adresa"));
@@ -76,7 +79,30 @@ public class Start {
 					formatVremena.parse("06:15"),
 					30));
 		} catch (ParseException e) {
-			System.out.println("Nesto je pošlo po zlu sa datumima");
+			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
+		}
+		
+		try {
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("01.01.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Nova Godina 2020.",
+					30));
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("01.03.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Neki blagdan 2020.",
+					30));
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("01.05.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Praznik rada 2020.",
+					30));
+		} catch (ParseException e) {
+			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
 		}
 		// kraj probnih podataka
 
@@ -164,6 +190,7 @@ public class Start {
 			case 1 -> osobeIzbornik();
 			case 2 -> korisniciIzbornik();
 			case 3 -> redovnaRadnaVremenaIzbornik();
+			case 4 -> iznimnaRadnaVremenaIzbornik();
 			case 8 -> logout();
 		}
 	}
@@ -774,7 +801,7 @@ public class Start {
 		korisnik.setLozinka(Alati.ucitajString("Unesite lozinku novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50));
 		korisnik.setOsobniBroj(Alati.ucitajString("Unesite osobni broj novoga korisnika: ", porukaGreskePraznogUnosa, 1, 10));
 		korisnik.setAktivan(Alati.daNe("Hoće li korisnik biti aktivan (da/ne): ", porukaGreskeIzboraAkcije));
-		korisnik.setRazina(Alati.ucitajBroj("Unesite razinu korisnika: ", porukaGreskeIzboraAkcije, 1, 2));
+		korisnik.setRazina(Alati.ucitajBroj("Unesite razinu korisnika (1 ili 2): ", porukaGreskeIzboraAkcije, 1, 2));
 		
 		return korisnik;
 	}
@@ -824,8 +851,8 @@ public class Start {
 		System.out.println("1 za unos redovnog radnog vremena");
 		System.out.println("2 za izmjenu redovnog radnog vremena");
 		System.out.println("3 za brisanje redovnog radnog vremena");
-		System.out.println("4 za pregled radnih vremena");
-		System.out.println("5 za prikaz detalja određenog radnog vremena");
+		System.out.println("4 za pregled redovnih radnih vremena");
+		System.out.println("5 za prikaz detalja određenog redovnog radnog vremena");
 		System.out.println("6 za povratak u glavni korisnički izbornik");
 		redovnaRadnaVremenaOdabirAkcije();
 	}
@@ -836,7 +863,7 @@ public class Start {
 			case 2 -> redovnaRadnaVremenaIzmjena();
 			case 3 -> redovnaRadnaVremenaBrisanje();
 			case 4 -> {
-				redovnaRadnaVremenaIzlistanje("U bazi postoje radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
+				redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
 				redovnaRadnaVremenaIzbornik();
 			}
 			case 5 -> redovnaRadnaVremenaDetalji();
@@ -847,7 +874,7 @@ public class Start {
 	
 	// UNOS NOVOG RADNOG VREMENA
 	private void redovnaRadnaVremenaUnosNovog() {
-		Alati.ispisZaglavlja("Unos novog radnog vremena", false);
+		Alati.ispisZaglavlja("Unos novog redovnog radnog vremena", false);
 		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();		
 		Date datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti nova radna vremena: ");
 		Date datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti nova radna vremena: ");
@@ -855,12 +882,12 @@ public class Start {
 				&& redovnaRadnaVremenaProvjeriPreklapanje(redovnaRadnaVremena, datumKrajaPrimjene)) {
 			redovnoRadnoVrijeme.setVrijediOd(datumPocetkaPrimjene);
 			redovnoRadnoVrijeme.setVrijediDo(datumKrajaPrimjene);
-			redovnoRadnoVrijeme = redovnoRadnoVrijemeUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
+			redovnoRadnoVrijeme = redovnaRadnaVremenaUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
 			redovnaRadnaVremena.add(redovnoRadnoVrijeme);
 			System.out.println();
 			System.out.println("Novo redovno radno vrijeme je unešeno");	
 		}else {
-			if(Alati.daNe("Radno vrijeme u tom intervalu primjene je već unešeno."
+			if(Alati.daNe("Redovno radno vrijeme u tom intervalu primjene je već unešeno."
 					+ "\nŽelite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
 				redovnaRadnaVremenaUnosNovog();
 			}
@@ -870,8 +897,8 @@ public class Start {
 	
 	//IZMJENA REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaIzmjena() {
-		redovnaRadnaVremenaIzlistanje("U bazi postoje radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
-		int i = Alati.ucitajBroj("Unesite broj ispred unosa koji želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
+		int i = Alati.ucitajBroj("Unesite broj ispred redovnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
 				redovnaRadnaVremena.size()) - 1;
 		RedovnoRadnoVrijeme redovnoRadnoVrijeme = redovnaRadnaVremena.get(i);
 		redovnaRadnaVremenaIzmjenaPodataka(redovnoRadnoVrijeme, i);		
@@ -885,10 +912,10 @@ public class Start {
 					&& redovnaRadnaVremenaProvjeriPreklapanje(redovnaRadnaVremena, datumKrajaPrimjene)) {
 				redovnoRadnoVrijeme.setVrijediOd(datumPocetkaPrimjene);
 				redovnoRadnoVrijeme.setVrijediDo(datumKrajaPrimjene);
-				redovnoRadnoVrijeme = redovnoRadnoVrijemeUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
+				redovnoRadnoVrijeme = redovnaRadnaVremenaUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
 				redovnaRadnaVremena.set(i, redovnoRadnoVrijeme);
 				System.out.println();
-				System.out.println("Radno vrijeme je izmijenjeno");	
+				System.out.println("Redovno radno vrijeme je izmijenjeno");	
 			}else {
 				if(Alati.daNe("Radno vrijeme u tom intervalu primjene je već unešeno."
 						+ "\nŽelite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
@@ -902,7 +929,7 @@ public class Start {
 	
 	// BRISANJE REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaBrisanje() {
-		redovnaRadnaVremenaIzlistanje("U bazi postoje radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
+		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
 		int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 				redovnaRadnaVremena.size()) - 1;
 		if(Alati.daNe("Želite li zaista obrisati radno vrijeme sa datumom primjene " + redovnaRadnaVremena.get(i).toString() + ": ", "Molimo unesite da ili ne")) {
@@ -915,10 +942,10 @@ public class Start {
 	
 	// DETALJI REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaDetalji() {			
-		redovnaRadnaVremenaIzlistanje("U bazi postoje radna vremena sa datumom primjene", redovnaRadnaVremena);
-		int i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do", redovnaRadnaVremena);
+		int i = Alati.ucitajBroj("Unesite redni broj redovnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 				redovnaRadnaVremena.size()) - 1;
-		Alati.ispisZaglavlja("Detalji radnog vremena", true);
+		Alati.ispisZaglavlja("Detalji redovnog radnog vremena", false);
 		redovnaRadnaVremena.get(i).ispisiDetalje();
 		redovnaRadnaVremenaIzbornik();		
 	}	
@@ -936,22 +963,22 @@ public class Start {
 		return valjanost;
 	}
 	
-	private RedovnoRadnoVrijeme redovnoRadnoVrijemeUnesiOstaleVrijednosti(RedovnoRadnoVrijeme redovnoRadnoVrijeme) {
-		redovnoRadnoVrijeme.setPonedjeljakOd(Alati.ucitajVrijeme("Početak radog vremena ponedjeljkom: "));
-		redovnoRadnoVrijeme.setPonedjeljakDo(Alati.ucitajVrijeme("Kraj radnog vremena ponedjeljkom: "));
-		redovnoRadnoVrijeme.setUtorakOd(Alati.ucitajVrijeme("Početak radog vremena utorkom: "));
-		redovnoRadnoVrijeme.setUtorakDo(Alati.ucitajVrijeme("Kraj radnog vremena utorkom: "));
-		redovnoRadnoVrijeme.setSrijedaOd(Alati.ucitajVrijeme("Početak radog vremena srijedom: "));
-		redovnoRadnoVrijeme.setSrijedaDo(Alati.ucitajVrijeme("Kraj radnog vremena srijedom: "));
-		redovnoRadnoVrijeme.setCetvrtakOd(Alati.ucitajVrijeme("Početak radog vremena četvrtkom: "));
-		redovnoRadnoVrijeme.setCetvrtakDo(Alati.ucitajVrijeme("Kraj radnog vremena četvrtkom: "));
-		redovnoRadnoVrijeme.setPetakOd(Alati.ucitajVrijeme("Početak radog vremena petkom: "));
-		redovnoRadnoVrijeme.setPetakDo(Alati.ucitajVrijeme("Kraj radnog vremena petkom: "));
-		redovnoRadnoVrijeme.setSubotaOd(Alati.ucitajVrijeme("Početak radog vremena subotom: "));
-		redovnoRadnoVrijeme.setSubotaDo(Alati.ucitajVrijeme("Kraj radnog vremena subotom: "));
-		redovnoRadnoVrijeme.setNedjeljaOd(Alati.ucitajVrijeme("Početak radog vremena nedjeljom: "));
-		redovnoRadnoVrijeme.setNedjeljaDo(Alati.ucitajVrijeme("Kraj radnog vremena nedjeljom: "));
-		redovnoRadnoVrijeme.setTrajanjePauzeUMinutama(Alati.ucitajBroj("Koliko svaki dan traje pauza (minuta): ", porukaGreskePraznogUnosa, 1, 120));
+	private RedovnoRadnoVrijeme redovnaRadnaVremenaUnesiOstaleVrijednosti(RedovnoRadnoVrijeme redovnoRadnoVrijeme) {
+		redovnoRadnoVrijeme.setPonedjeljakOd(Alati.ucitajVrijeme("Početak redovnog radog vremena ponedjeljkom: "));
+		redovnoRadnoVrijeme.setPonedjeljakDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena ponedjeljkom: "));
+		redovnoRadnoVrijeme.setUtorakOd(Alati.ucitajVrijeme("Početak redovnog radog vremena utorkom: "));
+		redovnoRadnoVrijeme.setUtorakDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena utorkom: "));
+		redovnoRadnoVrijeme.setSrijedaOd(Alati.ucitajVrijeme("Početak redovnog radog vremena srijedom: "));
+		redovnoRadnoVrijeme.setSrijedaDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena srijedom: "));
+		redovnoRadnoVrijeme.setCetvrtakOd(Alati.ucitajVrijeme("Početak redovnog radog vremena četvrtkom: "));
+		redovnoRadnoVrijeme.setCetvrtakDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena četvrtkom: "));
+		redovnoRadnoVrijeme.setPetakOd(Alati.ucitajVrijeme("Početak redovnog radog vremena petkom: "));
+		redovnoRadnoVrijeme.setPetakDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena petkom: "));
+		redovnoRadnoVrijeme.setSubotaOd(Alati.ucitajVrijeme("Početak redovnog radog vremena subotom: "));
+		redovnoRadnoVrijeme.setSubotaDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena subotom: "));
+		redovnoRadnoVrijeme.setNedjeljaOd(Alati.ucitajVrijeme("Početak redovnog radog vremena nedjeljom: "));
+		redovnoRadnoVrijeme.setNedjeljaDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena nedjeljom: "));
+		redovnoRadnoVrijeme.setTrajanjePauzeUMinutama(Alati.ucitajBroj("Trajanje pauze u minutama: ", porukaGreskeUnosaCijelogBroja, 1, 120));
 		
 		return redovnoRadnoVrijeme;
 	}
@@ -968,6 +995,136 @@ public class Start {
 	/**
 	 * 
 	 * REDOVNA RADNA VREMENA KRAJ
+	 * 
+	 * IZNIMNA RADNA VREMENA
+	 * 
+	 */
+	
+	private void iznimnaRadnaVremenaIzbornik() {
+		Alati.ispisZaglavlja("Rad sa iznimnim radnim vremenom", true);
+		System.out.println("1 za unos iznimnog radnog vremena");
+		System.out.println("2 za izmjenu iznimnog radnog vremena");
+		System.out.println("3 za brisanje iznimnog radnog vremena");
+		System.out.println("4 za pregled iznimnih radnih vremena");
+		System.out.println("5 za prikaz detalja određenog iznimnog radnog vremena");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
+		iznimnaRadnaVremenaOdabirAkcije();
+	}
+
+	private void iznimnaRadnaVremenaOdabirAkcije() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+			case 1 -> iznimnaRadnaVremenaUnosNovog();
+			case 2 -> iznimnaRadnaVremenaIzmjena();
+			case 3 -> iznimnaRadnaVremenaBrisanje();
+			case 4 -> {
+				iznimnaRadnaVremenaIzlistanje("U bazi postoje sljedeća iznimna radna vremena", iznimnaRadnaVremena);
+				iznimnaRadnaVremenaIzbornik();
+			}
+			case 5 -> iznimnaRadnaVremenaDetalji();
+			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+		}
+		
+	}
+	
+	// UNOS IZNIMNOG RADNOG VREMENA
+	private void iznimnaRadnaVremenaUnosNovog() {
+		Alati.ispisZaglavlja("Unos novog iznimnog radnog vremena", false);
+		IznimnoRadnoVrijeme iznimnoRadnoVrijeme = new IznimnoRadnoVrijeme();
+		Date datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
+		if(!iznimnaRadnaVremenaProvjeriPreklapanje(iznimnaRadnaVremena, datum)) {
+			iznimnoRadnoVrijeme.setDatum(datum);
+			iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
+			iznimnaRadnaVremena.add(iznimnoRadnoVrijeme);
+			System.out.println();
+			System.out.println("Novo iznimno radno vrijeme je unešeno");	
+		}else {
+			if(Alati.daNe("Iznimno radno vrijeme sa tim datumom je već unešeno."
+					+ "\nŽelite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
+				iznimnaRadnaVremenaUnosNovog();
+			}
+		}
+		iznimnaRadnaVremenaIzbornik();
+	}
+	
+	//IZMJENA IZNIMNOG RADNOG VREMENA
+	private void iznimnaRadnaVremenaIzmjena() {
+		iznimnaRadnaVremenaIzlistanje("U bazi postoje sjedeća iznimna radna", iznimnaRadnaVremena);
+		int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+				iznimnaRadnaVremena.size()) - 1;
+		IznimnoRadnoVrijeme iznimnoRadnoVrijeme = iznimnaRadnaVremena.get(i);
+		iznimnaRadnaVremenaIzmjenaPodataka(iznimnoRadnoVrijeme, i);		
+	}
+	
+	private void iznimnaRadnaVremenaIzmjenaPodataka(IznimnoRadnoVrijeme iznimnoRadnoVrijeme, int i) {
+		while(true) {
+			Date datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
+			if(!iznimnaRadnaVremenaProvjeriPreklapanje(iznimnaRadnaVremena, datum)) {
+				iznimnoRadnoVrijeme.setDatum(datum);
+				iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
+				iznimnaRadnaVremena.set(i, iznimnoRadnoVrijeme);
+				System.out.println();
+				System.out.println("Iznimno radno vrijeme je izmijenjeno");	
+			}else {
+				if(Alati.daNe("Iznimno radno vrijeme sa tim datumom je već unešeno."
+						+ "\nŽelite li pokušati ponovno? (da/ne): ", "Molimo unesite da ili ne")) {
+					continue;
+				}
+			}
+			iznimnaRadnaVremenaIzbornik();
+			break;
+		}		
+	}
+	
+	// BRISANJE IZNIMNOG RADNOG VREMENA
+	private void iznimnaRadnaVremenaBrisanje() {
+		iznimnaRadnaVremenaIzlistanje("U bazi postoje sljedeća iznimna radna vremena", iznimnaRadnaVremena);
+		int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+				iznimnaRadnaVremena.size()) - 1;
+		if(Alati.daNe("Želite li zaista obrisati iznimno radno vrijeme sa datumom " + Alati.hrDatum(iznimnaRadnaVremena.get(i).getDatum()) 
+						+ ": ", "Molimo unesite da ili ne")) {
+			iznimnaRadnaVremena.remove(i);
+			System.out.println();
+			System.out.println("Iznimno radno vrijeme je obrisano.");
+		}		
+		iznimnaRadnaVremenaIzbornik();
+	}
+	
+	// DETALJI IZNIMNOG RADNOG VREMENA
+	private void iznimnaRadnaVremenaDetalji() {			
+		iznimnaRadnaVremenaIzlistanje("U bazi postoje sljedeća iznimna radna vremena", iznimnaRadnaVremena);
+		int i = Alati.ucitajBroj("Unesite redni broj ispred iznimnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+				iznimnaRadnaVremena.size()) - 1;
+		Alati.ispisZaglavlja("Detalji iznimnog radnog vremena", false);
+		iznimnaRadnaVremena.get(i).ispisiDetalje();
+		iznimnaRadnaVremenaIzbornik();		
+	}	
+	
+	// POMOĆNE FUNKCIJE IZNIMNOG RADNOG VREMENA
+	private boolean iznimnaRadnaVremenaProvjeriPreklapanje(final List<IznimnoRadnoVrijeme> iznimnaRadnaVremena, final Date datum) {		
+	return iznimnaRadnaVremena.stream().filter(o -> o.getDatum().equals(datum)).findFirst().isPresent();
+	}
+	
+	private IznimnoRadnoVrijeme iznimnaRadnaVremenaUnesiOstaleVrijednosti(IznimnoRadnoVrijeme iznimnoRadnoVrijeme) {
+		iznimnoRadnoVrijeme.setPocetak(Alati.ucitajVrijeme("Početak radnog vremena na dan " + Alati.hrDatum(iznimnoRadnoVrijeme.getDatum()) + ": "));
+		iznimnoRadnoVrijeme.setKraj(Alati.ucitajVrijeme("Kraj radnog vremena na dan " + Alati.hrDatum(iznimnoRadnoVrijeme.getDatum()) + ": "));
+		iznimnoRadnoVrijeme.setPauza(Alati.ucitajBroj("Trajanje pauze u minutama na dan " + 
+									 Alati.hrDatum(iznimnoRadnoVrijeme.getDatum())  + ": ", porukaGreskeUnosaCijelogBroja, 1, 120));
+		iznimnoRadnoVrijeme.setNapomena(Alati.ucitajString("Unesite napomenu/oznaku iznimnog radnog vremena (npr. Božić 2015.): ", porukaGreskePraznogUnosa, 1, 50));		
+		return iznimnoRadnoVrijeme;
+	}
+	
+	private void iznimnaRadnaVremenaIzlistanje(String poruka, List<IznimnoRadnoVrijeme> iznimnaRadnaVremena) {
+		int counter = 1;
+		Alati.ispisZaglavlja(poruka, false);
+		for (IznimnoRadnoVrijeme irv : iznimnaRadnaVremena) {
+			System.out.println(counter + " " + irv.toString());
+			counter++;
+		}
+	}
+
+	/**
+	 *  
+	 * IZNIMNA RADNA VREMENA KRAJ
 	 * 
 	 */
 	

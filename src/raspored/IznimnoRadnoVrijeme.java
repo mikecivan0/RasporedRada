@@ -7,6 +7,20 @@ public class IznimnoRadnoVrijeme {
 	private Date pocetak;
 	private Date kraj;
 	private String napomena;
+	private int pauza;
+	
+	public IznimnoRadnoVrijeme() {
+		
+	}
+	
+	public IznimnoRadnoVrijeme(Date datum, Date pocetak, Date kraj, String napomena, int pauza) {
+		this.datum = datum;
+		this.pocetak = pocetak;
+		this.kraj = kraj;
+		this.napomena = napomena;
+		this.pauza = pauza;
+	}
+	
 	public Date getDatum() {
 		return datum;
 	}
@@ -31,6 +45,24 @@ public class IznimnoRadnoVrijeme {
 	public void setNapomena(String napomena) {
 		this.napomena = napomena;
 	}
+	public int getPauza() {
+		return pauza;
+	}
+	public void setPauza(int pauza) {
+		this.pauza = pauza;
+	}
 	
+	@Override
+	public String toString() {
+		return Alati.hrDatum(this.datum) + ", " + this.napomena;
+	}
+	
+	public void ispisiDetalje() {
+		System.out.println("Datum iznimnog radnog vremena: " + Alati.hrDatum(this.datum));
+		System.out.println("Radno vrijeme počinje u : " + Alati.hrVrijeme(this.pocetak));
+		System.out.println("Radno vrijeme završava u : " + Alati.hrVrijeme(this.kraj));
+		System.out.println("Trajanje pauze u minutama: " + this.getPauza());
+		System.out.println("Napomena/oznaka: " + this.napomena);
+	}
 
 }
