@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Raspored {
 	private Korisnik korisnik;
-	private VrstaUnosaURaspored vrstaUnosaURaspored;
+	private OznakaUnosaURaspored vrstaUnosaURaspored;
 	private Date datum;
 	private boolean radSaPauzom;
 	public Korisnik getKorisnik() {
@@ -13,10 +13,10 @@ public class Raspored {
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
 	}
-	public VrstaUnosaURaspored getElement() {
+	public OznakaUnosaURaspored getElement() {
 		return vrstaUnosaURaspored;
 	}
-	public void setElement(VrstaUnosaURaspored vrstaUnosaURaspored) {
+	public void setElement(OznakaUnosaURaspored vrstaUnosaURaspored) {
 		this.vrstaUnosaURaspored = vrstaUnosaURaspored;
 	}
 	public Date getDatum() {
