@@ -4,32 +4,31 @@ import java.util.Date;
 
 public class Raspored {
 	private Korisnik korisnik;
-	private VrstaUnosaURasporedu element;
-	private Date datumRada;
-	private boolean pauza;
+	private VrstaUnosaURaspored vrstaUnosaURaspored;
+	private Date datum;
+	private boolean radSaPauzom;
 	public Korisnik getKorisnik() {
 		return korisnik;
 	}
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
 	}
-	public VrstaUnosaURasporedu getElement() {
-		return element;
+	public VrstaUnosaURaspored getElement() {
+		return vrstaUnosaURaspored;
 	}
-	public void setElement(VrstaUnosaURasporedu element) {
-		this.element = element;
+	public void setElement(VrstaUnosaURaspored vrstaUnosaURaspored) {
+		this.vrstaUnosaURaspored = vrstaUnosaURaspored;
 	}
-	public Date getDatumRada() {
-		return datumRada;
+	public Date getDatum() {
+		return datum;
 	}
-	public void setDatumRada(Date datumRada) {
-		this.datumRada = datumRada;
+	public void setDatum(Date datum) {
+		this.datum = datum;
 	}
-	public boolean isPauza() {
-		return pauza;
+	public boolean isRadSaPauzom() {
+		return radSaPauzom;
 	}
-	public void setPauza(boolean pauza) {
-		this.pauza = pauza;
-	}
-	
+	public void setRadSaPauzom(boolean radSaPauzom) {
+		this.radSaPauzom = radSaPauzom;
+	}	
 }

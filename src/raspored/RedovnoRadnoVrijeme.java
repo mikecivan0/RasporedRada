@@ -153,11 +153,11 @@ public class RedovnoRadnoVrijeme {
 	
 	@Override
 	public String toString() {
-		return Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediOd);
+		return Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediDo);
 	}
 
 	public void ispisiDetalje() {
-		System.out.println("Datum primjene: " + Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediDo));
+		System.out.println("Vrijeme: " + Alati.hrDatum(this.vrijediOd) + " - " + Alati.hrDatum(this.vrijediDo));
 		System.out.println("Radno vrijeme ponedjeljkom: " + Alati.hrVrijeme(this.ponedjeljakOd) + " - " + Alati.hrVrijeme(this.ponedjeljakDo));
 		System.out.println("Radno vrijeme utorkom: " + Alati.hrVrijeme(this.utorakOd) + " - " + Alati.hrVrijeme(this.utorakDo));
 		System.out.println("Radno vrijeme srijedom: " + Alati.hrVrijeme(this.srijedaOd) + " - " + Alati.hrVrijeme(this.srijedaDo));
