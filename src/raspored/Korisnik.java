@@ -66,7 +66,7 @@ public class Korisnik extends Osoba{
 	}
 	
 	public String getAktivan() {
-		return (this.aktivan) ? "da" : "ne";
+		return Alati.parseBool(this.isAktivan());
 	}
 	
 	public void ispisiDetalje() {
@@ -75,11 +75,11 @@ public class Korisnik extends Osoba{
 			+ "Osobni broj: " + this.osobniBroj  + "\n"
 			+ "Aktivan: " + getAktivan() + "\n"
 			+ "Razina: " + this.razina
-			);
-		
+			);		
 	}
 	
 	public String korisnikZaPrikaz() {
 		return this.toString() + ", " + this.getOsoba().getIme() + " " + this.getOsoba().getPrezime();
 	}
+	
 }

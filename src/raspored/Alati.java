@@ -129,5 +129,9 @@ public class Alati {
 		return formatDatuma.format(datum);
 	}
 	
+	public static String parseBool(boolean bool) {
+		return (bool) ? "da" : "ne";
+	}
+	
 	
 }

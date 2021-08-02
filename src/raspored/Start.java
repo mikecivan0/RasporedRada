@@ -18,6 +18,7 @@ public class Start {
 	private List<IznimnoRadnoVrijeme> iznimnaRadnaVremena;
 	private List<BrojRadnikaPoDanima> brojeviRadnikaPoDanima;
 	private List<OznakaUnosaURaspored> oznakeUnosaURaspored;
+	private List<Raspored> rasporedi;
 	private boolean valjanost = false;
 	private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
 	private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
@@ -33,6 +34,7 @@ public class Start {
 		iznimnaRadnaVremena = new ArrayList<IznimnoRadnoVrijeme>();
 		brojeviRadnikaPoDanima = new ArrayList<BrojRadnikaPoDanima>();
 		oznakeUnosaURaspored = new ArrayList<OznakaUnosaURaspored>();
+		rasporedi = new ArrayList<Raspored>();
 
 		/**
 		 *  početak probnih podataka
@@ -923,6 +925,27 @@ public class Start {
 		}		
 	}
 	
+	// izlistanje aktivnih korisnika
+	private List<Korisnik> korisniciListaAktivnih() {
+		List<Korisnik> aktivniKorisnici = new ArrayList<Korisnik>();
+		Alati.ispisZaglavlja("Aktivni korisnici koji se nalaze u bazi", false);
+		for (Korisnik korisnik : korisnici) {
+			if(korisnik.isAktivan()) {
+				aktivniKorisnici.add(korisnik);
+			}
+		}
+		return aktivniKorisnici;
+	}
+	
+//	private Korisnik korisniciPronadjiPoAktivnomKorisniku(Korisnik aktivniKorisnik) {
+//		Korisnik korisnik = new Korisnik();
+//		for(Korisnik k : korisnici) {
+//			if(k.equals(aktivniKorisnik)) {
+//				korisnik = k;
+//			}
+//		}
+//	}
+	
 	/**
 	 * 
 	 * KORISNICI KRAJ
@@ -1433,8 +1456,7 @@ public class Start {
 			}
 			case 5 ->  oznakeUnosaURasporedDetalji();
 			case 6 -> autentificiraniKorisnikGlavniIzbornik();
-		}
-		
+		}		
 	}
 	
 	// UNOS NOVE OZNAKE UNOSA U RASPORED
@@ -1539,6 +1561,88 @@ public class Start {
 			counter++;
 		}
 	}
+	
+	/**
+	 *  
+	 * OZNAKE UNOSA U RASPORED KRAJ
+	 * 
+	 * RASPORED
+	 * 
+	 */
+	
+	private void rasporedIzbornik() {
+		Alati.ispisZaglavlja("Rad sa rasporedom", true);
+		System.out.println("1 za novi unos u raspored");
+		System.out.println("2 za izmjenu postojećeg unosa u rasporedu");
+		System.out.println("3 za brisanje postojećeg unosa u rasporedu");
+		System.out.println("4 za pregled postojećeg unosa u rasporedu za određeni dan");
+		System.out.println("5 za prikaz rasporeda za određeni mjesec i godinu");
+		System.out.println("6 za prikaz rasporeda za određenu osobu");
+		System.out.println("7 za povratak u glavni korisnički izbornik");
+		rasporedOdabirAkcije();
+	}
+
+	private void  rasporedOdabirAkcije() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+			case 1 -> raposredNoviUnos();
+//			case 2 -> raposredIzmjena();
+//			case 3 -> raposredBrisanje();
+//			case 4 -> raposredPregledZaDan();
+//			case 5 -> rasporedPregledZaMjesec();
+//			case 6 -> raposredPregledPoOsobi();
+			case 7 -> autentificiraniKorisnikGlavniIzbornik();
+		}
+		
+	}
+	
+	private void raposredNoviUnos() {
+		osobeIzlistanje();
+		Korisnik aktivniKorisnik = korisniciListaAktivnih().get(
+				Alati.ucitajBroj("Unesite broj osobe za koju želite stvoriti novi unos u rasporedu: ", 
+								"Unos ne smije biti prazan", 1, korisniciListaAktivnih().size())-1
+				);
+		Date datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
+		if(!rasporedProvjeriPostojanjeUnosa(aktivniKorisnik, datum)) {
+			Raspored raspored = new Raspored();
+			raspored.setKorisnik(aktivniKorisnik);
+			raspored.setDatum(datum);
+			oznakeUnosaURasporedIzlistanje();
+			OznakaUnosaURaspored oznaka = oznakeUnosaURaspored.get(
+					Alati.ucitajBroj("Odaberite oznaku zapisa: ", porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1
+					);
+			raspored.setoznakaUnosaURaspored(oznaka);
+			raspored.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", "Molimo unesite da ili ne"));
+			rasporedi.add(raspored);
+			rasporedPregledSviZapisa();
+			rasporedIzbornik();			
+		}else {
+			if(Alati.daNe("Ta osoba na taj datum je već unešena u rapored. Želite li pokušati opet? (da/ne): ", "Molimo unesite da ili ne")) {
+				raposredNoviUnos();				
+			}else {
+				rasporedIzbornik();
+			}
+		}
+	}
+
+	private void rasporedPregledSviZapisa() {
+		// dovršiti
+		
+	}
+
+	// POMOĆNE FUNKCIJE RASPOREDA
+	
+	// provjera potojanja zapisa u rasporedu kod unosa novog
+	private boolean rasporedProvjeriPostojanjeUnosa(final Korisnik korisnik, final Date datum) {	
+		boolean valjanost = true;
+		for(Raspored raspored : rasporedi) {
+			if(raspored.getKorisnik().equals(korisnik) & raspored.getDatum().equals(datum)) {				
+				valjanost = false;
+				break;		
+			}
+		}
+		return valjanost;	
+	}
+	
 	public static void main(String[] args) {
 		new Start();
 	}

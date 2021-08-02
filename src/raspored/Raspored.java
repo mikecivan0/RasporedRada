@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Raspored {
 	private Korisnik korisnik;
-	private OznakaUnosaURaspored vrstaUnosaURaspored;
+	private OznakaUnosaURaspored oznakaUnosaURaspored;
 	private Date datum;
 	private boolean radSaPauzom;
 	public Korisnik getKorisnik() {
@@ -13,11 +13,11 @@ public class Raspored {
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
 	}
-	public OznakaUnosaURaspored getElement() {
-		return vrstaUnosaURaspored;
+	public OznakaUnosaURaspored getoznakaUnosaURaspored() {
+		return oznakaUnosaURaspored;
 	}
-	public void setElement(OznakaUnosaURaspored vrstaUnosaURaspored) {
-		this.vrstaUnosaURaspored = vrstaUnosaURaspored;
+	public void setoznakaUnosaURaspored(OznakaUnosaURaspored oznakaUnosaURaspored) {
+		this.oznakaUnosaURaspored = oznakaUnosaURaspored;
 	}
 	public Date getDatum() {
 		return datum;
@@ -31,4 +31,14 @@ public class Raspored {
 	public void setRadSaPauzom(boolean radSaPauzom) {
 		this.radSaPauzom = radSaPauzom;
 	}	
+	
+
+	public void ispisiDetalje() {
+		System.out.println("Korisnik: " + this.korisnik.toString() + "\n"
+				+ "Oznaka: " + this.oznakaUnosaURaspored.getSkracenica() + "\n"
+				+ "Datum: " + Alati.hrDatum(this.datum)
+				+ "Rad sa pauzom: " + Alati.parseBool(this.radSaPauzom)
+				);
+	
+	}
 }
