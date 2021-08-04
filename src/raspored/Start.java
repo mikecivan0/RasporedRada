@@ -14,6 +14,7 @@ public class Start {
 	public static final String LINK_POVEZNICE = "https://github.com/mikecivan0/RasporedRada";
 	private List<Osoba> osobe;
 	private List<Korisnik> korisnici;
+	private List<Korisnik> aktivniKorisnici;
 	private List<RedovnoRadnoVrijeme> redovnaRadnaVremena;
 	private List<IznimnoRadnoVrijeme> iznimnaRadnaVremena;
 	private List<BrojRadnikaPoDanima> brojeviRadnikaPoDanima;
@@ -25,17 +26,27 @@ public class Start {
 	private String porukaGreskePraznogUnosa = "Unos ne smije bti prazan";
 	private String porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
 	private String porukaGreskeDaNe = "Molimo unesite da ili ne";
+	private String porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
+	private String porukaGreskeNemaKorisnika = "\nU bazi nema niti jednog korisnika";
+	private String porukaGreskeNemaAktivnihKorisnika = "\nU bazi nema niti jednog aktivnog korisnika";
+	private String porukaGreskeNemaRedovnihRadnihVremena ="\nU bazi nema niti jednog redovnog radnog vremena";
+	private String porukaGreskeNemaIznimnihRadnihVremena ="\nU bazi nema niti jednog iznimnog radnog vremena";
+	private String porukaGreskeNemaBrojRadnikaPoDanima ="\nU bazi nema niti jednog unosa broja radnika po danima u tjednu";
+	private String porukaGreskeNemaOznakaUnosaURaspored ="\nU bazi nema niti jedne oznake unosa u raspored";
 	SimpleDateFormat formatDatuma;
 	SimpleDateFormat formatVremena;
 
 	public Start() {
 		korisnici = new ArrayList<Korisnik>();
+		aktivniKorisnici = new ArrayList<Korisnik>();
 		osobe = new ArrayList<Osoba>();
 		redovnaRadnaVremena = new ArrayList<RedovnoRadnoVrijeme>();
 		iznimnaRadnaVremena = new ArrayList<IznimnoRadnoVrijeme>();
 		brojeviRadnikaPoDanima = new ArrayList<BrojRadnikaPoDanima>();
 		oznakeUnosaURaspored = new ArrayList<OznakaUnosaURaspored>();
 		rasporedi = new ArrayList<Raspored>();
+		
+		
 
 		/**
 		 *  početak probnih podataka
@@ -154,7 +165,7 @@ public class Start {
 		 *  kraj probnih podataka
 		 */
 
-		
+		korisniciAktualiziranjeListeAktivnihKorisnika();
 		Alati.scanner = new Scanner(System.in);
 		glavniIzbornik();
 	}
@@ -317,8 +328,13 @@ public class Start {
 
 	// IZMJENA OSOBE
 	private void osobeIzmjena() {
-		osobeIspisIzboraPretrage("Izmjena podataka osobe");
-		osobeUcitajOdabirPretrageZaIzmjenu();
+		if(!osobe.isEmpty()) {
+			osobeIspisIzboraPretrage("Izmjena podataka osobe");
+			osobeUcitajOdabirPretrageZaIzmjenu();
+		}else {
+			System.out.println(porukaGreskeNemaOsoba);
+			osobeIzbornik();
+		}		
 	}
 
 	private void osobeUcitajOdabirPretrageZaIzmjenu() {
@@ -366,8 +382,13 @@ public class Start {
 	
 	// BRISANJE OSOBE	
 	private void osobeBrisanje() {
-		osobeIspisIzboraPretrage("Brisanje osobe");
-		osobeUcitajOdabirPretrageZaBrisanje();
+		if(!osobe.isEmpty()) {
+			osobeIspisIzboraPretrage("Brisanje osobe");
+			osobeUcitajOdabirPretrageZaBrisanje();
+		}else {
+			System.out.println(porukaGreskeNemaOsoba);
+			osobeIzbornik();
+		}		
 	}
 
 	private void osobeUcitajOdabirPretrageZaBrisanje() {
@@ -427,8 +448,13 @@ public class Start {
 
 	// DETALJI OSOBE
 	private void osobeDetalji() {
-		osobeIspisIzboraPretrage("Detalji osobe");
-		osobeUcitajOdabirPretrageZaIspisDetalja();	
+		if(!osobe.isEmpty()) {
+			osobeIspisIzboraPretrage("Detalji osobe");
+			osobeUcitajOdabirPretrageZaIspisDetalja();	
+		}else {
+			System.out.println(porukaGreskeNemaOsoba);
+			osobeIzbornik();
+		}		
 	}
 
 	private void osobeUcitajOdabirPretrageZaIspisDetalja() {
@@ -472,12 +498,17 @@ public class Start {
 	
 	// izlistanje svih osoba
 	private void osobeIzlistanje() {
-		int counter = 1;
-		Alati.ispisZaglavlja("Osobe koje se nalaze u bazi", false);
-		for (Osoba osoba : osobe) {
-			System.out.println(counter + " " + osoba.toString());
-			counter++;
-		}
+		if(!osobe.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja("Osobe koje se nalaze u bazi", false);
+			for (Osoba osoba : osobe) {
+				System.out.println(counter + " " + osoba.toString());
+				counter++;
+			}
+		}else {
+			System.out.println(porukaGreskeNemaOsoba);
+			osobeIzbornik();
+		}			
 	}
 	
 	//izlistanje nađenih osoba
@@ -548,32 +579,80 @@ public class Start {
 
 	private void korisniciIzbornik() {
 		Alati.ispisZaglavlja("Rad sa korisnicima", true);
-		System.out.println("1 za unos postojeće osobe kao novog korisnika");
-		System.out.println("2 za unos nove osobe kao novog korisnika");
-		System.out.println("3 za izmjenu postojećeg korisnika");
-		System.out.println("4 za brisanje postojećeg korisnika");
-		System.out.println("5 za pregled svih korisnika");
-		System.out.println("6 za pregled detalja postojećeg korisnika");
-		System.out.println("7 za povratak u glavni korisnički izbornik");
+		System.out.println("1 za unos novog korisnika");
+		System.out.println("2 za izmjenu postojećeg korisnika");
+		System.out.println("3 za brisanje postojećeg korisnika");
+		System.out.println("4 za pregled svih korisnika");
+		System.out.println("5 za pregled detalja postojećeg korisnika");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
 		korisniciOdabirAkcije();
 	}
 
 	private void korisniciOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 7)) {
-			case 1 -> korisniciUnosPostojeceOsobeKaoNovogKorisnika();
-			case 2 -> korisniciUnosNoveOsobeKaoNovogKorisnika();
-			case 3 -> korisniciIzmjena();
-			case 4 -> korisniciBrisanje();
-			case 5 -> {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+			case 1 -> korisniciUnosNovog();
+			case 2 -> korisniciIzmjena();
+			case 3 -> korisniciBrisanje();
+			case 4 -> {
 				korisniciIzlistanje();
 				korisniciIzbornik();
 			}
-			case 6 -> {
+			case 5 -> {
 				korisniciDetalji();
 				korisniciIzbornik();
 			}
-			case 7 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> autentificiraniKorisnikGlavniIzbornik();
 		}		
+	}
+	
+	private void korisniciUnosNovog() {
+		Alati.ispisZaglavlja("Odabir načina unosa novog korisnika", true);
+		System.out.println("1 za unos postojeće osobe kao novog korisnika");
+		System.out.println("2 za unos nove osobe kao novog korisnika");
+		System.out.println("3 za povratak u glavni izbornika za rad sa korisnicima");
+		korisniciUnosNovogOdabirAkcije();
+	}
+	
+	private void korisniciUnosNovogOdabirAkcije() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 3)) {
+			case 1 -> korisniciUnosPostojeceOsobeKaoNovogKorisnika();
+			case 2 -> korisniciUnosNoveOsobeKaoNovogKorisnika();
+			case 3 -> korisniciIzbornik();
+		}				
+	}
+
+	private void korisniciUnosPostojeceOsobeKaoNovogKorisnika() {
+		if(!osobe.isEmpty()) {
+			osobeIzlistanje();
+			Osoba osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", 
+							"Unos ne smije biti prazan", 1, osobe.size())-1);
+			if(!korisniciJeLiOsobaKorisnik(osoba)) {
+				Korisnik korisnik = new Korisnik();
+				korisnik.setOsoba(osoba);
+				while(true) {
+					String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+					if(!korisniciProvjeriPostojanjeKorisnickogImena(korisnickoIme)) {
+						korisnik.setKorisnickoIme(korisnickoIme);
+						korisnik = korisniciUnosOstalihPodataka(korisnik);
+						korisnici.add(korisnik);
+						System.out.println();
+						System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
+					}else {
+						if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
+							continue;
+						}
+					}				
+					break;
+				}			
+			}else {
+				if(Alati.daNe("Osoba je već unešena kao korisnik. Želite li odabrati drugu osobu? (da/ne): ", porukaGreskeDaNe)) {
+					korisniciUnosPostojeceOsobeKaoNovogKorisnika();
+				}
+			}
+		}else {
+			System.out.println(porukaGreskeNemaOsoba);
+		}		
+		korisniciIzbornik();
 	}
 	
 	// UNOS NOVOG KORISNIKA
@@ -601,40 +680,15 @@ public class Start {
 		}		
 	}
 
-	private void korisniciUnosPostojeceOsobeKaoNovogKorisnika() {
-		osobeIzlistanje();
-		Osoba osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", 
-						"Unos ne smije biti prazan", 1, osobe.size())-1);
-		if(!korisniciJeLiOsobaKorisnik(osoba)) {
-			Korisnik korisnik = new Korisnik();
-			korisnik.setOsoba(osoba);
-			while(true) {
-				String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
-				if(!korisniciProvjeriPostojanjeKorisnickogImena(korisnickoIme)) {
-					korisnik.setKorisnickoIme(korisnickoIme);
-					korisnik = korisniciUnosOstalihPodataka(korisnik);
-					korisnici.add(korisnik);
-					System.out.println();
-					System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
-				}else {
-					if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
-						continue;
-					}
-				}				
-				break;
-			}			
-		}else {
-			if(Alati.daNe("Osoba je već unešena kao korisnik. Želite li odabrati drugu osobu? (da/ne): ", porukaGreskeDaNe)) {
-				korisniciUnosPostojeceOsobeKaoNovogKorisnika();
-			}
-		}
-		korisniciIzbornik();
-	}
-
 	// IZMJENA KORISNIKA
 	private void korisniciIzmjena() {
-		korisniciIspisIzboraPretrage("Izmjena podataka korisnika");
-		korisniciUcitajOdabirPretrage();
+		if(!korisnici.isEmpty()) {
+			korisniciIspisIzboraPretrage("Izmjena podataka korisnika");
+			korisniciUcitajOdabirPretrage();
+		}else {
+			System.out.println(porukaGreskeNemaKorisnika);
+			korisniciIzbornik();
+		}		
 	}
 	
 	private void korisniciUcitajOdabirPretrage() {
@@ -693,8 +747,13 @@ public class Start {
 	
 	// BRISANJE KORISNIKA
 	private void korisniciBrisanje() {
-		korisniciIspisIzboraPretrage("Brisanje korisnika");
-		korisniciUcitajOdabirPretrageZaBrisanje();
+		if(!korisnici.isEmpty()) {
+			korisniciIspisIzboraPretrage("Brisanje korisnika");
+			korisniciUcitajOdabirPretrageZaBrisanje();
+		}else {
+			System.out.println(porukaGreskeNemaKorisnika);
+			korisniciIzbornik();
+		}
 	}
 
 	private void korisniciUcitajOdabirPretrageZaBrisanje() {
@@ -745,8 +804,13 @@ public class Start {
 	
 	// DETALJI KORISNIKA
 	private void korisniciDetalji() {
-		korisniciIspisIzboraPretrage("Detalji korisnika");
-		korisniciUcitajOdabirPretrageZaIspisDetalja();			
+		if(!korisnici.isEmpty()) {
+			korisniciIspisIzboraPretrage("Detalji korisnika");
+			korisniciUcitajOdabirPretrageZaIspisDetalja();	
+		}else {
+			System.out.println(porukaGreskeNemaKorisnika);
+			korisniciIzbornik();
+		}
 	}
 
 	private void korisniciUcitajOdabirPretrageZaIspisDetalja() {
@@ -859,44 +923,54 @@ public class Start {
 	
 	// izlistanje svih korisnika
 	private void korisniciIzlistanje() {
-		int counter = 1;
-		Alati.ispisZaglavlja("Korisici koji se nalaze u bazi", false);
-		for (Korisnik korisnik : korisnici) {
-			System.out.println(counter + " " + korisnik.toString());
-			counter++;
-		}		
+		if(!korisnici.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja("Korisici koji se nalaze u bazi", false);
+			for (Korisnik korisnik : korisnici) {
+				System.out.println(counter + " " + korisnik.toString());
+				counter++;
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaKorisnika);
+		}	
 	}
 	
 	// izlistanje nađenih korisnika
 	private void korisniciIzlistanje(String poruka, List<Korisnik> korisnici) {
-		int counter = 1;
-		Alati.ispisZaglavlja(poruka, false);
-		for (Korisnik korisnik : korisnici) {
-			System.out.println(counter + " " + korisnik.toString());
-			counter++;
-		}		
+		if(!korisnici.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja(poruka, false);
+			for (Korisnik korisnik : korisnici) {
+				System.out.println(counter + " " + korisnik.toString());
+				counter++;
+			}	
+		}else {
+			System.out.println(porukaGreskeNemaKorisnika);
+		}			
 	}
 	
-	// izlistanje aktivnih korisnika
-	private List<Korisnik> korisniciListaAktivnih() {
-		List<Korisnik> aktivniKorisnici = new ArrayList<Korisnik>();
-		Alati.ispisZaglavlja("Aktivni korisnici koji se nalaze u bazi", false);
+	// aktualiziranje aktivnih korisnika
+	private void korisniciAktualiziranjeListeAktivnihKorisnika() {
 		for (Korisnik korisnik : korisnici) {
 			if(korisnik.isAktivan()) {
 				aktivniKorisnici.add(korisnik);
 			}
 		}
-		return aktivniKorisnici;
 	}
 	
-//	private Korisnik korisniciPronadjiPoAktivnomKorisniku(Korisnik aktivniKorisnik) {
-//		Korisnik korisnik = new Korisnik();
-//		for(Korisnik k : korisnici) {
-//			if(k.equals(aktivniKorisnik)) {
-//				korisnik = k;
-//			}
-//		}
-//	}
+	// izlistanje aktivnih korisnika
+	private void korisniciIzlistanjeAktivnihKorisnika(String poruka, List<Korisnik> korisnici) {
+		if(!korisnici.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja(poruka, false);
+			for (Korisnik korisnik : korisnici) {
+				System.out.println(counter + " " + korisnik.korisnikZaPrikaz());
+				counter++;
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaAktivnihKorisnika);
+		}		
+	}
 	
 	/**
 	 * 
@@ -957,11 +1031,16 @@ public class Start {
 	
 	//IZMJENA REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaIzmjena() {
-		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-		int i = Alati.ucitajBroj("Unesite broj ispred redovnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
-				redovnaRadnaVremena.size()) - 1;
-		RedovnoRadnoVrijeme redovnoRadnoVrijeme = redovnaRadnaVremena.get(i);
-		redovnaRadnaVremenaIzmjenaPodataka(redovnoRadnoVrijeme, i);		
+		if(!redovnaRadnaVremena.isEmpty()) {
+			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
+			int i = Alati.ucitajBroj("Unesite broj ispred redovnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+					redovnaRadnaVremena.size()) - 1;
+			RedovnoRadnoVrijeme redovnoRadnoVrijeme = redovnaRadnaVremena.get(i);
+			redovnaRadnaVremenaIzmjenaPodataka(redovnoRadnoVrijeme, i);		
+		}else {
+			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
+			redovnaRadnaVremenaIzbornik();
+		}		
 	}
 	
 	private void redovnaRadnaVremenaIzmjenaPodataka(RedovnoRadnoVrijeme redovnoRadnoVrijeme, int i) {
@@ -989,27 +1068,35 @@ public class Start {
 	
 	// BRISANJE REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaBrisanje() {
-		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-		int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
-				redovnaRadnaVremena.size()) - 1;
-		if(Alati.daNe("Želite li zaista obrisati radno vrijeme sa datumom primjene " 
-				+ redovnaRadnaVremena.get(i).toString() + ": ", 
-				porukaGreskeDaNe)) {
-			redovnaRadnaVremena.remove(i);
-			System.out.println();
-			System.out.println("Unos je obrisan.");
-		}		
+		if(!redovnaRadnaVremena.isEmpty()) {
+			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
+			int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+					redovnaRadnaVremena.size()) - 1;
+			if(Alati.daNe("Želite li zaista obrisati radno vrijeme sa datumom primjene " 
+					+ redovnaRadnaVremena.get(i).toString() + ": ", 
+					porukaGreskeDaNe)) {
+				redovnaRadnaVremena.remove(i);
+				System.out.println();
+				System.out.println("Unos je obrisan.");
+			}				
+		}else {
+			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
+		}
 		redovnaRadnaVremenaIzbornik();
 	}
 	
 	// DETALJI REDOVNOG RADNOG VREMENA
-	private void redovnaRadnaVremenaDetalji() {			
-		redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-		int i = Alati.ucitajBroj("Unesite redni broj redovnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
-				redovnaRadnaVremena.size()) - 1;
-		Alati.ispisZaglavlja("Detalji redovnog radnog vremena", false);
-		redovnaRadnaVremena.get(i).ispisiDetalje();
-		redovnaRadnaVremenaIzbornik();		
+	private void redovnaRadnaVremenaDetalji() {	
+		if(!redovnaRadnaVremena.isEmpty()) {
+			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
+			int i = Alati.ucitajBroj("Unesite redni broj redovnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+					redovnaRadnaVremena.size()) - 1;
+			Alati.ispisZaglavlja("Detalji redovnog radnog vremena", false);
+			redovnaRadnaVremena.get(i).ispisiDetalje();
+		}else {
+			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
+		}
+		redovnaRadnaVremenaIzbornik();	
 	}	
 	
 	// POMOĆNE FUNKCIJE REDOVNOG RADNOG VREMENA
@@ -1064,12 +1151,16 @@ public class Start {
 	}
 	
 	private void redovnaRadnaVremenaIzlistanje(String poruka) {
-		int counter = 1;
-		Alati.ispisZaglavlja(poruka, false);
-		for (RedovnoRadnoVrijeme rrv : redovnaRadnaVremena) {
-			System.out.println(counter + " " + rrv.toString());
-			counter++;
-		}
+		if(!redovnaRadnaVremena.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja(poruka, false);
+			for (RedovnoRadnoVrijeme rrv : redovnaRadnaVremena) {
+				System.out.println(counter + " " + rrv.toString());
+				counter++;
+			}
+		}else {
+			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
+		}		
 	}
 
 	/**
@@ -1128,11 +1219,16 @@ public class Start {
 	
 	//IZMJENA IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaIzmjena() {
-		iznimnaRadnaVremenaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
-				iznimnaRadnaVremena.size()) - 1;
-		IznimnoRadnoVrijeme iznimnoRadnoVrijeme = iznimnaRadnaVremena.get(i);
-		iznimnaRadnaVremenaIzmjenaPodataka(iznimnoRadnoVrijeme, i);		
+		if(!iznimnaRadnaVremena.isEmpty()) {
+			iznimnaRadnaVremenaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+					iznimnaRadnaVremena.size()) - 1;
+			IznimnoRadnoVrijeme iznimnoRadnoVrijeme = iznimnaRadnaVremena.get(i);
+			iznimnaRadnaVremenaIzmjenaPodataka(iznimnoRadnoVrijeme, i);		
+		}else {
+			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
+			iznimnaRadnaVremenaIzbornik();
+		}		
 	}
 	
 	private void iznimnaRadnaVremenaIzmjenaPodataka(IznimnoRadnoVrijeme iznimnoRadnoVrijeme, int i) {
@@ -1157,26 +1253,34 @@ public class Start {
 	
 	// BRISANJE IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaBrisanje() {
-		iznimnaRadnaVremenaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite obrisati: ", porukaGreskeIzboraAkcije, 1,
-				iznimnaRadnaVremena.size()) - 1;
-		if(Alati.daNe("Želite li zaista obrisati iznimno radno vrijeme sa datumom " 
-						+ Alati.hrDatum(iznimnaRadnaVremena.get(i).getDatum()) + ": ", 
-						porukaGreskeDaNe)) {
-			iznimnaRadnaVremena.remove(i);
-			System.out.println();
-			System.out.println("Iznimno radno vrijeme je obrisano.");
+		if(!iznimnaRadnaVremena.isEmpty()) {
+			iznimnaRadnaVremenaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+					iznimnaRadnaVremena.size()) - 1;
+			if(Alati.daNe("Želite li zaista obrisati iznimno radno vrijeme sa datumom " 
+							+ Alati.hrDatum(iznimnaRadnaVremena.get(i).getDatum()) + ": ", 
+							porukaGreskeDaNe)) {
+				iznimnaRadnaVremena.remove(i);
+				System.out.println();
+				System.out.println("Iznimno radno vrijeme je obrisano.");
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
 		}		
 		iznimnaRadnaVremenaIzbornik();
 	}
 	
 	// DETALJI IZNIMNOG RADNOG VREMENA
-	private void iznimnaRadnaVremenaDetalji() {			
-		iznimnaRadnaVremenaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite redni broj ispred iznimnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
-				iznimnaRadnaVremena.size()) - 1;
-		Alati.ispisZaglavlja("Detalji iznimnog radnog vremena", false);
-		iznimnaRadnaVremena.get(i).ispisiDetalje();
+	private void iznimnaRadnaVremenaDetalji() {	
+		if(!iznimnaRadnaVremena.isEmpty()) {			
+			iznimnaRadnaVremenaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite redni broj ispred iznimnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+					iznimnaRadnaVremena.size()) - 1;
+			Alati.ispisZaglavlja("Detalji iznimnog radnog vremena", false);
+			iznimnaRadnaVremena.get(i).ispisiDetalje();
+		}else {
+			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
+		}			
 		iznimnaRadnaVremenaIzbornik();		
 	}	
 	
@@ -1210,12 +1314,16 @@ public class Start {
 	}
 	
 	private void iznimnaRadnaVremenaIzlistanje() {
-		int counter = 1;
-		Alati.ispisZaglavlja("U bazi postoje sljedeća iznimna radna vremena", false);
-		for (IznimnoRadnoVrijeme irv : iznimnaRadnaVremena) {
-			System.out.println(counter + " " + irv.toString());
-			counter++;
-		}
+		if(!iznimnaRadnaVremena.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja("U bazi postoje sljedeća iznimna radna vremena", false);
+			for (IznimnoRadnoVrijeme irv : iznimnaRadnaVremena) {
+				System.out.println(counter + " " + irv.toString());
+				counter++;
+			}
+		}else {
+			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
+		}		
 	}
 
 	/**
@@ -1277,11 +1385,16 @@ public class Start {
 	
 	//IZMJENA BROJA RADNIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaIzmjena() {
-		brojRadnikaPoDanimaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj ispred unosa koji želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
-				brojeviRadnikaPoDanima.size()) - 1;
-		BrojRadnikaPoDanima brojRadnikaPoDanima = brojeviRadnikaPoDanima.get(i);
-		brojRadnikaPoDanimaIzmjenaPodataka(brojRadnikaPoDanima, i);		
+		if(!brojeviRadnikaPoDanima.isEmpty()) {
+			brojRadnikaPoDanimaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj ispred unosa koji želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+					brojeviRadnikaPoDanima.size()) - 1;
+			BrojRadnikaPoDanima brojRadnikaPoDanima = brojeviRadnikaPoDanima.get(i);
+			brojRadnikaPoDanimaIzmjenaPodataka(brojRadnikaPoDanima, i);		
+		}else {
+			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
+			brojRadnikaPoDanimaIzbornik();
+		}		
 	}
 	
 	private void brojRadnikaPoDanimaIzmjenaPodataka(BrojRadnikaPoDanima brojRadnikaPoDanima, int i) {
@@ -1309,26 +1422,35 @@ public class Start {
 	
 	// BRISANJE UNOSA BROJA RANIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaBrisanje() {
-		brojRadnikaPoDanimaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
-				brojeviRadnikaPoDanima.size()) - 1;
-		if(Alati.daNe("Želite li zaista obrisati unos sa datum primjene " 
-						+ brojeviRadnikaPoDanima.get(i).toString() + ": ", 
-						porukaGreskeDaNe)) {
-			brojeviRadnikaPoDanima.remove(i);
-			System.out.println();
-			System.out.println("Unos je obrisan.");
-		}		
+		if(!brojeviRadnikaPoDanima.isEmpty()) {
+			brojRadnikaPoDanimaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+					brojeviRadnikaPoDanima.size()) - 1;
+			if(Alati.daNe("Želite li zaista obrisati unos sa datum primjene " 
+							+ brojeviRadnikaPoDanima.get(i).toString() + ": ", 
+							porukaGreskeDaNe)) {
+				brojeviRadnikaPoDanima.remove(i);
+				System.out.println();
+				System.out.println("Unos je obrisan.");
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
+		}			
 		brojRadnikaPoDanimaIzbornik();
 	}
 	
 	// DETALJI UNOSA BROJA RADNIKA PO DANIMA U TJEDNU
-	private void brojRadnikaPoDanimaDetalji() {			
-		brojRadnikaPoDanimaIzlistanje();
-		int i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
-				brojeviRadnikaPoDanima.size()) - 1;
-		Alati.ispisZaglavlja("Detalji unosa", false);
-		brojeviRadnikaPoDanima.get(i).ispisiDetalje();
+	private void brojRadnikaPoDanimaDetalji() {	
+		if(!brojeviRadnikaPoDanima.isEmpty()) {
+			brojRadnikaPoDanimaIzbornik();
+			brojRadnikaPoDanimaIzlistanje();
+			int i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+					brojeviRadnikaPoDanima.size()) - 1;
+			Alati.ispisZaglavlja("Detalji unosa", false);
+			brojeviRadnikaPoDanima.get(i).ispisiDetalje();
+		}else {
+			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
+		}					
 		brojRadnikaPoDanimaIzbornik();		
 	}	
 	
@@ -1375,12 +1497,17 @@ public class Start {
 	}
 	
 	private void brojRadnikaPoDanimaIzlistanje() {
-		int counter = 1;
-		Alati.ispisZaglavlja("U bazi postoje unosi broja radnika po danima sa datumom primjene od-do", false);
-		for (BrojRadnikaPoDanima brojRadnika : brojeviRadnikaPoDanima) {
-			System.out.println(counter + " " + brojRadnika.toString());
-			counter++;
+		if(!brojeviRadnikaPoDanima.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja("U bazi postoje unosi broja radnika po danima sa datumom primjene od-do", false);
+			for (BrojRadnikaPoDanima brojRadnika : brojeviRadnikaPoDanima) {
+				System.out.println(counter + " " + brojRadnika.toString());
+				counter++;
+			}
+		}else {
+			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
 		}
+		
 	}
 	
 	/**
@@ -1438,11 +1565,16 @@ public class Start {
 	
 	//IZMJENA OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedIzmjena() {
-		oznakeUnosaURasporedIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
-				oznakeUnosaURaspored.size()) - 1;
-		OznakaUnosaURaspored oznakaUnosaURaspored = oznakeUnosaURaspored.get(i);
-		oznakeUnosaURasporedIzmjenaPodataka(oznakaUnosaURaspored, i);		
+		if(!oznakeUnosaURaspored.isEmpty()) {
+			oznakeUnosaURasporedIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+					oznakeUnosaURaspored.size()) - 1;
+			OznakaUnosaURaspored oznakaUnosaURaspored = oznakeUnosaURaspored.get(i);
+			oznakeUnosaURasporedIzmjenaPodataka(oznakaUnosaURaspored, i);	
+		}else {
+			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
+			oznakeUnosaURasporedIzbornik();
+		}			
 	}
 	
 	private void oznakeUnosaURasporedIzmjenaPodataka(OznakaUnosaURaspored oznakaUnosaURaspored, int i) {
@@ -1467,26 +1599,34 @@ public class Start {
 	
 	// BRISANJE OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedBrisanje() {
-		oznakeUnosaURasporedIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj oznake koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
-				oznakeUnosaURaspored.size()) - 1;
-		if(Alati.daNe("Želite li zaista obrisati oznaku " 
-						+ oznakeUnosaURaspored.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
-			oznakeUnosaURaspored.remove(i);
-			System.out.println();
-			System.out.println("Oznaka je obrisana.");
-		}		
+		if(!oznakeUnosaURaspored.isEmpty()) {
+			oznakeUnosaURasporedIzlistanje();
+			int i = Alati.ucitajBroj("Unesite broj oznake koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+					oznakeUnosaURaspored.size()) - 1;
+			if(Alati.daNe("Želite li zaista obrisati oznaku " 
+							+ oznakeUnosaURaspored.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
+				oznakeUnosaURaspored.remove(i);
+				System.out.println();
+				System.out.println("Oznaka je obrisana.");
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
+		}	
 		oznakeUnosaURasporedIzbornik();
 	}
 	
 	// DETALJI OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedDetalji() {			
-		oznakeUnosaURasporedIzlistanje();
-		int i = Alati.ucitajBroj("Unesite redni broj oznake koju želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
-				oznakeUnosaURaspored.size()) - 1;
-		Alati.ispisZaglavlja("Detalji oznake", false);
-		oznakeUnosaURaspored.get(i).ispisiDetalje();
-		oznakeUnosaURasporedIzbornik();		
+		if(!oznakeUnosaURaspored.isEmpty()) {
+			oznakeUnosaURasporedIzlistanje();
+			int i = Alati.ucitajBroj("Unesite redni broj oznake koju želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+					oznakeUnosaURaspored.size()) - 1;
+			Alati.ispisZaglavlja("Detalji oznake", false);
+			oznakeUnosaURaspored.get(i).ispisiDetalje();
+		}else {
+			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
+		}	
+		oznakeUnosaURasporedIzbornik();
 	}	
 	
 	// POMOĆNE FUNKCIJE OZNAKE UNOSA U RASPORED
@@ -1511,12 +1651,16 @@ public class Start {
 	}
 
 	private void oznakeUnosaURasporedIzlistanje() {
-		int counter = 1;
-		Alati.ispisZaglavlja("U bazi postoje slijedeće oznake unosa u raspored", false);
-		for (OznakaUnosaURaspored oznakaUnosaURaspored : oznakeUnosaURaspored) {
-			System.out.println(counter + " " + oznakaUnosaURaspored.toString());
-			counter++;
-		}
+		if(!oznakeUnosaURaspored.isEmpty()) {
+			int counter = 1;
+			Alati.ispisZaglavlja("U bazi postoje slijedeće oznake unosa u raspored", false);
+			for (OznakaUnosaURaspored oznakaUnosaURaspored : oznakeUnosaURaspored) {
+				System.out.println(counter + " " + oznakaUnosaURaspored.toString());
+				counter++;
+			}		
+		}else {
+			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
+		}			
 	}
 	
 	/**
@@ -1552,38 +1696,45 @@ public class Start {
 		
 	}
 	
-	private void raposredNoviUnos() {
-		osobeIzlistanje();
-		Korisnik aktivniKorisnik = korisniciListaAktivnih().get(
-				Alati.ucitajBroj("Unesite broj osobe za koju želite stvoriti novi unos u rasporedu: ", 
-								"Unos ne smije biti prazan", 1, korisniciListaAktivnih().size())-1
-				);
-		Date datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
-		if(!rasporedProvjeriPostojanjeUnosa(aktivniKorisnik, datum)) {
-			Raspored raspored = new Raspored();
-			raspored.setKorisnik(aktivniKorisnik);
-			raspored.setDatum(datum);
-			oznakeUnosaURasporedIzlistanje();
-			OznakaUnosaURaspored oznaka = oznakeUnosaURaspored.get(
-					Alati.ucitajBroj("Odaberite oznaku zapisa: ", porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1
-					);
-			raspored.setoznakaUnosaURaspored(oznaka);
-			raspored.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
-			rasporedi.add(raspored);
-			rasporedPregledSviZapisa();
-			rasporedIzbornik();			
-		}else {
-			if(Alati.daNe("Ta osoba na taj datum je već unešena u rapored. Želite li pokušati opet? (da/ne): ", 
-					porukaGreskeDaNe)) {
-				raposredNoviUnos();				
+	private void raposredNoviUnos() {		
+		if(!aktivniKorisnici.isEmpty()) {
+			Korisnik odabraniKorisnik = new Korisnik();
+			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
+			int izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
+									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
+			int indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
+			odabraniKorisnik = korisnici.get(indeksKorisnika);
+			Date datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
+			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum)) {			
+				Raspored raspored = new Raspored();
+				raspored.setKorisnik(odabraniKorisnik);
+				raspored.setDatum(datum);
+				oznakeUnosaURasporedIzlistanje();
+				OznakaUnosaURaspored oznaka = oznakeUnosaURaspored.get(
+						Alati.ucitajBroj("Odaberite oznaku zapisa: ", porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1
+						);
+				raspored.setoznakaUnosaURaspored(oznaka);
+				raspored.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
+				rasporedi.add(raspored);
+				rasporedIspisSvih();	
 			}else {
-				rasporedIzbornik();
+				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
+						porukaGreskeDaNe)) {
+					raposredNoviUnos();				
+				}
 			}
-		}
+		}else {
+			System.out.println();
+			System.out.println("Nema aktivnih korisnika."
+					+ "\nBarem jedan korisnik mora biti aktivan da bi Ste mogli unijeti zapis u raspored.");
+		}		
+		rasporedIzbornik();
 	}
 
-	private void rasporedPregledSviZapisa() {
-		// dovršiti
+	private void rasporedIspisSvih() {
+		for(Raspored r : rasporedi) {
+			r.ispisiDetalje();
+		}
 		
 	}
 
