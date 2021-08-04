@@ -2,7 +2,6 @@ package raspored;
 
 import java.awt.Desktop;
 import java.net.URI;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +27,6 @@ public class Start {
 	private String porukaGreskeDaNe = "Molimo unesite da ili ne";
 	private String porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
 	private String porukaGreskeNemaKorisnika = "\nU bazi nema niti jednog korisnika";
-	private String porukaGreskeNemaAktivnihKorisnika = "\nU bazi nema niti jednog aktivnog korisnika";
 	private String porukaGreskeNemaRedovnihRadnihVremena ="\nU bazi nema niti jednog redovnog radnog vremena";
 	private String porukaGreskeNemaIznimnihRadnihVremena ="\nU bazi nema niti jednog iznimnog radnog vremena";
 	private String porukaGreskeNemaBrojRadnikaPoDanima ="\nU bazi nema niti jednog unosa broja radnika po danima u tjednu";
@@ -60,107 +58,107 @@ public class Start {
 		// probni podaci novog korisnika
 		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true));
 		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));
-		
-		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
-		formatVremena = new SimpleDateFormat("HH:mm");
-		
-		// probni podaci redovnog radnog vremena
-		try {
-			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
-					formatDatuma.parse("01.01.2020."),
-					formatDatuma.parse("01.03.2020."),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					30));
-			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
-					formatDatuma.parse("01.04.2020."),
-					formatDatuma.parse("01.06.2020."),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					formatVremena.parse("00:00"),
-					formatVremena.parse("08:45"),
-					formatVremena.parse("00:00"),
-					formatVremena.parse("08:45"),
-					formatVremena.parse("22:00"),
-					formatVremena.parse("06:15"),
-					30));
-		} catch (ParseException e) {
-			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
-		}
-		
-		// probni podaci iznimnog radnog vremena
-		try {
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("01.01.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Nova Godina 2020.",
-					30));
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("01.03.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Neki blagdan 2020.",
-					30));
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("01.05.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Praznik rada 2020.",
-					30));
-		} catch (ParseException e) {
-			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
-		}
-		
-		// probni podaci broja radnika po danima u tjednu
-		try {
-			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
-					formatDatuma.parse("01.01.2020."),
-					formatDatuma.parse("01.03.2020."),
-					6,
-					6,
-					7,
-					7,
-					6,
-					6,
-					6));
-			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
-					formatDatuma.parse("01.04.2020."),
-					formatDatuma.parse("01.06.2020."),
-					8,
-					6,
-					7,
-					7,
-					6,
-					9,
-					6));
-		} catch (ParseException e) {
-			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
-		}
-		
-		// probni podaci vrsta unosa u raspored
-		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Rad","R"));
-		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Slobodno","S"));
-		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Bolovanje","B"));
-		
+//		
+//		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
+//		formatVremena = new SimpleDateFormat("HH:mm");
+//		
+//		// probni podaci redovnog radnog vremena
+//		try {
+//			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
+//					formatDatuma.parse("01.01.2020."),
+//					formatDatuma.parse("01.03.2020."),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					30));
+//			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
+//					formatDatuma.parse("01.04.2020."),
+//					formatDatuma.parse("01.06.2020."),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					formatVremena.parse("00:00"),
+//					formatVremena.parse("08:45"),
+//					formatVremena.parse("00:00"),
+//					formatVremena.parse("08:45"),
+//					formatVremena.parse("22:00"),
+//					formatVremena.parse("06:15"),
+//					30));
+//		} catch (ParseException e) {
+//			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
+//		}
+//		
+//		// probni podaci iznimnog radnog vremena
+//		try {
+//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+//					formatDatuma.parse("01.01.2020."),
+//					formatVremena.parse("02:00"),
+//					formatVremena.parse("04:00"),
+//					"Nova Godina 2020.",
+//					30));
+//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+//					formatDatuma.parse("01.03.2020."),
+//					formatVremena.parse("02:00"),
+//					formatVremena.parse("04:00"),
+//					"Neki blagdan 2020.",
+//					30));
+//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+//					formatDatuma.parse("01.05.2020."),
+//					formatVremena.parse("02:00"),
+//					formatVremena.parse("04:00"),
+//					"Praznik rada 2020.",
+//					30));
+//		} catch (ParseException e) {
+//			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
+//		}
+//		
+//		// probni podaci broja radnika po danima u tjednu
+//		try {
+//			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
+//					formatDatuma.parse("01.01.2020."),
+//					formatDatuma.parse("01.03.2020."),
+//					6,
+//					6,
+//					7,
+//					7,
+//					6,
+//					6,
+//					6));
+//			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
+//					formatDatuma.parse("01.04.2020."),
+//					formatDatuma.parse("01.06.2020."),
+//					8,
+//					6,
+//					7,
+//					7,
+//					6,
+//					9,
+//					6));
+//		} catch (ParseException e) {
+//			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
+//		}
+//		
+//		// probni podaci vrsta unosa u raspored
+//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Rad","R"));
+//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Slobodno","S"));
+//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Bolovanje","B"));
+//		
 		/**
 		 *  kraj probnih podataka
 		 */
@@ -252,6 +250,7 @@ public class Start {
 			case 4 -> iznimnaRadnaVremenaIzbornik();
 			case 5 -> brojRadnikaPoDanimaIzbornik();
 			case 6 -> oznakeUnosaURasporedIzbornik();
+			case 7 -> rasporedIzbornik();
 			case 8 -> logout();
 		}
 	}
@@ -299,8 +298,7 @@ public class Start {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
 			case 1 -> {
 				osobeUnosNove();
-				System.out.println();
-				System.out.println("Osoba je spremljena. Što želite dalje?");
+				System.out.println("\nOsoba je spremljena. Što želite dalje?");
 				osobeIzbornik();
 			}
 			case 2 -> osobeIzmjena();
@@ -405,11 +403,9 @@ public class Start {
 		if(Alati.daNe("Želite li zaista obrisati osobu " + osobe.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
 			if(!korisniciJeLiOsobaKorisnik(osobe.get(i))) {
 				osobe.remove(i);
-				System.out.println();
-				System.out.println("Osoba je obrisana.");
+				System.out.println("\nOsoba je obrisana.");
 			}else {
-				System.out.println();
-				System.out.println("Odabrana osoba je korisnik i stoga ju ne možete obrisati.");
+				System.out.println("\nOdabrana osoba je korisnik i stoga ju ne možete obrisati.");
 			}
 			
 		}		
@@ -430,15 +426,13 @@ public class Start {
 						porukaGreskeDaNe)) {
 				if(!korisniciJeLiOsobaKorisnik(osobe.get(indeksOdabraneOsobe))) {
 					osobe.remove(indeksOdabraneOsobe);
-					System.out.println();
-					System.out.println("Osoba je obrisana.");
+					System.out.println("\nOsoba je obrisana.");
 				}else {
-					System.out.println();
-					System.out.println("Odabrana osoba je korisnik i stoga ju ne možete obrisati.");
+					System.out.println("\nOdabrana osoba je korisnik i stoga ju ne možete obrisati.");
 				}				
 			}					
 		} else {
-			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
+			System.out.println("\nNema rezultata koji dogovaraju zadanom kriteriju. ");
 			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", porukaGreskeDaNe)) {
 				osobeBrisanjePoImenu();
 			}
@@ -635,10 +629,9 @@ public class Start {
 						korisnik.setKorisnickoIme(korisnickoIme);
 						korisnik = korisniciUnosOstalihPodataka(korisnik);
 						korisnici.add(korisnik);
-						System.out.println();
-						System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");
+						System.out.println("\nNova osoba je unešena i postavljena kao novi korisnik");
 					}else {
-						if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
+						if(Alati.daNe("\nKorisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
 							continue;
 						}
 					}				
@@ -650,8 +643,10 @@ public class Start {
 				}
 			}
 		}else {
-			System.out.println(porukaGreskeNemaOsoba);
-		}		
+			System.out.println("\nU bazi ne postoji niti jedna osoba. \n"
+					+ "Da bi Ste mogli dodati osobu kao novog korisnika prvo unesite najmanje jednu osobu.");
+		}	
+		korisniciAktualiziranjeListeAktivnihKorisnika();
 		korisniciIzbornik();
 	}
 	
@@ -666,15 +661,15 @@ public class Start {
 				korisnik.setKorisnickoIme(korisnickoIme);
 				korisnik = korisniciUnosOstalihPodataka(korisnik);
 				korisnici.add(korisnik);
-				System.out.println();
-				System.out.println("Nova osoba je unešena i postavljena kao novi korisnik");	
+				System.out.println("\nNova osoba je unešena i postavljena kao novi korisnik");	
 			}else {
-				if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
+				if(Alati.daNe("\nKorisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
 					continue;
 				}else {
 					osobe.remove(osobe.size()-1);
 				}
 			}
+			korisniciAktualiziranjeListeAktivnihKorisnika();
 			korisniciIzbornik();
 			break;
 		}		
@@ -740,6 +735,7 @@ public class Start {
 					continue;
 				}
 			}
+			korisniciAktualiziranjeListeAktivnihKorisnika();
 			korisniciIzbornik();
 			break;
 		}		
@@ -771,9 +767,9 @@ public class Start {
 					+ korisnici.get(i).korisnikZaPrikaz() + "): ", 
 					porukaGreskeDaNe)) {
 			korisnici.remove(i);
-			System.out.println();
-			System.out.println("Korisnik je obrisan.");
+			System.out.println("\nKorisnik je obrisan.");
 		}		
+		korisniciAktualiziranjeListeAktivnihKorisnika();
 		korisniciIzbornik();
 	}
 
@@ -790,8 +786,7 @@ public class Start {
 							+ korisnici.get(indeksKorisnikaIzIzvorneListe).korisnikZaPrikaz() + "): ", 
 							porukaGreskeDaNe)) {
 				korisnici.remove(indeksKorisnikaIzIzvorneListe);
-				System.out.println();
-				System.out.println("Korisnik je obrisan.");	
+				System.out.println("\nKorisnik je obrisan.");	
 			}
 		} else {
 			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
@@ -799,6 +794,7 @@ public class Start {
 				korisniciBrisanjePoNazivu();
 			}			
 		}
+		korisniciAktualiziranjeListeAktivnihKorisnika();
 		korisniciIzbornik();
 	}	
 	
@@ -951,6 +947,7 @@ public class Start {
 	
 	// aktualiziranje aktivnih korisnika
 	private void korisniciAktualiziranjeListeAktivnihKorisnika() {
+		aktivniKorisnici.clear();
 		for (Korisnik korisnik : korisnici) {
 			if(korisnik.isAktivan()) {
 				aktivniKorisnici.add(korisnik);
@@ -960,17 +957,13 @@ public class Start {
 	
 	// izlistanje aktivnih korisnika
 	private void korisniciIzlistanjeAktivnihKorisnika(String poruka, List<Korisnik> korisnici) {
-		if(!korisnici.isEmpty()) {
-			int counter = 1;
-			Alati.ispisZaglavlja(poruka, false);
-			for (Korisnik korisnik : korisnici) {
-				System.out.println(counter + " " + korisnik.korisnikZaPrikaz());
-				counter++;
-			}		
-		}else {
-			System.out.println(porukaGreskeNemaAktivnihKorisnika);
+		int counter = 1;
+		Alati.ispisZaglavlja(poruka, false);
+		for (Korisnik korisnik : korisnici) {
+			System.out.println(counter + " " + korisnik.korisnikZaPrikaz());
+			counter++;
 		}		
-	}
+	}	
 	
 	/**
 	 * 
@@ -1018,8 +1011,7 @@ public class Start {
 			redovnoRadnoVrijeme.setVrijediDo(datumKrajaPrimjene);
 			redovnoRadnoVrijeme = redovnaRadnaVremenaUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
 			redovnaRadnaVremena.add(redovnoRadnoVrijeme);
-			System.out.println();
-			System.out.println("Novo redovno radno vrijeme je unešeno");	
+			System.out.println("\nNovo redovno radno vrijeme je unešeno");	
 		}else {
 			if(Alati.daNe("Redovno radno vrijeme u tom intervalu primjene je već unešeno."
 					+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1053,8 +1045,7 @@ public class Start {
 				redovnoRadnoVrijeme.setVrijediDo(datumKrajaPrimjene);
 				redovnoRadnoVrijeme = redovnaRadnaVremenaUnesiOstaleVrijednosti(redovnoRadnoVrijeme);
 				redovnaRadnaVremena.set(i, redovnoRadnoVrijeme);
-				System.out.println();
-				System.out.println("Redovno radno vrijeme je izmijenjeno");	
+				System.out.println("\nRedovno radno vrijeme je izmijenjeno");	
 			}else {
 				if(Alati.daNe("Radno vrijeme u tom intervalu primjene je već unešeno."
 						+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1076,8 +1067,7 @@ public class Start {
 					+ redovnaRadnaVremena.get(i).toString() + ": ", 
 					porukaGreskeDaNe)) {
 				redovnaRadnaVremena.remove(i);
-				System.out.println();
-				System.out.println("Unos je obrisan.");
+				System.out.println("\nUnos je obrisan.");
 			}				
 		}else {
 			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
@@ -1206,8 +1196,7 @@ public class Start {
 			iznimnoRadnoVrijeme.setDatum(datum);
 			iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
 			iznimnaRadnaVremena.add(iznimnoRadnoVrijeme);
-			System.out.println();
-			System.out.println("Novo iznimno radno vrijeme je unešeno");	
+			System.out.println("\nNovo iznimno radno vrijeme je unešeno");	
 		}else {
 			if(Alati.daNe("Iznimno radno vrijeme sa tim datumom je već unešeno."
 					+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1238,8 +1227,7 @@ public class Start {
 				iznimnoRadnoVrijeme.setDatum(datum);
 				iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
 				iznimnaRadnaVremena.set(i, iznimnoRadnoVrijeme);
-				System.out.println();
-				System.out.println("Iznimno radno vrijeme je izmijenjeno");	
+				System.out.println("\nIznimno radno vrijeme je izmijenjeno");	
 			}else {
 				if(Alati.daNe("Iznimno radno vrijeme sa tim datumom je već unešeno."
 						+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1261,8 +1249,7 @@ public class Start {
 							+ Alati.hrDatum(iznimnaRadnaVremena.get(i).getDatum()) + ": ", 
 							porukaGreskeDaNe)) {
 				iznimnaRadnaVremena.remove(i);
-				System.out.println();
-				System.out.println("Iznimno radno vrijeme je obrisano.");
+				System.out.println("\nIznimno radno vrijeme je obrisano.");
 			}		
 		}else {
 			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
@@ -1372,8 +1359,7 @@ public class Start {
 			brojRadnikaPoDanima.setVrijediDo(datumKrajaPrimjene);
 			brojRadnikaPoDanima = brojRadnikaPoDanimaUnesiOstaleVrijednosti(brojRadnikaPoDanima);
 			brojeviRadnikaPoDanima.add(brojRadnikaPoDanima);
-			System.out.println();
-			System.out.println("Unešen je novi broj radnika po danima u tjednu.");	
+			System.out.println("\nUnešen je novi broj radnika po danima u tjednu.");	
 		}else {
 			if(Alati.daNe("Broj radnika u tom intervalu primjene je već unešen."
 					+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1407,8 +1393,7 @@ public class Start {
 				brojRadnikaPoDanima.setVrijediDo(datumKrajaPrimjene);
 				brojRadnikaPoDanima = brojRadnikaPoDanimaUnesiOstaleVrijednosti(brojRadnikaPoDanima);
 				brojeviRadnikaPoDanima.set(i, brojRadnikaPoDanima);
-				System.out.println();
-				System.out.println("Unos je izmjenjen.");	
+				System.out.println("\nUnos je izmjenjen.");	
 			}else {
 				if(Alati.daNe("Broj radnika u tom intervalu primjene je već unešen."
 						+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1430,8 +1415,7 @@ public class Start {
 							+ brojeviRadnikaPoDanima.get(i).toString() + ": ", 
 							porukaGreskeDaNe)) {
 				brojeviRadnikaPoDanima.remove(i);
-				System.out.println();
-				System.out.println("Unos je obrisan.");
+				System.out.println("\nUnos je obrisan.");
 			}		
 		}else {
 			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
@@ -1552,8 +1536,7 @@ public class Start {
 			oznakaUnosaURaspored.setSkracenica(skracenica);
 			oznakaUnosaURaspored.setNaziv(Alati.ucitajString("Koji će biti naziv nove oznake: ", porukaGreskePraznogUnosa, 1, 30));
 			oznakeUnosaURaspored.add(oznakaUnosaURaspored);
-			System.out.println();
-			System.out.println("Nova oznaka je unešena.");	
+			System.out.println("\nNova oznaka je unešena.");	
 		}else {
 			if(Alati.daNe("Oznaka unosa u raspored sa tom skraćenicom već postoji."
 					+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1584,8 +1567,7 @@ public class Start {
 				oznakaUnosaURaspored.setSkracenica(skracenica);
 				oznakaUnosaURaspored.setNaziv(Alati.ucitajString("Koji će biti naziv nove oznake: ", porukaGreskePraznogUnosa, 1, 30));
 				oznakeUnosaURaspored.set(i, oznakaUnosaURaspored);
-				System.out.println();
-				System.out.println("Oznaka unosa u raspored je izmjenjena.");	
+				System.out.println("\nOznaka unosa u raspored je izmjenjena.");	
 			}else {
 				if(Alati.daNe("Oznaka unosa u raspored sa tom skraćenicom već postoji."
 						+ "\nŽelite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
@@ -1606,8 +1588,7 @@ public class Start {
 			if(Alati.daNe("Želite li zaista obrisati oznaku " 
 							+ oznakeUnosaURaspored.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
 				oznakeUnosaURaspored.remove(i);
-				System.out.println();
-				System.out.println("Oznaka je obrisana.");
+				System.out.println("\nOznaka je obrisana.");
 			}		
 		}else {
 			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
@@ -1696,8 +1677,8 @@ public class Start {
 		
 	}
 	
-	private void raposredNoviUnos() {		
-		if(!aktivniKorisnici.isEmpty()) {
+	private void raposredNoviUnos() {	
+		if(rasporedPostojanjeAktivnihKorisnika() & raposredPostojanjeOznakaUnosa()) {
 			Korisnik odabraniKorisnik = new Korisnik();
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
 			int izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
@@ -1723,10 +1704,6 @@ public class Start {
 					raposredNoviUnos();				
 				}
 			}
-		}else {
-			System.out.println();
-			System.out.println("Nema aktivnih korisnika."
-					+ "\nBarem jedan korisnik mora biti aktivan da bi Ste mogli unijeti zapis u raspored.");
 		}		
 		rasporedIzbornik();
 	}
@@ -1750,6 +1727,24 @@ public class Start {
 			}
 		}
 		return valjanost;	
+	}
+	
+	private boolean rasporedPostojanjeAktivnihKorisnika() {
+		boolean valjanost = true;
+		if(aktivniKorisnici.isEmpty()) {
+			System.out.println("\nU bazi mora postojati barem jedan aktivan korisnik za nastavak ove radnje.");
+			valjanost = false;			
+		}
+		return valjanost;
+	}
+	
+	private boolean raposredPostojanjeOznakaUnosa() {
+		boolean valjanost = true;
+		if(oznakeUnosaURaspored.isEmpty()) {
+			System.out.println("\nU bazi mora postojati barem jedna oznaka unosa u raspored za nastavak ove radnje.");
+			valjanost = false;			
+		}
+		return valjanost;
 	}
 	
 	public static void main(String[] args) {

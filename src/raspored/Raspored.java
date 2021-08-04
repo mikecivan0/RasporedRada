@@ -30,13 +30,12 @@ public class Raspored {
 	}
 	public void setRadSaPauzom(boolean radSaPauzom) {
 		this.radSaPauzom = radSaPauzom;
-	}	
-	
+	}		
 
 	public void ispisiDetalje() {
 		System.out.println("Korisnik: " + this.korisnik.toString() + "\n"
 				+ "Oznaka: " + this.oznakaUnosaURaspored.getSkracenica() + "\n"
-				+ "Datum: " + Alati.hrDatum(this.datum)
+				+ "Datum: " + Alati.hrDatum(this.datum) + "\n"
 				+ "Rad sa pauzom: " + Alati.parseBool(this.radSaPauzom)
 				);
 	
