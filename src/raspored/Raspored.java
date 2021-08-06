@@ -2,11 +2,24 @@ package raspored;
 
 import java.util.Date;
 
-public class Raspored {
+public class Raspored implements Comparable<Raspored>{
 	private Korisnik korisnik;
 	private OznakaUnosaURaspored oznakaUnosaURaspored;
 	private Date datum;
 	private boolean radSaPauzom;
+	
+	public Raspored() {
+		
+	}	
+	
+	public Raspored(Korisnik korisnik, OznakaUnosaURaspored oznakaUnosaURaspored, Date datum, boolean radSaPauzom) {
+		this.korisnik = korisnik;
+		this.oznakaUnosaURaspored = oznakaUnosaURaspored;
+		this.datum = datum;
+		this.radSaPauzom = radSaPauzom;
+	}
+
+
 	public Korisnik getKorisnik() {
 		return korisnik;
 	}
@@ -40,4 +53,9 @@ public class Raspored {
 				);
 	
 	}
+	
+	@Override
+	  public int compareTo(Raspored r) {
+	    return getDatum().compareTo(r.getDatum());
+	  }
 }

@@ -7,10 +7,16 @@ import java.util.Scanner;
 public class Alati {
 
 	public static Scanner scanner;
-	public static final String FORMAT_DATUMA = "dd.MM.yyyy.";
+	public static final String FORMAT_DATUMA = "d.M.yyyy.";
 	public static final String FORMAT_VREMENA = "HH:mm";
+	public static final String FORMAT_GODINE = "yyyy";
+	public static final String FORMAT_MJESECA = "M";
+	public static final String FORMAT_DANA = "d";
 	private static SimpleDateFormat formatDatuma;
 	private static SimpleDateFormat formatVremena;
+	private static SimpleDateFormat formatGodine;
+	private static SimpleDateFormat formatMjeseca;
+	private static SimpleDateFormat formatDana;
 	
 	public static Date ucitajDatum(String poruka) {
 
@@ -117,6 +123,21 @@ public class Alati {
 			System.out.println("Unesite");
 		}
 		
+	}
+	
+	public static String hrGodina(Date datum) {
+		formatGodine = new SimpleDateFormat(FORMAT_GODINE);
+		return formatGodine.format(datum);
+	}
+	
+	public static String hrMjesec(Date datum) {
+		formatMjeseca = new SimpleDateFormat(FORMAT_MJESECA);
+		return formatMjeseca.format(datum);
+	}
+	
+	public static String hrDan(Date datum) {
+		formatDana = new SimpleDateFormat(FORMAT_DANA);
+		return formatDana.format(datum);
 	}
 	
 	public static String hrDatum(Date datum) {

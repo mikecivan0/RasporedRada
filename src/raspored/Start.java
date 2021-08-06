@@ -2,8 +2,11 @@ package raspored;
 
 import java.awt.Desktop;
 import java.net.URI;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -31,6 +34,8 @@ public class Start {
 	private String porukaGreskeNemaIznimnihRadnihVremena ="\nU bazi nema niti jednog iznimnog radnog vremena";
 	private String porukaGreskeNemaBrojRadnikaPoDanima ="\nU bazi nema niti jednog unosa broja radnika po danima u tjednu";
 	private String porukaGreskeNemaOznakaUnosaURaspored ="\nU bazi nema niti jedne oznake unosa u raspored";
+	private String porukaGreskeNemaZapisaURasporedu ="\nU bazi nema niti jedan zapis u rasporedu";
+	private String porukaGreskeKorisnikJeURasporedu ="\nNije moguće obrisati korisnika jer se nalazi u rasporedu";
 	SimpleDateFormat formatDatuma;
 	SimpleDateFormat formatVremena;
 
@@ -58,107 +63,174 @@ public class Start {
 		// probni podaci novog korisnika
 		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true));
 		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));
-//		
-//		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
-//		formatVremena = new SimpleDateFormat("HH:mm");
-//		
-//		// probni podaci redovnog radnog vremena
-//		try {
-//			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
-//					formatDatuma.parse("01.01.2020."),
-//					formatDatuma.parse("01.03.2020."),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					30));
-//			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
-//					formatDatuma.parse("01.04.2020."),
-//					formatDatuma.parse("01.06.2020."),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					formatVremena.parse("00:00"),
-//					formatVremena.parse("08:45"),
-//					formatVremena.parse("00:00"),
-//					formatVremena.parse("08:45"),
-//					formatVremena.parse("22:00"),
-//					formatVremena.parse("06:15"),
-//					30));
-//		} catch (ParseException e) {
-//			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
-//		}
-//		
-//		// probni podaci iznimnog radnog vremena
-//		try {
-//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-//					formatDatuma.parse("01.01.2020."),
-//					formatVremena.parse("02:00"),
-//					formatVremena.parse("04:00"),
-//					"Nova Godina 2020.",
-//					30));
-//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-//					formatDatuma.parse("01.03.2020."),
-//					formatVremena.parse("02:00"),
-//					formatVremena.parse("04:00"),
-//					"Neki blagdan 2020.",
-//					30));
-//			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-//					formatDatuma.parse("01.05.2020."),
-//					formatVremena.parse("02:00"),
-//					formatVremena.parse("04:00"),
-//					"Praznik rada 2020.",
-//					30));
-//		} catch (ParseException e) {
-//			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
-//		}
-//		
-//		// probni podaci broja radnika po danima u tjednu
-//		try {
-//			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
-//					formatDatuma.parse("01.01.2020."),
-//					formatDatuma.parse("01.03.2020."),
-//					6,
-//					6,
-//					7,
-//					7,
-//					6,
-//					6,
-//					6));
-//			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
-//					formatDatuma.parse("01.04.2020."),
-//					formatDatuma.parse("01.06.2020."),
-//					8,
-//					6,
-//					7,
-//					7,
-//					6,
-//					9,
-//					6));
-//		} catch (ParseException e) {
-//			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
-//		}
-//		
-//		// probni podaci vrsta unosa u raspored
-//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Rad","R"));
-//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Slobodno","S"));
-//		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Bolovanje","B"));
-//		
+		
+		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
+		formatVremena = new SimpleDateFormat("HH:mm");
+		
+		// probni podaci redovnog radnog vremena
+		try {
+			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
+					formatDatuma.parse("1.1.2020."),
+					formatDatuma.parse("1.3.2020."),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					30));
+			redovnaRadnaVremena.add(new RedovnoRadnoVrijeme(
+					formatDatuma.parse("1.4.2020."),
+					formatDatuma.parse("1.6.2020."),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					formatVremena.parse("00:00"),
+					formatVremena.parse("08:45"),
+					formatVremena.parse("00:00"),
+					formatVremena.parse("08:45"),
+					formatVremena.parse("22:00"),
+					formatVremena.parse("06:15"),
+					30));
+		} catch (ParseException e) {
+			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
+		}
+		
+		// probni podaci iznimnog radnog vremena
+		try {
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("1.1.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Nova Godina 2020.",
+					30));
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("1.3.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Neki blagdan 2020.",
+					30));
+			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
+					formatDatuma.parse("1.5.2020."),
+					formatVremena.parse("02:00"),
+					formatVremena.parse("04:00"),
+					"Praznik rada 2020.",
+					30));
+		} catch (ParseException e) {
+			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
+		}
+		
+		// probni podaci broja radnika po danima u tjednu
+		try {
+			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
+					formatDatuma.parse("1.1.2020."),
+					formatDatuma.parse("1.3.2020."),
+					6,
+					6,
+					7,
+					7,
+					6,
+					6,
+					6));
+			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
+					formatDatuma.parse("1.4.2020."),
+					formatDatuma.parse("1.6.2020."),
+					8,
+					6,
+					7,
+					7,
+					6,
+					9,
+					6));
+		} catch (ParseException e) {
+			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
+		}
+		
+		// probni podaci vrsta unosa u raspored
+		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Rad","R"));
+		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Slobodno","S"));
+		oznakeUnosaURaspored.add(new OznakaUnosaURaspored("Bolovanje","B"));
+		
+		// probni podaci raspored
+		try {
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(0),
+					formatDatuma.parse("1.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(0),
+					formatDatuma.parse("2.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(0),
+					formatDatuma.parse("3.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(1),
+					formatDatuma.parse("4.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("5.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("07.04.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("9.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("10.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(0),
+					formatDatuma.parse("7.5.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("8.5.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("10.1.2021."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(0),
+					oznakeUnosaURaspored.get(1),
+					formatDatuma.parse("15.2.2021."),
+					true));
+			
+		} catch (ParseException e) {
+			System.out.println("Nesto je pošlo po zlu unosom u raspored");
+		}
+		
 		/**
 		 *  kraj probnih podataka
 		 */
@@ -679,14 +751,14 @@ public class Start {
 	private void korisniciIzmjena() {
 		if(!korisnici.isEmpty()) {
 			korisniciIspisIzboraPretrage("Izmjena podataka korisnika");
-			korisniciUcitajOdabirPretrage();
+			korisniciIzmjenaUcitajOdabirPretrage();
 		}else {
 			System.out.println(porukaGreskeNemaKorisnika);
 			korisniciIzbornik();
 		}		
 	}
 	
-	private void korisniciUcitajOdabirPretrage() {
+	private void korisniciIzmjenaUcitajOdabirPretrage() {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
 			case 1 -> korisniciIzmjenaPoIndeksu();
 			case 2 -> korisniciIzmjenaPoImenu();
@@ -760,16 +832,22 @@ public class Start {
 	}
 	
 	private void korisniciBrisanjePoIndeksu() {
+		Korisnik korisnik = new Korisnik();
 		korisniciIzlistanje();
 		int i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 				korisnici.size())-1;
-		if(Alati.daNe("Želite li zaista obrisati korisnika (" 
-					+ korisnici.get(i).korisnikZaPrikaz() + "): ", 
+		korisnik = korisnici.get(i);
+		if(!korisniciJeLiKorisnikURasporedu(korisnik)) {
+			if(Alati.daNe("Želite li zaista obrisati korisnika (" 
+					+ korisnik.korisnikZaPrikaz() + "): ", 
 					porukaGreskeDaNe)) {
 			korisnici.remove(i);
 			System.out.println("\nKorisnik je obrisan.");
-		}		
-		korisniciAktualiziranjeListeAktivnihKorisnika();
+			korisniciAktualiziranjeListeAktivnihKorisnika();
+			}				
+		}else {
+			System.out.println(porukaGreskeKorisnikJeURasporedu);
+		}	
 		korisniciIzbornik();
 	}
 
@@ -901,6 +979,10 @@ public class Start {
 		} else {
 			return false;
 		}
+	}
+	
+	private boolean korisniciJeLiKorisnikURasporedu(Korisnik korisnik) {
+		return rasporedi.stream().filter(o -> o.getKorisnik().equals(korisnik)).findFirst().isPresent();
 	}
 	
 	private int korisniciIndeksKorisnikaIzIzvorneListe(Korisnik korisnik) {
@@ -1657,26 +1739,30 @@ public class Start {
 		System.out.println("1 za novi unos u raspored");
 		System.out.println("2 za izmjenu postojećeg unosa u rasporedu");
 		System.out.println("3 za brisanje postojećeg unosa u rasporedu");
-		System.out.println("4 za pregled postojećeg unosa u rasporedu za određeni dan");
-		System.out.println("5 za prikaz rasporeda za određeni mjesec i godinu");
-		System.out.println("6 za prikaz rasporeda za određenu osobu");
-		System.out.println("7 za povratak u glavni korisnički izbornik");
+		System.out.println("4 za prikaz svih zapisa u rasporedu na određeni datum");
+		System.out.println("5 za prikaz rasporeda za određeni mjesec u određenoj godini");
+		System.out.println("6 za prikaz rasporeda po korisnicima");
+		System.out.println("7 za ispis cijelog raporeda");
+		System.out.println("8 za povratak u glavni korisnički izbornik");
 		rasporedOdabirAkcije();
 	}
 
 	private void  rasporedOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 8)) {
 			case 1 -> raposredNoviUnos();
 //			case 2 -> raposredIzmjena();
 //			case 3 -> raposredBrisanje();
 //			case 4 -> raposredPregledZaDan();
 //			case 5 -> rasporedPregledZaMjesec();
-//			case 6 -> raposredPregledPoOsobi();
-			case 7 -> autentificiraniKorisnikGlavniIzbornik();
-		}
-		
+			case 6 -> raposredPregledPoKorisniku();
+			case 7 -> {
+				rasporedIspisSvih();
+				rasporedIzbornik();
+			}
+			case 8 -> autentificiraniKorisnikGlavniIzbornik();
+		}		
 	}
-	
+
 	private void raposredNoviUnos() {	
 		if(rasporedPostojanjeAktivnihKorisnika() & raposredPostojanjeOznakaUnosa()) {
 			Korisnik odabraniKorisnik = new Korisnik();
@@ -1697,7 +1783,6 @@ public class Start {
 				raspored.setoznakaUnosaURaspored(oznaka);
 				raspored.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
 				rasporedi.add(raspored);
-				rasporedIspisSvih();	
 			}else {
 				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
 						porukaGreskeDaNe)) {
@@ -1707,12 +1792,91 @@ public class Start {
 		}		
 		rasporedIzbornik();
 	}
+	
+//	private void raposredIzmjena() {
+//		if(!rasporedi.isEmpty()) {
+//			Alati.ispisZaglavlja("Odabir načina pretrage zapisa u rasporedu", true);
+//			System.out.println("1 za pronalazak zapisa po korisniku");
+//			System.out.println("2 za pronalazak zapisa po datumu");
+//			System.out.println("3 za izlistanje svih zapisa");
+//			System.out.println("4 za povratak u glavni izbornik rasporeda");
+//			rasporedIzmjenaOdabirAkcije();
+//		}else {
+//			System.out.println(porukaGreskeNemaZapisaURasporedu);
+//			rasporedIzbornik();
+//		}		
+//	}
+//
+//
+//	private void rasporedIzmjenaOdabirAkcije() {
+//		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 4)) {
+//			case 1 -> rasporedIzborPretragePoKorisniku();
+//			case 2 -> raposredIzmjena();
+//			case 3 -> raposredBrisanje();
+//			case 4 -> raposredPregledZaDan();
+//		}
+//		
+//	}
 
-	private void rasporedIspisSvih() {
-		for(Raspored r : rasporedi) {
-			r.ispisiDetalje();
-		}
-		
+	private void raposredPregledPoKorisniku() {
+		korisniciIzlistanjeAktivnihKorisnika("Korisnici koji se nalaze u bazi", aktivniKorisnici);
+		int i = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite pogledati zapise u rasporedu: ", 
+				porukaGreskeIzboraAkcije, 1,
+				aktivniKorisnici.size()) - 1;
+		Korisnik korisnik = aktivniKorisnici.get(i);
+		raposredPregledZapisaPoKorisniku(korisnik);		
+	}
+
+
+	private void raposredPregledZapisaPoKorisniku(Korisnik korisnik) {
+		List<Integer> godine = new ArrayList<Integer>();
+		List<Integer> mjeseci = new ArrayList<Integer>();
+		List<Raspored> rasporedPoKorisniku = new ArrayList<Raspored>();
+		rasporedPoKorisniku = rasporedPoKorisniku(korisnik);
+		Collections.sort(rasporedPoKorisniku);
+		for (Raspored d : rasporedPoKorisniku) {
+			if(!godine.contains(Integer.parseInt(Alati.hrGodina(d.getDatum())))){
+				godine.add(Integer.parseInt(Alati.hrGodina(d.getDatum())));
+			}
+			if(!mjeseci.contains(Integer.parseInt(Alati.hrMjesec(d.getDatum())))){
+				mjeseci.add(Integer.parseInt(Alati.hrMjesec(d.getDatum())));
+			}
+		}		
+		Collections.sort(godine);
+		Collections.sort(mjeseci);
+		for(Integer g : godine) {
+			System.out.println(g + ". godina");
+			for(Integer m : mjeseci) {
+				for(Raspored unos : rasporedPoKorisniku) {
+					if(Integer.parseInt(Alati.hrGodina(unos.getDatum()))==g 
+							&& Integer.parseInt(Alati.hrMjesec(unos.getDatum()))==m) {
+						System.out.println("\t" + m + ". mjesec");
+					}
+				}
+//				YearMonth godinaIMjesec = YearMonth.of(g, m);
+//				int brojDanaUMjesecu = godinaIMjesec.lengthOfMonth();
+//				for(int d = 1; d<=brojDanaUMjesecu; d++) {
+//					System.out.print(d + "\t");
+//				}
+//				System.out.println();
+//				for(int d = 1; d<=brojDanaUMjesecu; d++) {
+//					Date datum;
+//					try {
+//						datum = formatDatuma.parse(d + "." + m + "." + g + ".");
+//						for(Raspored unos : rasporedPoKorisniku) {
+//							if(unos.getDatum().equals(datum)) {
+//								System.out.print(unos.getoznakaUnosaURaspored() + "\t");
+//							}else {
+//								System.out.println("\t");
+//							}
+//						}
+//					} catch (ParseException e) {
+//						System.out.println("Problem sa učitanjem datuma");
+//					}
+//					
+//				}
+			}		
+		}	
 	}
 
 	// POMOĆNE FUNKCIJE RASPOREDA
@@ -1745,6 +1909,21 @@ public class Start {
 			valjanost = false;			
 		}
 		return valjanost;
+	}
+	
+	private List<Raspored> rasporedPoKorisniku(Korisnik korisnik) {
+		List<Raspored> raspored = new ArrayList<Raspored>();
+		for(Raspored unos : rasporedi) {			
+				raspored.add(unos);
+			}
+		return raspored;
+	}
+
+	private void rasporedIspisSvih() {
+		System.out.println();
+		for(Raspored r : rasporedi) {
+			r.ispisiDetalje();
+		}		
 	}
 	
 	public static void main(String[] args) {
