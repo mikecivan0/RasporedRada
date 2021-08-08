@@ -24,7 +24,7 @@ public class Osoba {
 		return ime;
 	}
 	public void setIme(String ime) {
-		this.ime = ime;
+		this.ime = ime.trim();
 	}
 	public String getPrezime() {
 		return prezime;

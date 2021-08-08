@@ -33,7 +33,7 @@ public class Korisnik extends Osoba{
 		return korisnickoIme;
 	}
 	public void setKorisnickoIme(String korisnickoIme) {
-		this.korisnickoIme = korisnickoIme;
+		this.korisnickoIme = korisnickoIme.trim();
 	}
 	public String getLozinka() {
 		return lozinka;
@@ -80,6 +80,10 @@ public class Korisnik extends Osoba{
 	
 	public String korisnikZaPrikaz() {
 		return this.toString() + ", " + this.getOsoba().getIme() + " " + this.getOsoba().getPrezime();
+	}
+	
+	public String imeIPrezime() {
+		return this.getOsoba().getIme() + " " + this.getOsoba().getPrezime();
 	}
 	
 }

@@ -1739,27 +1739,23 @@ public class Start {
 		System.out.println("1 za novi unos u raspored");
 		System.out.println("2 za izmjenu postojećeg unosa u rasporedu");
 		System.out.println("3 za brisanje postojećeg unosa u rasporedu");
-		System.out.println("4 za prikaz svih zapisa u rasporedu na određeni datum");
-		System.out.println("5 za prikaz rasporeda za određeni mjesec u određenoj godini");
-		System.out.println("6 za prikaz rasporeda po korisnicima");
-		System.out.println("7 za ispis cijelog raporeda");
-		System.out.println("8 za povratak u glavni korisnički izbornik");
+		System.out.println("4 za prikaz rasporeda za određeni mjesec u određenoj godini");
+		System.out.println("5 za ispis svih unosa");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
 		rasporedOdabirAkcije();
 	}
 
 	private void  rasporedOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 8)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
 			case 1 -> raposredNoviUnos();
 //			case 2 -> raposredIzmjena();
 //			case 3 -> raposredBrisanje();
-//			case 4 -> raposredPregledZaDan();
-//			case 5 -> rasporedPregledZaMjesec();
-			case 6 -> raposredPregledPoKorisniku();
-			case 7 -> {
+			case 4 -> rasporedPregledPoMjesecu();
+			case 5 -> {
 				rasporedIspisSvih();
 				rasporedIzbornik();
 			}
-			case 8 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> autentificiraniKorisnikGlavniIzbornik();
 		}		
 	}
 
@@ -1780,7 +1776,7 @@ public class Start {
 				OznakaUnosaURaspored oznaka = oznakeUnosaURaspored.get(
 						Alati.ucitajBroj("Odaberite oznaku zapisa: ", porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1
 						);
-				raspored.setoznakaUnosaURaspored(oznaka);
+				raspored.setOznakaUnosaURaspored(oznaka);
 				raspored.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
 				rasporedi.add(raspored);
 			}else {
@@ -1792,95 +1788,69 @@ public class Start {
 		}		
 		rasporedIzbornik();
 	}
-	
-//	private void raposredIzmjena() {
-//		if(!rasporedi.isEmpty()) {
-//			Alati.ispisZaglavlja("Odabir načina pretrage zapisa u rasporedu", true);
-//			System.out.println("1 za pronalazak zapisa po korisniku");
-//			System.out.println("2 za pronalazak zapisa po datumu");
-//			System.out.println("3 za izlistanje svih zapisa");
-//			System.out.println("4 za povratak u glavni izbornik rasporeda");
-//			rasporedIzmjenaOdabirAkcije();
-//		}else {
-//			System.out.println(porukaGreskeNemaZapisaURasporedu);
-//			rasporedIzbornik();
-//		}		
-//	}
-//
-//
-//	private void rasporedIzmjenaOdabirAkcije() {
-//		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 4)) {
-//			case 1 -> rasporedIzborPretragePoKorisniku();
-//			case 2 -> raposredIzmjena();
-//			case 3 -> raposredBrisanje();
-//			case 4 -> raposredPregledZaDan();
-//		}
-//		
-//	}
 
-	private void raposredPregledPoKorisniku() {
-		korisniciIzlistanjeAktivnihKorisnika("Korisnici koji se nalaze u bazi", aktivniKorisnici);
-		int i = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite pogledati zapise u rasporedu: ", 
-				porukaGreskeIzboraAkcije, 1,
-				aktivniKorisnici.size()) - 1;
-		Korisnik korisnik = aktivniKorisnici.get(i);
-		raposredPregledZapisaPoKorisniku(korisnik);		
-	}
-
-
-	private void raposredPregledZapisaPoKorisniku(Korisnik korisnik) {
-		List<Integer> godine = new ArrayList<Integer>();
-		List<Integer> mjeseci = new ArrayList<Integer>();
-		List<Raspored> rasporedPoKorisniku = new ArrayList<Raspored>();
-		rasporedPoKorisniku = rasporedPoKorisniku(korisnik);
-		Collections.sort(rasporedPoKorisniku);
-		for (Raspored d : rasporedPoKorisniku) {
-			if(!godine.contains(Integer.parseInt(Alati.hrGodina(d.getDatum())))){
-				godine.add(Integer.parseInt(Alati.hrGodina(d.getDatum())));
-			}
-			if(!mjeseci.contains(Integer.parseInt(Alati.hrMjesec(d.getDatum())))){
-				mjeseci.add(Integer.parseInt(Alati.hrMjesec(d.getDatum())));
-			}
-		}		
-		Collections.sort(godine);
-		Collections.sort(mjeseci);
-		for(Integer g : godine) {
-			System.out.println(g + ". godina");
-			for(Integer m : mjeseci) {
-				for(Raspored unos : rasporedPoKorisniku) {
-					if(Integer.parseInt(Alati.hrGodina(unos.getDatum()))==g 
-							&& Integer.parseInt(Alati.hrMjesec(unos.getDatum()))==m) {
-						System.out.println("\t" + m + ". mjesec");
-					}
-				}
-//				YearMonth godinaIMjesec = YearMonth.of(g, m);
-//				int brojDanaUMjesecu = godinaIMjesec.lengthOfMonth();
-//				for(int d = 1; d<=brojDanaUMjesecu; d++) {
-//					System.out.print(d + "\t");
-//				}
-//				System.out.println();
-//				for(int d = 1; d<=brojDanaUMjesecu; d++) {
-//					Date datum;
-//					try {
-//						datum = formatDatuma.parse(d + "." + m + "." + g + ".");
-//						for(Raspored unos : rasporedPoKorisniku) {
-//							if(unos.getDatum().equals(datum)) {
-//								System.out.print(unos.getoznakaUnosaURaspored() + "\t");
-//							}else {
-//								System.out.println("\t");
-//							}
-//						}
-//					} catch (ParseException e) {
-//						System.out.println("Problem sa učitanjem datuma");
-//					}
-//					
-//				}
-			}		
+	private void rasporedPregledPoMjesecu() {
+		if(!rasporedi.isEmpty()) {
+			List<Integer> aktivneGodine = new ArrayList<Integer>();
+			List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+			aktivneGodine = rasporedAktivneGodine();		
+			int izborGodine = Alati.ucitajBroj("Unesite broj ispreg godine za koju želite pogledati raposred: ", 
+					"Unos ne smije biti prazan", 1, aktivneGodine.size())-1;
+			Integer izabranaGodina = aktivneGodine.get(izborGodine);
+			aktivniMjeseci = rasporedAktivniMjeseciUGodini(izabranaGodina);
+			int izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca za koji želite pogledati raposred: ", 
+					"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
+			Integer izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
+			rasporedIspisZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
+			rasporedIzbornik();
+		}else {
+			System.out.println(porukaGreskeNemaZapisaURasporedu);
 		}	
 	}
 
+	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
+		
+		List<Raspored> aktivniRasporedZaGodinuIMjesec = new ArrayList<Raspored>();
+		aktivniRasporedZaGodinuIMjesec = rasporedZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
+		
+		YearMonth obj = YearMonth.of(izabranaGodina, izabraniMjesec);
+		int brojDanaUmjesecu = obj.lengthOfMonth();
+		
+		List<Korisnik> aktivniKorisniciZaGodiniIMjesec = new ArrayList<Korisnik>();
+		aktivniKorisniciZaGodiniIMjesec = rasporedAktivniKorisniciZaGodiniIMjesec(aktivniRasporedZaGodinuIMjesec);
+		
+		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(aktivniKorisniciZaGodiniIMjesec);
+		String pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);
+		
+		System.out.println("\nRaspored za mjesec/godinu: " + izabraniMjesec + "/" + izabranaGodina);		
+		System.out.print(pocetniRazmak);
+		for(int i=1;i<=brojDanaUmjesecu;i++) {
+			System.out.print(i + "\t");
+		}		
+		System.out.println();
+		for(Korisnik k : aktivniKorisniciZaGodiniIMjesec) {
+			Integer naknadniBrojRazmaka = rasporedBrojRazmaka(k.imeIPrezime(),brojPocetnihRazmaka);
+			String naknadniRazmak = rasporedIspisiRazmake(naknadniBrojRazmaka);
+			System.out.print(k.imeIPrezime() + naknadniRazmak);
+			for(int d=1;d<=brojDanaUmjesecu;d++) {
+				String zapis = "-\t";
+				for(Raspored r : aktivniRasporedZaGodinuIMjesec) {
+					Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+					Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+					Integer dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
+					if(r.getKorisnik().equals(k) && godina.equals(izabranaGodina) 
+							&& mjesec.equals(izabraniMjesec) && dan.equals(d)) {
+						zapis = r.getOznakaUnosaURaspored().getSkracenica() + "\t";
+					}
+				}
+				System.out.print(zapis);
+			}
+			System.out.println();
+		}		
+	}
+
 	// POMOĆNE FUNKCIJE RASPOREDA
-	
+
 	// provjera potojanja zapisa u rasporedu kod unosa novog
 	private boolean rasporedProvjeriPostojanjeUnosa(final Korisnik korisnik, final Date datum) {	
 		boolean valjanost = true;
@@ -1911,19 +1881,149 @@ public class Start {
 		return valjanost;
 	}
 	
-	private List<Raspored> rasporedPoKorisniku(Korisnik korisnik) {
-		List<Raspored> raspored = new ArrayList<Raspored>();
-		for(Raspored unos : rasporedi) {			
-				raspored.add(unos);
-			}
-		return raspored;
-	}
-
 	private void rasporedIspisSvih() {
 		System.out.println();
 		for(Raspored r : rasporedi) {
 			r.ispisiDetalje();
 		}		
+	}
+	
+	private List<Integer> rasporedAktivneGodine() {
+		int counter = 1;
+		List<Integer> akrivneGodine = new ArrayList<Integer>();
+		Alati.ispisZaglavlja("U bazi postoje zapisi u rasporedu sa idućim godinama", false);
+		for (Raspored r : rasporedi) {
+			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			if(!akrivneGodine.contains(godina)) {
+				akrivneGodine.add(godina);
+			}
+		}
+		Collections.sort(akrivneGodine);
+		for(Integer g : akrivneGodine) {
+			System.out.println(counter + " " + g);
+			counter++;
+		}
+		return akrivneGodine;
+	}
+	
+	private List<Raspored> rasporedZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
+		List<Raspored> aktivniRasporedZaGodinuImjesec = new ArrayList<Raspored>();
+		for (Raspored r : rasporedi) {
+			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			if(godina.equals(izabranaGodina) & mjesec.equals(izabraniMjesec)) {
+				aktivniRasporedZaGodinuImjesec.add(r);
+			}
+		}
+		Collections.sort(aktivniRasporedZaGodinuImjesec);
+		return aktivniRasporedZaGodinuImjesec;
+	}
+	
+	private List<Korisnik> rasporedAktivniKorisniciZaGodiniIMjesec(List<Raspored> aktivniRasporedZaGodinuIMjesec) {
+		List<Korisnik> aktivniKorisniciZaGodiniIMjesec = new ArrayList<Korisnik>();
+		for(Raspored r : aktivniRasporedZaGodinuIMjesec) {
+			if(!aktivniKorisniciZaGodiniIMjesec.contains(r.getKorisnik())) {
+				aktivniKorisniciZaGodiniIMjesec.add(r.getKorisnik());
+			}
+		}
+		return aktivniKorisniciZaGodiniIMjesec;
+	}
+	
+	private List<Integer> rasporedAktivniMjeseciUGodini(Integer aktivnaGodina) {
+		int counter = 1;
+		List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+		Alati.ispisZaglavlja("Za " + aktivnaGodina + ". godinu u bazi postoje zapisi u rasporedu sa idućim mjesecima", false);
+		for (Raspored r : rasporedi) {
+			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			if(aktivnaGodina.equals(godina) & !aktivniMjeseci.contains(mjesec)) {
+				aktivniMjeseci.add(mjesec);
+			}			
+		}
+		Collections.sort(aktivniMjeseci);
+		for(Integer g : aktivniMjeseci) {
+			System.out.println(counter + " " + g);
+			counter++;
+		}
+		return aktivniMjeseci;
+	}
+	
+	private Integer rasporedBrojRazmaka(List<Korisnik> aktivniKorisniciZaGodiniIMjesec) {
+		Integer brojRazmaka = 1;
+		int maxLength = 0;
+		for(Korisnik k : aktivniKorisniciZaGodiniIMjesec) {
+			int korisnikImeLength = k.imeIPrezime().length();
+			if(korisnikImeLength>maxLength) {
+				maxLength = korisnikImeLength;
+			}
+		}
+		
+		if(maxLength>7 & maxLength<=15) {
+			brojRazmaka = 2;
+		}
+		
+		if(maxLength>15 & maxLength<=23) {
+			brojRazmaka = 3;
+		}
+		
+		if(maxLength>23 & maxLength<=31) {
+			brojRazmaka = 4;
+		}
+		
+		if(maxLength>31 & maxLength<=39) {
+			brojRazmaka = 5;
+		}
+		
+		if(maxLength>39 & maxLength<=47) {
+			brojRazmaka = 6;
+		}
+		
+		if(maxLength>47 & maxLength<=51) {
+			brojRazmaka = 7;
+		}
+		
+		return brojRazmaka;
+	}
+	
+	private String rasporedIspisiRazmake(Integer brojPocetnihRazmaka) {
+		String razmak = "";
+		if(brojPocetnihRazmaka!=0) {
+			for(int i=0; i<brojPocetnihRazmaka;i++) {
+				razmak += "\t";
+			}
+		}		
+		return razmak;
+	}
+	
+	private Integer rasporedBrojRazmaka(String imeIPrezime, Integer brojPocetnihRazmaka) {
+		Integer brojRazmaka = 1;
+		int length = imeIPrezime.length();
+		
+		if(length>=8 & length<16) {
+			brojRazmaka = 2;
+		}
+		
+		if(length>=16 & length<24) {
+			brojRazmaka = 3;
+		}
+		
+		if(length>=24 & length<32) {
+			brojRazmaka = 4;
+		}
+		
+		if(length>=32 & length<40) {
+			brojRazmaka = 5;
+		}
+		
+		if(length>=40 & length<=48) {
+			brojRazmaka = 6;
+		}
+		
+		if(length>=48 & length<=51) {
+			brojRazmaka = 7;
+		}
+		
+		return brojPocetnihRazmaka-brojRazmaka+1;
 	}
 	
 	public static void main(String[] args) {

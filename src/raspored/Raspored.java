@@ -26,10 +26,10 @@ public class Raspored implements Comparable<Raspored>{
 	public void setKorisnik(Korisnik korisnik) {
 		this.korisnik = korisnik;
 	}
-	public OznakaUnosaURaspored getoznakaUnosaURaspored() {
+	public OznakaUnosaURaspored getOznakaUnosaURaspored() {
 		return oznakaUnosaURaspored;
 	}
-	public void setoznakaUnosaURaspored(OznakaUnosaURaspored oznakaUnosaURaspored) {
+	public void setOznakaUnosaURaspored(OznakaUnosaURaspored oznakaUnosaURaspored) {
 		this.oznakaUnosaURaspored = oznakaUnosaURaspored;
 	}
 	public Date getDatum() {
