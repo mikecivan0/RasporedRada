@@ -1816,31 +1816,37 @@ public class Start {
 		YearMonth obj = YearMonth.of(izabranaGodina, izabraniMjesec);
 		int brojDanaUmjesecu = obj.lengthOfMonth();
 		
-		List<Korisnik> aktivniKorisniciZaGodiniIMjesec = new ArrayList<Korisnik>();
-		aktivniKorisniciZaGodiniIMjesec = rasporedAktivniKorisniciZaGodiniIMjesec(aktivniRasporedZaGodinuIMjesec);
+		List<Korisnik> aktivniKorisniciZaGodinuIMjesec = new ArrayList<Korisnik>();
+		aktivniKorisniciZaGodinuIMjesec = rasporedAktivniKorisniciZaGodiniIMjesec(aktivniRasporedZaGodinuIMjesec);
 		
-		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(aktivniKorisniciZaGodiniIMjesec);
+		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(aktivniKorisniciZaGodinuIMjesec);
 		String pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);
 		
 		System.out.println("\nRaspored za mjesec/godinu: " + izabraniMjesec + "/" + izabranaGodina);		
 		System.out.print(pocetniRazmak);
 		for(int i=1;i<=brojDanaUmjesecu;i++) {
-			System.out.print(i + "\t");
+			if(i<10) {
+				System.out.print(i + "   ");
+			}else {
+				System.out.print(i + "  ");
+			}
+			
 		}		
 		System.out.println();
-		for(Korisnik k : aktivniKorisniciZaGodiniIMjesec) {
+		
+		for(Korisnik k : aktivniKorisniciZaGodinuIMjesec) {
 			Integer naknadniBrojRazmaka = rasporedBrojRazmaka(k.imeIPrezime(),brojPocetnihRazmaka);
 			String naknadniRazmak = rasporedIspisiRazmake(naknadniBrojRazmaka);
 			System.out.print(k.imeIPrezime() + naknadniRazmak);
 			for(int d=1;d<=brojDanaUmjesecu;d++) {
-				String zapis = "-\t";
+				String zapis = "-   ";
 				for(Raspored r : aktivniRasporedZaGodinuIMjesec) {
 					Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
 					Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 					Integer dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
 					if(r.getKorisnik().equals(k) && godina.equals(izabranaGodina) 
 							&& mjesec.equals(izabraniMjesec) && dan.equals(d)) {
-						zapis = r.getOznakaUnosaURaspored().getSkracenica() + "\t";
+						zapis = r.getOznakaUnosaURaspored().getSkracenica() + "   ";
 					}
 				}
 				System.out.print(zapis);
