@@ -1810,16 +1810,16 @@ public class Start {
 
 	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
 		
-		List<Raspored> aktivniRasporedZaGodinuIMjesec = new ArrayList<Raspored>();
-		aktivniRasporedZaGodinuIMjesec = rasporedZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
+		List<Raspored> rasporedZaGodinuIMjesec = new ArrayList<Raspored>();
+		rasporedZaGodinuIMjesec = rasporedZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
 		
 		YearMonth obj = YearMonth.of(izabranaGodina, izabraniMjesec);
 		int brojDanaUmjesecu = obj.lengthOfMonth();
 		
-		List<Korisnik> aktivniKorisniciZaGodinuIMjesec = new ArrayList<Korisnik>();
-		aktivniKorisniciZaGodinuIMjesec = rasporedAktivniKorisniciZaGodiniIMjesec(aktivniRasporedZaGodinuIMjesec);
+		List<Korisnik> korisniciZaGodinuIMjesec = new ArrayList<Korisnik>();
+		korisniciZaGodinuIMjesec = rasporedKorisniciZaGodinuIMjesec(rasporedZaGodinuIMjesec);
 		
-		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(aktivniKorisniciZaGodinuIMjesec);
+		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(korisniciZaGodinuIMjesec);
 		String pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);
 		
 		System.out.println("\nRaspored za mjesec/godinu: " + izabraniMjesec + "/" + izabranaGodina);		
@@ -1834,13 +1834,13 @@ public class Start {
 		}		
 		System.out.println();
 		
-		for(Korisnik k : aktivniKorisniciZaGodinuIMjesec) {
+		for(Korisnik k : korisniciZaGodinuIMjesec) {
 			Integer naknadniBrojRazmaka = rasporedBrojRazmaka(k.imeIPrezime(),brojPocetnihRazmaka);
 			String naknadniRazmak = rasporedIspisiRazmake(naknadniBrojRazmaka);
 			System.out.print(k.imeIPrezime() + naknadniRazmak);
 			for(int d=1;d<=brojDanaUmjesecu;d++) {
 				String zapis = "-   ";
-				for(Raspored r : aktivniRasporedZaGodinuIMjesec) {
+				for(Raspored r : rasporedZaGodinuIMjesec) {
 					Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
 					Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 					Integer dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
@@ -1913,26 +1913,26 @@ public class Start {
 	}
 	
 	private List<Raspored> rasporedZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
-		List<Raspored> aktivniRasporedZaGodinuImjesec = new ArrayList<Raspored>();
+		List<Raspored> rasporedZaGodinuImjesec = new ArrayList<Raspored>();
 		for (Raspored r : rasporedi) {
 			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
 			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 			if(godina.equals(izabranaGodina) & mjesec.equals(izabraniMjesec)) {
-				aktivniRasporedZaGodinuImjesec.add(r);
+				rasporedZaGodinuImjesec.add(r);
 			}
 		}
-		Collections.sort(aktivniRasporedZaGodinuImjesec);
-		return aktivniRasporedZaGodinuImjesec;
+		Collections.sort(rasporedZaGodinuImjesec);
+		return rasporedZaGodinuImjesec;
 	}
 	
-	private List<Korisnik> rasporedAktivniKorisniciZaGodiniIMjesec(List<Raspored> aktivniRasporedZaGodinuIMjesec) {
-		List<Korisnik> aktivniKorisniciZaGodiniIMjesec = new ArrayList<Korisnik>();
-		for(Raspored r : aktivniRasporedZaGodinuIMjesec) {
-			if(!aktivniKorisniciZaGodiniIMjesec.contains(r.getKorisnik())) {
-				aktivniKorisniciZaGodiniIMjesec.add(r.getKorisnik());
+	private List<Korisnik> rasporedKorisniciZaGodinuIMjesec(List<Raspored> rasporedZaGodinuIMjesec) {
+		List<Korisnik> korisniciZaGodiniIMjesec = new ArrayList<Korisnik>();
+		for(Raspored r : rasporedZaGodinuIMjesec) {
+			if(!korisniciZaGodiniIMjesec.contains(r.getKorisnik())) {
+				korisniciZaGodiniIMjesec.add(r.getKorisnik());
 			}
 		}
-		return aktivniKorisniciZaGodiniIMjesec;
+		return korisniciZaGodiniIMjesec;
 	}
 	
 	private List<Integer> rasporedAktivniMjeseciUGodini(Integer aktivnaGodina) {
