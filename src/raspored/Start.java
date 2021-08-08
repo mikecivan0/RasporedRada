@@ -390,8 +390,8 @@ public class Start {
 	
 	// UNOS NOVE OSOBE
 	private void osobeUnosNove() {
-		Alati.ispisZaglavlja("Podaci nove osobe", true);
 		Osoba osoba = new Osoba();
+		Alati.ispisZaglavlja("Podaci nove osobe", true);
 		osoba = osobeUnosPodataka(osoba);
 		osobe.add(osoba);
 	}
@@ -415,22 +415,26 @@ public class Start {
 	}
 	
 	private void osobeIzmjenaPoIndeksu() {
+		int i;
 		osobeIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
 				osobe.size()) - 1;
 		Osoba osoba = osobe.get(i);
 		osobeIzmjenaPodataka(osoba, i);
 	}
 
 	private void osobeIzmjenaPoImenu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
+		String uvjet;
+		int izbor,indeksOdabraneOsobe;
+		List<Osoba> nadjeneOsobe = new ArrayList<Osoba>();		
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
 				30);
-		List<Osoba> nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
+		nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
 		if (!nadjeneOsobe.isEmpty()) {
 			osobeIzlistanje("Pronađene osobe", nadjeneOsobe);
-			Integer izbor = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije,
 					1, nadjeneOsobe.size())-1;
-			int indeksOdabraneOsobe = osobeIndeksOsobeIzIzvorneListe(nadjeneOsobe.get(izbor));
+			indeksOdabraneOsobe = osobeIndeksOsobeIzIzvorneListe(nadjeneOsobe.get(izbor));
 			osobeIzmjenaPodataka(osobe.get(indeksOdabraneOsobe), indeksOdabraneOsobe);					
 		} else {
 			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
@@ -468,8 +472,9 @@ public class Start {
 	}
 	
 	private void osobeBrisanjePoIndeksu() {
+		int i;
 		osobeIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj osobe koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj osobe koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 				osobe.size()) - 1;
 		if(Alati.daNe("Želite li zaista obrisati osobu " + osobe.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
 			if(!korisniciJeLiOsobaKorisnik(osobe.get(i))) {
@@ -477,21 +482,23 @@ public class Start {
 				System.out.println("\nOsoba je obrisana.");
 			}else {
 				System.out.println("\nOdabrana osoba je korisnik i stoga ju ne možete obrisati.");
-			}
-			
+			}			
 		}		
 		osobeIzbornik();		
 	}
 
 	private void osobeBrisanjePoImenu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
+		String uvjet;
+		int izbor,indeksOdabraneOsobe;
+		List<Osoba> nadjeneOsobe = new ArrayList<Osoba>();	
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
 				30);
-		List<Osoba> nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
+		nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
 		if (!nadjeneOsobe.isEmpty()) {
 			osobeIzlistanje("Pronađene osobe", nadjeneOsobe);
-			Integer izbor = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj osobe koju želite izmijeniti: ", porukaGreskeIzboraAkcije,
 					1, nadjeneOsobe.size())-1;
-			int indeksOdabraneOsobe = osobeIndeksOsobeIzIzvorneListe(nadjeneOsobe.get(izbor));
+			indeksOdabraneOsobe = osobeIndeksOsobeIzIzvorneListe(nadjeneOsobe.get(izbor));
 			if(Alati.daNe("Želite li zaista obrisati osobu " 
 						+ osobe.get(indeksOdabraneOsobe).toString() + " (da/ne): ", 
 						porukaGreskeDaNe)) {
@@ -530,8 +537,9 @@ public class Start {
 	}
 	
 	private void osobeDetaljiPoIndeksu() {
+		int i;
 		osobeIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
 				osobe.size()) - 1;
 		Alati.ispisZaglavlja("Detalji osobe", false);
 		osobe.get(i).ispisiDetalje();
@@ -539,12 +547,15 @@ public class Start {
 	}
 
 	private void osobeDetaljiPoImenu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
+		String uvjet;
+		int izbor;
+		List<Osoba> nadjeneOsobe = new ArrayList<Osoba>();	
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime osobe koju tražite: ", porukaGreskePraznogUnosa, 0,
 				30);
-		List<Osoba> nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
+		nadjeneOsobe = osobePronadjiPoUvjetu(uvjet);
 		if (!nadjeneOsobe.isEmpty()) {
 			osobeIzlistanje("Pronađene osobe", nadjeneOsobe);
-			Integer izbor = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj osobe čije detalje želite pogledati: ", porukaGreskeIzboraAkcije,
 					1, nadjeneOsobe.size())-1;
 			Alati.ispisZaglavlja("Detalji osobe", false);
 			nadjeneOsobe.get(izbor).ispisiDetalje();		
@@ -563,8 +574,9 @@ public class Start {
 	
 	// izlistanje svih osoba
 	private void osobeIzlistanje() {
+		int counter;
 		if(!osobe.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja("Osobe koje se nalaze u bazi", false);
 			for (Osoba osoba : osobe) {
 				System.out.println(counter + " " + osoba.toString());
@@ -596,10 +608,10 @@ public class Start {
 		return listaOsoba;
 	}
 
-	private boolean osobeJeLiToOsobaPoImenuIPrezimenu(Osoba osoba, String uvjet) {
-		uvjet = uvjet.trim().toLowerCase();
+	private boolean osobeJeLiToOsobaPoImenuIPrezimenu(Osoba osoba, String uvjet) {		
 		String imePrezime = osoba.getIme().toLowerCase() + " " + osoba.getPrezime().toLowerCase();
 		String prezimeIme = osoba.getPrezime().toLowerCase() + " " + osoba.getIme().toLowerCase();
+		uvjet = uvjet.trim().toLowerCase();
 		if (imePrezime.contains(uvjet) || prezimeIme.contains(uvjet)) {
 			return true;
 		} else {
@@ -687,12 +699,13 @@ public class Start {
 	}
 
 	private void korisniciUnosPostojeceOsobeKaoNovogKorisnika() {
+		Osoba osoba = new Osoba();
+		Korisnik korisnik = new Korisnik();
 		if(!osobe.isEmpty()) {
 			osobeIzlistanje();
-			Osoba osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", 
+			osoba = osobe.get(Alati.ucitajBroj("Unesite broj osobe koju želite dodati kao korisnika: ", 
 							"Unos ne smije biti prazan", 1, osobe.size())-1);
-			if(!korisniciJeLiOsobaKorisnik(osoba)) {
-				Korisnik korisnik = new Korisnik();
+			if(!korisniciJeLiOsobaKorisnik(osoba)) {				
 				korisnik.setOsoba(osoba);
 				while(true) {
 					String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
@@ -724,10 +737,11 @@ public class Start {
 	// UNOS NOVOG KORISNIKA
 	private void korisniciUnosNoveOsobeKaoNovogKorisnika() {
 		Korisnik korisnik = new Korisnik();
+		String korisnickoIme;
 		osobeUnosNove();
 		korisnik.setOsoba(osobe.get(osobe.size()-1));		
 		while(true) {
-			String korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+			korisnickoIme = Alati.ucitajString("Unesite korisničko ime novoga korisnika: ", porukaGreskePraznogUnosa, 1, 50);
 			if(!korisniciProvjeriPostojanjeKorisnickogImena(korisnickoIme)) {
 				korisnik.setKorisnickoIme(korisnickoIme);
 				korisnik = korisniciUnosOstalihPodataka(korisnik);
@@ -766,23 +780,30 @@ public class Start {
 	}
 
 	private void korisniciIzmjenaPoIndeksu() {
+		int i;
+		Korisnik korisnik = new Korisnik();
 		korisniciIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije, 1,
 				korisnici.size()) - 1;
-		Korisnik korisnik = korisnici.get(i);
+		korisnik = korisnici.get(i);
 		korisniciIzmjenaPodataka(korisnik, i);
 	}
 
 	private void korisniciIzmjenaPoImenu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime korisnika kojeg tražite: ", porukaGreskePraznogUnosa, 0,
+		String uvjet;
+		int izbor,indeksIzabranogKorisnika;
+		List<Korisnik> nadjeniKorisnici = new ArrayList<Korisnik>();
+		Korisnik izabraniKorisnik = new Korisnik();
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime korisnika kojeg tražite: ", porukaGreskePraznogUnosa, 0,
 				30);
-		List<Korisnik> nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
+		nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
 		if (!nadjeniKorisnici.isEmpty()) {
 			korisniciIzlistanje("Pronađeni korsnici", nadjeniKorisnici);
-			Integer izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite izmijeniti: ", porukaGreskeIzboraAkcije,
 					1, nadjeniKorisnici.size())-1;
-			int indeksOdabranogKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(nadjeniKorisnici.get(izbor));
-			korisniciIzmjenaPodataka(korisnici.get(indeksOdabranogKorisnika), indeksOdabranogKorisnika);				
+			indeksIzabranogKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(nadjeniKorisnici.get(izbor));
+			izabraniKorisnik = korisnici.get(indeksIzabranogKorisnika);
+			korisniciIzmjenaPodataka(izabraniKorisnik, indeksIzabranogKorisnika);				
 		} else {
 			System.out.println("Nema rezultata koji dogovaraju zadanom kriteriju. ");
 			if (Alati.daNe("Želite li pokušati opet? (da/ne): ", porukaGreskeDaNe)) {
@@ -793,8 +814,9 @@ public class Start {
 	}	
 
 	private void korisniciIzmjenaPodataka(Korisnik korisnik, int i) {
+		String korisnickoIme;
 		while(true) {
-			String korisnickoIme = Alati.ucitajString("Unesite korisničko ime korisnika: ", porukaGreskePraznogUnosa, 1, 50);
+			korisnickoIme = Alati.ucitajString("Unesite korisničko ime korisnika: ", porukaGreskePraznogUnosa, 1, 50);
 			if(!korisniciProvjeriPostojanjeKorisnickogImena(korisnickoIme, korisnik)) {
 				korisnik.setKorisnickoIme(korisnickoIme);
 				korisnik = korisniciUnosOstalihPodataka(korisnik);
@@ -832,8 +854,9 @@ public class Start {
 	
 	private void korisniciBrisanjePoIndeksu() {
 		Korisnik korisnik = new Korisnik();
+		int i;
 		korisniciIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 				korisnici.size())-1;
 		korisnik = korisnici.get(i);
 		if(!korisniciJeLiKorisnikURasporedu(korisnik)) {
@@ -851,14 +874,19 @@ public class Start {
 	}
 
 	private void korisniciBrisanjePoNazivu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime korisnika kojeg tražite: ", 
+		String uvjet;
+		int izbor, indeksKorisnikaIzIzvorneListe;
+		List<Korisnik> nadjeniKorisnici = new ArrayList<Korisnik>();
+		Korisnik odabraniKorisnik = new Korisnik();
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime korisnika kojeg tražite: ", 
 				porukaGreskePraznogUnosa, 0, 30);
-		List<Korisnik> nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
+		nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
 		if (!nadjeniKorisnici.isEmpty()) {
 			korisniciIzlistanje("Pronađeni korisnici", nadjeniKorisnici);
-			Integer izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite obrisati: ", porukaGreskeIzboraAkcije,
 					1, nadjeniKorisnici.size())-1;
-			int indeksKorisnikaIzIzvorneListe = korisniciIndeksKorisnikaIzIzvorneListe(nadjeniKorisnici.get(izbor));
+			odabraniKorisnik = nadjeniKorisnici.get(izbor);
+			indeksKorisnikaIzIzvorneListe = korisniciIndeksKorisnikaIzIzvorneListe(odabraniKorisnik);
 			if(Alati.daNe("Želite li zaista obrisati odabranog korisnika (" 
 							+ korisnici.get(indeksKorisnikaIzIzvorneListe).korisnikZaPrikaz() + "): ", 
 							porukaGreskeDaNe)) {
@@ -894,8 +922,9 @@ public class Start {
 	}
 	
 	private void korisniciDetaljiPoIndeksu() {
+		int i;
 		korisniciIzlistanje();
-		int i = Alati.ucitajBroj("Unesite broj korisnika čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
+		i = Alati.ucitajBroj("Unesite broj korisnika čije detalje želite pogledati: ", porukaGreskeIzboraAkcije, 1,
 				korisnici.size()) - 1;
 		Alati.ispisZaglavlja("Detalji korisnika", false);
 		korisnici.get(i).ispisiDetalje();
@@ -903,12 +932,15 @@ public class Start {
 	}
 	
 	private void korisniciDetaljiPoImenu() {
-		String uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime osobe/korisnika kojeg tražite: ", porukaGreskePraznogUnosa, 0,
+		String uvjet;
+		int izbor;
+		List<Korisnik> nadjeniKorisnici = new ArrayList<Korisnik>();
+		uvjet = Alati.ucitajString("Upišite ime i/ili prezime ili korisničko ime osobe/korisnika kojeg tražite: ", porukaGreskePraznogUnosa, 0,
 				30);
-		List<Korisnik> nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
+		nadjeniKorisnici = korisniciPronadjiPoUvjetu(uvjet);
 		if (!nadjeniKorisnici.isEmpty()) {
 			korisniciIzlistanje("Pronađeni korisnici", nadjeniKorisnici);
-			Integer izbor = Alati.ucitajBroj("Unesite broj korisnika čije detalje želite pogledati: ", porukaGreskeIzboraAkcije,
+			izbor = Alati.ucitajBroj("Unesite broj korisnika čije detalje želite pogledati: ", porukaGreskeIzboraAkcije,
 					1, nadjeniKorisnici.size())-1;
 			Alati.ispisZaglavlja("Detalji korisnika", false);
 			nadjeniKorisnici.get(izbor).ispisiDetalje();	
@@ -969,10 +1001,10 @@ public class Start {
 	}
 	
 	private boolean korisniciJeLiToKorisnikPoNazivu(Korisnik korisnik, String uvjet) {
-		uvjet = uvjet.trim().toLowerCase();
 		String imePrezime = korisnik.getOsoba().getIme().toLowerCase() + " " + korisnik.getOsoba().getPrezime().toLowerCase();
 		String prezimeIme = korisnik.getOsoba().getPrezime().toLowerCase() + " " + korisnik.getOsoba().getIme().toLowerCase();
 		String korisnickoIme = korisnik.getKorisnickoIme().toLowerCase();
+		uvjet = uvjet.trim().toLowerCase();
 		if (imePrezime.contains(uvjet) || prezimeIme.contains(uvjet) || korisnickoIme.equals(uvjet)) {
 			return true;
 		} else {
@@ -1014,8 +1046,9 @@ public class Start {
 	
 	// izlistanje nađenih korisnika
 	private void korisniciIzlistanje(String poruka, List<Korisnik> korisnici) {
+		int counter;
 		if(!korisnici.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja(poruka, false);
 			for (Korisnik korisnik : korisnici) {
 				System.out.println(counter + " " + korisnik.toString());
@@ -1082,10 +1115,12 @@ public class Start {
 	
 	// UNOS NOVOG RADNOG VREMENA
 	private void redovnaRadnaVremenaUnosNovog() {
-		Alati.ispisZaglavlja("Unos novog redovnog radnog vremena", false);
-		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();		
-		Date datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti nova radna vremena: ");
-		Date datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti nova radna vremena: ");
+		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();
+		Date datumPocetkaPrimjene;
+		Date datumKrajaPrimjene;
+		Alati.ispisZaglavlja("Unos novog redovnog radnog vremena", false);			
+		datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti nova radna vremena: ");
+		datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti nova radna vremena: ");
 		if(redovnaRadnaVremenaProvjeriPreklapanje(datumPocetkaPrimjene) 
 				&& redovnaRadnaVremenaProvjeriPreklapanje(datumKrajaPrimjene)) {
 			redovnoRadnoVrijeme.setVrijediOd(datumPocetkaPrimjene);
@@ -1104,11 +1139,13 @@ public class Start {
 	
 	//IZMJENA REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaIzmjena() {
+		int i;
+		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();
 		if(!redovnaRadnaVremena.isEmpty()) {
 			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-			int i = Alati.ucitajBroj("Unesite broj ispred redovnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj ispred redovnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
 					redovnaRadnaVremena.size()) - 1;
-			RedovnoRadnoVrijeme redovnoRadnoVrijeme = redovnaRadnaVremena.get(i);
+			redovnoRadnoVrijeme = redovnaRadnaVremena.get(i);
 			redovnaRadnaVremenaIzmjenaPodataka(redovnoRadnoVrijeme, i);		
 		}else {
 			System.out.println(porukaGreskeNemaRedovnihRadnihVremena);
@@ -1117,9 +1154,11 @@ public class Start {
 	}
 	
 	private void redovnaRadnaVremenaIzmjenaPodataka(RedovnoRadnoVrijeme redovnoRadnoVrijeme, int i) {
+		Date datumPocetkaPrimjene;
+		Date datumKrajaPrimjene;
 		while(true) {
-			Date datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti nova radna vremena: ");
-			Date datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti nova radna vremena: ");
+			datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti nova radna vremena: ");
+			datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti nova radna vremena: ");
 			if(redovnaRadnaVremenaProvjeriPreklapanje(datumPocetkaPrimjene, redovnoRadnoVrijeme) 
 					&& redovnaRadnaVremenaProvjeriPreklapanje(datumKrajaPrimjene,redovnoRadnoVrijeme )) {
 				redovnoRadnoVrijeme.setVrijediOd(datumPocetkaPrimjene);
@@ -1140,9 +1179,10 @@ public class Start {
 	
 	// BRISANJE REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaBrisanje() {
+		int i;
 		if(!redovnaRadnaVremena.isEmpty()) {
 			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-			int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					redovnaRadnaVremena.size()) - 1;
 			if(Alati.daNe("Želite li zaista obrisati radno vrijeme sa datumom primjene " 
 					+ redovnaRadnaVremena.get(i).toString() + ": ", 
@@ -1158,9 +1198,10 @@ public class Start {
 	
 	// DETALJI REDOVNOG RADNOG VREMENA
 	private void redovnaRadnaVremenaDetalji() {	
+		int i;
 		if(!redovnaRadnaVremena.isEmpty()) {
 			redovnaRadnaVremenaIzlistanje("U bazi postoje redovna radna vremena sa datumom primjene od-do");
-			int i = Alati.ucitajBroj("Unesite redni broj redovnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite redni broj redovnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					redovnaRadnaVremena.size()) - 1;
 			Alati.ispisZaglavlja("Detalji redovnog radnog vremena", false);
 			redovnaRadnaVremena.get(i).ispisiDetalje();
@@ -1222,8 +1263,9 @@ public class Start {
 	}
 	
 	private void redovnaRadnaVremenaIzlistanje(String poruka) {
+		int counter;
 		if(!redovnaRadnaVremena.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja(poruka, false);
 			for (RedovnoRadnoVrijeme rrv : redovnaRadnaVremena) {
 				System.out.println(counter + " " + rrv.toString());
@@ -1270,9 +1312,10 @@ public class Start {
 	
 	// UNOS IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaUnosNovog() {
-		Alati.ispisZaglavlja("Unos novog iznimnog radnog vremena", false);
 		IznimnoRadnoVrijeme iznimnoRadnoVrijeme = new IznimnoRadnoVrijeme();
-		Date datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
+		Date datum;
+		Alati.ispisZaglavlja("Unos novog iznimnog radnog vremena", false);		
+		datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
 		if(!iznimnaRadnaVremenaProvjeriPreklapanje(datum)) {
 			iznimnoRadnoVrijeme.setDatum(datum);
 			iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
@@ -1289,11 +1332,13 @@ public class Start {
 	
 	//IZMJENA IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaIzmjena() {
+		int i;
+		IznimnoRadnoVrijeme iznimnoRadnoVrijeme = new IznimnoRadnoVrijeme();
 		if(!iznimnaRadnaVremena.isEmpty()) {
 			iznimnaRadnaVremenaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
 					iznimnaRadnaVremena.size()) - 1;
-			IznimnoRadnoVrijeme iznimnoRadnoVrijeme = iznimnaRadnaVremena.get(i);
+			iznimnoRadnoVrijeme = iznimnaRadnaVremena.get(i);
 			iznimnaRadnaVremenaIzmjenaPodataka(iznimnoRadnoVrijeme, i);		
 		}else {
 			System.out.println(porukaGreskeNemaIznimnihRadnihVremena);
@@ -1302,8 +1347,9 @@ public class Start {
 	}
 	
 	private void iznimnaRadnaVremenaIzmjenaPodataka(IznimnoRadnoVrijeme iznimnoRadnoVrijeme, int i) {
+		Date datum;
 		while(true) {
-			Date datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
+			datum = Alati.ucitajDatum("Unesite datum iznimnog radnog vremena: ");
 			if(!iznimnaRadnaVremenaProvjeriPreklapanje(datum, iznimnoRadnoVrijeme)) {
 				iznimnoRadnoVrijeme.setDatum(datum);
 				iznimnoRadnoVrijeme = iznimnaRadnaVremenaUnesiOstaleVrijednosti(iznimnoRadnoVrijeme);
@@ -1322,9 +1368,10 @@ public class Start {
 	
 	// BRISANJE IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaBrisanje() {
+		int i;
 		if(!iznimnaRadnaVremena.isEmpty()) {
 			iznimnaRadnaVremenaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj iznimnog radnog vremena koje želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					iznimnaRadnaVremena.size()) - 1;
 			if(Alati.daNe("Želite li zaista obrisati iznimno radno vrijeme sa datumom " 
 							+ Alati.hrDatum(iznimnaRadnaVremena.get(i).getDatum()) + ": ", 
@@ -1340,9 +1387,10 @@ public class Start {
 	
 	// DETALJI IZNIMNOG RADNOG VREMENA
 	private void iznimnaRadnaVremenaDetalji() {	
+		int i;
 		if(!iznimnaRadnaVremena.isEmpty()) {			
 			iznimnaRadnaVremenaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite redni broj ispred iznimnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite redni broj ispred iznimnog radnog vremena koje želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					iznimnaRadnaVremena.size()) - 1;
 			Alati.ispisZaglavlja("Detalji iznimnog radnog vremena", false);
 			iznimnaRadnaVremena.get(i).ispisiDetalje();
@@ -1382,8 +1430,9 @@ public class Start {
 	}
 	
 	private void iznimnaRadnaVremenaIzlistanje() {
+		int counter;
 		if(!iznimnaRadnaVremena.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja("U bazi postoje sljedeća iznimna radna vremena", false);
 			for (IznimnoRadnoVrijeme irv : iznimnaRadnaVremena) {
 				System.out.println(counter + " " + irv.toString());
@@ -1430,10 +1479,12 @@ public class Start {
 	
 	// UNOS NOVOG BROJA RADNIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaUnosNovog() {
-		Alati.ispisZaglavlja("Unos novog redovnog radnog vremena", false);
-		BrojRadnikaPoDanima brojRadnikaPoDanima = new BrojRadnikaPoDanima();		
-		Date datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti novi unosi: ");
-		Date datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti novi unosi: ");
+		BrojRadnikaPoDanima brojRadnikaPoDanima = new BrojRadnikaPoDanima();
+		Date datumPocetkaPrimjene;
+		Date datumKrajaPrimjene;
+		Alati.ispisZaglavlja("Unos novog redovnog radnog vremena", false);			
+		datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti novi unosi: ");
+		datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti novi unosi: ");
 		if(brojRadnikaPoDanimaProvjeriPreklapanje(datumPocetkaPrimjene) 
 				&& brojRadnikaPoDanimaProvjeriPreklapanje(datumKrajaPrimjene)) {
 			brojRadnikaPoDanima.setVrijediOd(datumPocetkaPrimjene);
@@ -1452,11 +1503,13 @@ public class Start {
 	
 	//IZMJENA BROJA RADNIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaIzmjena() {
+		int i;
+		BrojRadnikaPoDanima brojRadnikaPoDanima = new BrojRadnikaPoDanima();
 		if(!brojeviRadnikaPoDanima.isEmpty()) {
 			brojRadnikaPoDanimaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj ispred unosa koji želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj ispred unosa koji želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
 					brojeviRadnikaPoDanima.size()) - 1;
-			BrojRadnikaPoDanima brojRadnikaPoDanima = brojeviRadnikaPoDanima.get(i);
+			brojRadnikaPoDanima = brojeviRadnikaPoDanima.get(i);
 			brojRadnikaPoDanimaIzmjenaPodataka(brojRadnikaPoDanima, i);		
 		}else {
 			System.out.println(porukaGreskeNemaBrojRadnikaPoDanima);
@@ -1465,9 +1518,11 @@ public class Start {
 	}
 	
 	private void brojRadnikaPoDanimaIzmjenaPodataka(BrojRadnikaPoDanima brojRadnikaPoDanima, int i) {
+		Date datumPocetkaPrimjene;
+		Date datumKrajaPrimjene;
 		while(true) {
-			Date datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti novi unos: ");
-			Date datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti novi unos: ");
+			datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti novi unos: ");
+			datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti novi unos: ");
 			if(!brojRadnikaPoDanimaProvjeriPreklapanje(datumPocetkaPrimjene, brojRadnikaPoDanima) 
 					&& !brojRadnikaPoDanimaProvjeriPreklapanje(datumKrajaPrimjene, brojRadnikaPoDanima)) {
 				brojRadnikaPoDanima.setVrijediOd(datumPocetkaPrimjene);
@@ -1488,9 +1543,10 @@ public class Start {
 	
 	// BRISANJE UNOSA BROJA RANIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaBrisanje() {
+		int i;
 		if(!brojeviRadnikaPoDanima.isEmpty()) {
 			brojRadnikaPoDanimaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj unosa koji želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					brojeviRadnikaPoDanima.size()) - 1;
 			if(Alati.daNe("Želite li zaista obrisati unos sa datum primjene " 
 							+ brojeviRadnikaPoDanima.get(i).toString() + ": ", 
@@ -1506,10 +1562,11 @@ public class Start {
 	
 	// DETALJI UNOSA BROJA RADNIKA PO DANIMA U TJEDNU
 	private void brojRadnikaPoDanimaDetalji() {	
+		int i;
 		if(!brojeviRadnikaPoDanima.isEmpty()) {
 			brojRadnikaPoDanimaIzbornik();
 			brojRadnikaPoDanimaIzlistanje();
-			int i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					brojeviRadnikaPoDanima.size()) - 1;
 			Alati.ispisZaglavlja("Detalji unosa", false);
 			brojeviRadnikaPoDanima.get(i).ispisiDetalje();
@@ -1562,8 +1619,9 @@ public class Start {
 	}
 	
 	private void brojRadnikaPoDanimaIzlistanje() {
+		int counter;
 		if(!brojeviRadnikaPoDanima.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja("U bazi postoje unosi broja radnika po danima sa datumom primjene od-do", false);
 			for (BrojRadnikaPoDanima brojRadnika : brojeviRadnikaPoDanima) {
 				System.out.println(counter + " " + brojRadnika.toString());
@@ -1610,12 +1668,14 @@ public class Start {
 	
 	// UNOS NOVE OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedUnosNove() {
+		String skracenica;
+		OznakaUnosaURaspored oznakaUnosaURaspored = new OznakaUnosaURaspored();				
 		Alati.ispisZaglavlja("Unos nove oznake koja će se unositi u raspored", false);
-		OznakaUnosaURaspored oznakaUnosaURaspored = new OznakaUnosaURaspored();		
-		String skracenica = Alati.ucitajString("Koja će biti skraćenica nove oznaka: ", porukaGreskePraznogUnosa, 1, 3);
+		skracenica = Alati.ucitajString("Koja će biti skraćenica nove oznaka: ", porukaGreskePraznogUnosa, 1, 3);
 		if(!oznakeUnosaProvjeriPostojanjeSkracenice(skracenica)) {
 			oznakaUnosaURaspored.setSkracenica(skracenica);
-			oznakaUnosaURaspored.setNaziv(Alati.ucitajString("Koji će biti naziv nove oznake: ", porukaGreskePraznogUnosa, 1, 30));
+			oznakaUnosaURaspored.setNaziv(Alati.ucitajString("Koji će biti naziv nove oznake: ", 
+					porukaGreskePraznogUnosa, 1, 30));
 			oznakeUnosaURaspored.add(oznakaUnosaURaspored);
 			System.out.println("\nNova oznaka je unešena.");	
 		}else {
@@ -1629,11 +1689,13 @@ public class Start {
 	
 	//IZMJENA OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedIzmjena() {
+		int i;
+		OznakaUnosaURaspored oznakaUnosaURaspored = new OznakaUnosaURaspored();
 		if(!oznakeUnosaURaspored.isEmpty()) {
 			oznakeUnosaURasporedIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
 					oznakeUnosaURaspored.size()) - 1;
-			OznakaUnosaURaspored oznakaUnosaURaspored = oznakeUnosaURaspored.get(i);
+			oznakaUnosaURaspored = oznakeUnosaURaspored.get(i);
 			oznakeUnosaURasporedIzmjenaPodataka(oznakaUnosaURaspored, i);	
 		}else {
 			System.out.println(porukaGreskeNemaOznakaUnosaURaspored);
@@ -1642,8 +1704,9 @@ public class Start {
 	}
 	
 	private void oznakeUnosaURasporedIzmjenaPodataka(OznakaUnosaURaspored oznakaUnosaURaspored, int i) {
+		String skracenica;
 		while(true) {
-			String skracenica = Alati.ucitajString("Koja će biti skraćenica nove oznaka: ", porukaGreskePraznogUnosa, 1, 3);
+			skracenica = Alati.ucitajString("Koja će biti skraćenica nove oznaka: ", porukaGreskePraznogUnosa, 1, 3);
 			if(!oznakeUnosaProvjeriPostojanjeSkracenice(skracenica, oznakaUnosaURaspored)) {
 				oznakaUnosaURaspored.setSkracenica(skracenica);
 				oznakaUnosaURaspored.setNaziv(Alati.ucitajString("Koji će biti naziv nove oznake: ", porukaGreskePraznogUnosa, 1, 30));
@@ -1662,9 +1725,10 @@ public class Start {
 	
 	// BRISANJE OZNAKE UNOSA U RASPORED
 	private void oznakeUnosaURasporedBrisanje() {
+		int i;
 		if(!oznakeUnosaURaspored.isEmpty()) {
 			oznakeUnosaURasporedIzlistanje();
-			int i = Alati.ucitajBroj("Unesite broj oznake koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite broj oznake koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
 					oznakeUnosaURaspored.size()) - 1;
 			if(Alati.daNe("Želite li zaista obrisati oznaku " 
 							+ oznakeUnosaURaspored.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
@@ -1678,10 +1742,11 @@ public class Start {
 	}
 	
 	// DETALJI OZNAKE UNOSA U RASPORED
-	private void oznakeUnosaURasporedDetalji() {			
+	private void oznakeUnosaURasporedDetalji() {
+		int i;
 		if(!oznakeUnosaURaspored.isEmpty()) {
 			oznakeUnosaURasporedIzlistanje();
-			int i = Alati.ucitajBroj("Unesite redni broj oznake koju želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
+			i = Alati.ucitajBroj("Unesite redni broj oznake koju želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					oznakeUnosaURaspored.size()) - 1;
 			Alati.ispisZaglavlja("Detalji oznake", false);
 			oznakeUnosaURaspored.get(i).ispisiDetalje();
@@ -1713,8 +1778,9 @@ public class Start {
 	}
 
 	private void oznakeUnosaURasporedIzlistanje() {
+		int counter;
 		if(!oznakeUnosaURaspored.isEmpty()) {
-			int counter = 1;
+			counter = 1;
 			Alati.ispisZaglavlja("U bazi postoje slijedeće oznake unosa u raspored", false);
 			for (OznakaUnosaURaspored oznakaUnosaURaspored : oznakeUnosaURaspored) {
 				System.out.println(counter + " " + oznakaUnosaURaspored.toString());
@@ -1754,16 +1820,18 @@ public class Start {
 	}
 
 	private void raposredNoviUnos() {	
-		if(rasporedPostojanjeAktivnihKorisnika() && raposredPostojanjeOznakaUnosa()) {
-			Korisnik odabraniKorisnik = new Korisnik();
+		int izbor,indeksKorisnika;
+		Date datum;
+		Korisnik odabraniKorisnik = new Korisnik();
+		Raspored unos = new Raspored();
+		if(rasporedPostojanjeAktivnihKorisnika() && raposredPostojanjeOznakaUnosa()) {			
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
-			int izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
+			izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
 									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
-			int indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
+			indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
 			odabraniKorisnik = korisnici.get(indeksKorisnika);
-			Date datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
-			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum)) {	
-				Raspored unos = new Raspored();
+			datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
+			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum)) {				
 				unos.setKorisnik(odabraniKorisnik);
 				unos.setDatum(datum);
 				unos = rasporedUnosPodataka(unos);
@@ -1779,27 +1847,31 @@ public class Start {
 	}	
 	
 	private Raspored rasporedUnosPodataka(Raspored unos) {
-			oznakeUnosaURasporedIzlistanje();
-			OznakaUnosaURaspored oznaka = oznakeUnosaURaspored.get(
-					Alati.ucitajBroj("Odaberite oznaku zapisa koju želite spremiti u zapis: ", porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1
-					);
-			unos.setOznakaUnosaURaspored(oznaka);
-			unos.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
-			return unos;	
+		int i;
+		OznakaUnosaURaspored oznaka = new OznakaUnosaURaspored();
+		oznakeUnosaURasporedIzlistanje();
+		i = Alati.ucitajBroj("Odaberite oznaku zapisa koju želite spremiti u zapis: ", 
+				porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1;
+		oznaka = oznakeUnosaURaspored.get(i);
+		unos.setOznakaUnosaURaspored(oznaka);
+		unos.setRadSaPauzom(Alati.daNe("Radi li se taj dan sa pauzom? (da/ne): ", porukaGreskeDaNe));
+		return unos;	
 	}
 
 	private void raposredIzmjena() {
+		int indeks, izbor,indeksKorisnika;
+		Date datum;
+		Raspored unos = new Raspored();
+		Korisnik odabraniKorisnik = new Korisnik();
 		if(!rasporedi.isEmpty()) {
-			int indeks  = rasporedPronalazakZapisa();					
-			Raspored unos = new Raspored();
+			indeks  = rasporedPronalazakZapisa();			
 			unos = rasporedi.get(indeks);
-			Korisnik odabraniKorisnik = new Korisnik();
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
-			int izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite spremiti u promjene unosa: ", 
+			izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite spremiti u promjene unosa: ", 
 									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
-			int indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
+			indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
 			odabraniKorisnik = korisnici.get(indeksKorisnika);
-			Date datum = Alati.ucitajDatum("Unesite datum koji želite spremiti u promjenu unosa: ");
+			datum = Alati.ucitajDatum("Unesite datum koji želite spremiti u promjenu unosa: ");
 			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum, unos)) {	
 				unos.setKorisnik(odabraniKorisnik);
 				unos.setDatum(datum);
@@ -1817,8 +1889,9 @@ public class Start {
 	}
 	
 	private void raposredBrisanje() {
+		int indeks;
 		if(!rasporedi.isEmpty()) {
-			int indeks  = rasporedPronalazakZapisa();
+			indeks  = rasporedPronalazakZapisa();
 			if(Alati.daNe("Jeste li sigurni da želite obrisati taj unos (da/ne): ", porukaGreskeDaNe)) {				
 				rasporedi.remove(indeks);
 				System.out.println("\nUnos je obrisan");
@@ -1830,17 +1903,18 @@ public class Start {
 	}
 
 	private void rasporedPregledPoMjesecu() {
-		if(!rasporedi.isEmpty()) {
-			List<Integer> aktivneGodine = new ArrayList<Integer>();
-			List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+		int izborGodine, izabranaGodina, izborMjeseca, izabraniMjesec;
+		List<Integer> aktivneGodine = new ArrayList<Integer>();
+		List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+		if(!rasporedi.isEmpty()) {			
 			aktivneGodine = rasporedAktivneGodine();		
-			int izborGodine = Alati.ucitajBroj("Unesite broj ispreg godine za koju želite pogledati raposred: ", 
+			izborGodine = Alati.ucitajBroj("Unesite broj ispreg godine za koju želite pogledati raposred: ", 
 					"Unos ne smije biti prazan", 1, aktivneGodine.size())-1;
-			Integer izabranaGodina = aktivneGodine.get(izborGodine);
+			izabranaGodina = aktivneGodine.get(izborGodine);
 			aktivniMjeseci = rasporedAktivniMjeseciUGodini(izabranaGodina);
-			int izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca za koji želite pogledati raposred: ", 
+			izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca za koji želite pogledati raposred: ", 
 					"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
-			Integer izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
+			izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
 			rasporedIspisZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
 			rasporedIzbornik();
 		}else {
@@ -1848,20 +1922,18 @@ public class Start {
 		}	
 	}
 
-	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
-		
+	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {		
 		List<Raspored> rasporedZaGodinuIMjesec = new ArrayList<Raspored>();
-		rasporedZaGodinuIMjesec = rasporedZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
-		
-		YearMonth obj = YearMonth.of(izabranaGodina, izabraniMjesec);
-		int brojDanaUmjesecu = obj.lengthOfMonth();
-		
 		List<Korisnik> korisniciZaGodinuIMjesec = new ArrayList<Korisnik>();
+		YearMonth obj;
+		int brojDanaUmjesecu,brojPocetnihRazmaka;
+		String pocetniRazmak;
+		rasporedZaGodinuIMjesec = rasporedZaGodinuIMjesec(izabranaGodina,izabraniMjesec);	
 		korisniciZaGodinuIMjesec = rasporedKorisniciZaGodinuIMjesec(rasporedZaGodinuIMjesec);
-		
-		Integer brojPocetnihRazmaka = rasporedBrojRazmaka(korisniciZaGodinuIMjesec);
-		String pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);
-		
+		brojPocetnihRazmaka = rasporedBrojRazmaka(korisniciZaGodinuIMjesec);
+		obj = YearMonth.of(izabranaGodina, izabraniMjesec);;
+		brojDanaUmjesecu = obj.lengthOfMonth();		
+		pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);		
 		Alati.ispisZaglavlja("Raspored za " + izabraniMjesec + ". mjesec " + izabranaGodina + ". godine", false);		
 		System.out.print(pocetniRazmak);
 		for(int i=1;i<=brojDanaUmjesecu;i++) {
@@ -1875,15 +1947,18 @@ public class Start {
 		System.out.println();
 		
 		for(Korisnik k : korisniciZaGodinuIMjesec) {
-			Integer naknadniBrojRazmaka = rasporedBrojRazmaka(k.imeIPrezime(),brojPocetnihRazmaka);
-			String naknadniRazmak = rasporedIspisiRazmake(naknadniBrojRazmaka);
+			int naknadniBrojRazmaka;
+			String naknadniRazmak;
+			naknadniBrojRazmaka = rasporedBrojRazmaka(k.imeIPrezime(),brojPocetnihRazmaka);
+			naknadniRazmak = rasporedIspisiRazmake(naknadniBrojRazmaka);
 			System.out.print(k.imeIPrezime() + naknadniRazmak);
 			for(int d=1;d<=brojDanaUmjesecu;d++) {
 				String zapis = "-   ";
 				for(Raspored r : rasporedZaGodinuIMjesec) {
-					Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
-					Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
-					Integer dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
+					Integer godina,mjesec,dan;
+					godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+					mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+					dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
 					if(r.getKorisnik().equals(k) && godina.equals(izabranaGodina) 
 							&& mjesec.equals(izabraniMjesec) && dan.equals(d)) {
 						zapis = r.getOznakaUnosaURaspored().getSkracenica() + "   ";
@@ -1939,8 +2014,9 @@ public class Start {
 	}
 	
 	private List<Integer> rasporedAktivneGodine() {
-		int counter = 1;
+		int counter;
 		List<Integer> akrivneGodine = new ArrayList<Integer>();
+		counter = 1;
 		Alati.ispisZaglavlja("U bazi postoje zapisi u rasporedu sa idućim godinama", false);
 		for (Raspored r : rasporedi) {
 			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
@@ -1959,8 +2035,9 @@ public class Start {
 	private List<Raspored> rasporedZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {
 		List<Raspored> rasporedZaGodinuImjesec = new ArrayList<Raspored>();
 		for (Raspored r : rasporedi) {
-			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
-			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			Integer godina,mjesec;
+			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 			if(godina.equals(izabranaGodina) && mjesec.equals(izabraniMjesec)) {
 				rasporedZaGodinuImjesec.add(r);
 			}
@@ -1980,12 +2057,14 @@ public class Start {
 	}
 	
 	private List<Integer> rasporedAktivniMjeseciUGodini(Integer aktivnaGodina) {
-		int counter = 1;
+		int counter;
 		List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+		counter = 1;
 		Alati.ispisZaglavlja("Za " + aktivnaGodina + ". godinu u bazi postoje zapisi u rasporedu sa idućim mjesecima", false);
 		for (Raspored r : rasporedi) {
-			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
-			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			Integer godina,mjesec;
+			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 			if(aktivnaGodina.equals(godina) && !aktivniMjeseci.contains(mjesec)) {
 				aktivniMjeseci.add(mjesec);
 			}			
@@ -2005,15 +2084,16 @@ public class Start {
 		List<Raspored> rasporedPoKorisnikuMjesecuIGodini = new ArrayList<Raspored>();
 		Korisnik izabraniKorisnik = new Korisnik();
 		Raspored izabraniUnos = new Raspored();
+		Integer izabranaGodina,izabraniMjesec;
 		int izborGodine, izborMjeseca, izborKorisnika, izborUnosa;
 		aktivneGodine = rasporedAktivneGodine();		
 		izborGodine = Alati.ucitajBroj("Unesite broj ispred godine u kojoj tražite unos: ", 
 				"Unos ne smije biti prazan", 1, aktivneGodine.size())-1;
-		Integer izabranaGodina = aktivneGodine.get(izborGodine);
+		izabranaGodina = aktivneGodine.get(izborGodine);
 		aktivniMjeseci = rasporedAktivniMjeseciUGodini(izabranaGodina);
 		izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca u kojem tražite unos: ", 
 				"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
-		Integer izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
+		izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
 		korisniciUMjesecuIGodini = rasporedKorisniciUMjesecuIGodini(izabranaGodina,izabraniMjesec);
 		izborKorisnika = Alati.ucitajBroj("Unesite broj ispreg korisnika za kojeg tražite unos: ", 
 				"Unos ne smije biti prazan", 1, korisniciUMjesecuIGodini.size())-1;
@@ -2027,12 +2107,14 @@ public class Start {
 	}
 	
 	private List<Korisnik> rasporedKorisniciUMjesecuIGodini(Integer izabranaGodina, Integer izabraniMjesec) {
-		int counter = 1;
+		int counter;
 		List<Korisnik> korisnici = new ArrayList<Korisnik>();
+		counter = 1;
 		Alati.ispisZaglavlja("U " + izabraniMjesec + "." + izabranaGodina + ". postoje unosi za sljedeće korisnike", false);
 		for (Raspored r : rasporedi) {
-			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
-			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			Integer godina,mjesec;
+			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 			if(izabranaGodina.equals(godina) && !izabraniMjesec.equals(mjesec) 
 					&& !korisnici.contains(r.getKorisnik())) {
 				korisnici.add(r.getKorisnik());
@@ -2047,14 +2129,16 @@ public class Start {
 	
 	private List<Raspored> rasporedPoKorisnikuMjesecuIGodini(Integer izabranaGodina, Integer izabraniMjesec,
 			Korisnik izabraniKorisnik) {
-		int counter = 1;
+		int counter;
 		List<Raspored> rasporedPoGodiniMjesecuIKorisniku = new ArrayList<Raspored>();
+		counter = 1;
 		Alati.ispisZaglavlja("U " + izabraniMjesec + ". mjesecu " + izabranaGodina + ". godine "
 							+ "zakorisnika " + izabraniKorisnik.imeIPrezime() 
 							+ " postoje unosi sa idućim datumima", false);
 		for(Raspored r : rasporedi) {
-			Integer godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
-			Integer mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			Integer godina,mjesec;
+			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
 			if(godina.equals(izabranaGodina) && mjesec.equals(izabraniMjesec) 
 					&& r.getKorisnik().equals(izabraniKorisnik) 
 					&& !rasporedPoGodiniMjesecuIKorisniku.contains(r)) {
@@ -2074,8 +2158,10 @@ public class Start {
 	}
 	
 	private Integer rasporedBrojRazmaka(List<Korisnik> aktivniKorisniciZaGodiniIMjesec) {
-		Integer brojRazmaka = 1;
-		int maxLength = 0;
+		int brojRazmaka;
+		int maxLength;
+		brojRazmaka = 1;
+		maxLength = 0;
 		for(Korisnik k : aktivniKorisniciZaGodiniIMjesec) {
 			int korisnikImeLength = k.imeIPrezime().length();
 			if(korisnikImeLength>maxLength) {
@@ -2114,24 +2200,26 @@ public class Start {
 	}
 	
 	private Integer rasporedBrojRazmaka(String imeIPrezime, Integer brojPocetnihRazmaka) {
-		Integer brojRazmaka = 1;
-		int length = imeIPrezime.length();		
-		if(length>=8 && length<16) {
+		int brojRazmaka;
+		int duzina;	
+		brojRazmaka = 1;
+		duzina = imeIPrezime.length();	
+		if(duzina>=8 && duzina<16) {
 			brojRazmaka = 2;
 		}		
-		if(length>=16 && length<24) {
+		if(duzina>=16 && duzina<24) {
 			brojRazmaka = 3;
 		}		
-		if(length>=24 && length<32) {
+		if(duzina>=24 && duzina<32) {
 			brojRazmaka = 4;
 		}		
-		if(length>=32 && length<40) {
+		if(duzina>=32 && duzina<40) {
 			brojRazmaka = 5;
 		}		
-		if(length>=40 && length<=48) {
+		if(duzina>=40 && duzina<=48) {
 			brojRazmaka = 6;
 		}		
-		if(length>=48 && length<=51) {
+		if(duzina>=48 && duzina<=51) {
 			brojRazmaka = 7;
 		}		
 		return brojPocetnihRazmaka-brojRazmaka+1;
