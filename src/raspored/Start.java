@@ -25,7 +25,7 @@ public class Start {
 	private boolean valjanost = false;
 	private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
 	private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
-	private String porukaGreskePraznogUnosa = "Unos ne smije bti prazan";
+	private String porukaGreskePraznogUnosa = "Unos ne smije biti prazan";
 	private String porukaGreskeUnosaCijelogBroja = "Molimo unesite cijeli broj";
 	private String porukaGreskeDaNe = "Molimo unesite da ili ne";
 	private String porukaGreskeNemaOsoba = "\nU bazi nema niti jedne osobe";
@@ -174,7 +174,7 @@ public class Start {
 					korisnici.get(0),
 					oznakeUnosaURaspored.get(0),
 					formatDatuma.parse("2.4.2020."),
-					true));
+					false));
 			rasporedi.add(new Raspored(
 					korisnici.get(0),
 					oznakeUnosaURaspored.get(0),
@@ -229,7 +229,7 @@ public class Start {
 					korisnici.get(1),
 					oznakeUnosaURaspored.get(2),
 					formatDatuma.parse("14.4.2020."),
-					true));
+					false));
 			rasporedi.add(new Raspored(
 					korisnici.get(1),
 					oznakeUnosaURaspored.get(2),
@@ -1787,7 +1787,7 @@ public class Start {
 			case 2 -> oznakeUnosaURasporedIzmjena();
 			case 3 -> oznakeUnosaURasporedBrisanje();
 			case 4 -> {
-				oznakeUnosaURasporedIzlistanje();
+				oznakeUnosaURasporedIzlistanje(true);
 				oznakeUnosaURasporedIzbornik();
 			}
 			case 5 ->  oznakeUnosaURasporedDetalji();
@@ -1821,8 +1821,9 @@ public class Start {
 		int i;
 		OznakaUnosaURaspored oznakaUnosaURaspored = new OznakaUnosaURaspored();
 		if(!oznakeUnosaURaspored.isEmpty()) {
-			oznakeUnosaURasporedIzlistanje();
-			i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", porukaGreskeIzboraAkcije, 1,
+			oznakeUnosaURasporedIzlistanje(true);
+			i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", 
+					porukaGreskeIzboraAkcije, 2,
 					oznakeUnosaURaspored.size()) - 1;
 			oznakaUnosaURaspored = oznakeUnosaURaspored.get(i);
 			oznakeUnosaURasporedIzmjenaPodataka(oznakaUnosaURaspored, i);	
@@ -1856,8 +1857,9 @@ public class Start {
 	private void oznakeUnosaURasporedBrisanje() {
 		int i;
 		if(!oznakeUnosaURaspored.isEmpty()) {
-			oznakeUnosaURasporedIzlistanje();
-			i = Alati.ucitajBroj("Unesite broj oznake koju želite obrisati: ", porukaGreskeIzboraAkcije, 1,
+			oznakeUnosaURasporedIzlistanje(true);
+			i = Alati.ucitajBroj("Unesite broj ispred oznake koju želite izmjeniti: ", 
+					porukaGreskeIzboraAkcije, 2,
 					oznakeUnosaURaspored.size()) - 1;
 			if(Alati.daNe("Želite li zaista obrisati oznaku " 
 							+ oznakeUnosaURaspored.get(i).toString() + " (da/ne): ", porukaGreskeDaNe)) {
@@ -1874,7 +1876,7 @@ public class Start {
 	private void oznakeUnosaURasporedDetalji() {
 		int i;
 		if(!oznakeUnosaURaspored.isEmpty()) {
-			oznakeUnosaURasporedIzlistanje();
+			oznakeUnosaURasporedIzlistanje(true);
 			i = Alati.ucitajBroj("Unesite redni broj oznake koju želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					oznakeUnosaURaspored.size()) - 1;
 			Alati.ispisZaglavlja("Detalji oznake", false);
@@ -1906,13 +1908,20 @@ public class Start {
 		return postojanje;		
 	}
 
-	private void oznakeUnosaURasporedIzlistanje() {
+	private void oznakeUnosaURasporedIzlistanje(boolean napomena) {
 		int counter;
 		if(!oznakeUnosaURaspored.isEmpty()) {
 			counter = 1;
+			String string = "";
 			Alati.ispisZaglavlja("U bazi postoje slijedeće oznake unosa u raspored", false);
 			for (OznakaUnosaURaspored oznakaUnosaURaspored : oznakeUnosaURaspored) {
-				System.out.println(counter + " " + oznakaUnosaURaspored.toString());
+				string = counter + " " + oznakaUnosaURaspored.toString();
+				if(napomena) {
+					if(oznakaUnosaURaspored.getSkracenica().equals("R")) {
+						string += " - nije moguća izmjena ili brisanje";
+					}
+				}				
+				System.out.println(string);
 				counter++;
 			}		
 		}else {
@@ -1967,6 +1976,7 @@ public class Start {
 				unos.setDatum(datum);
 				unos = rasporedUnosPodataka(unos);
 				rasporedi.add(unos);
+				System.out.println("\nZapis je unešen u  raspored");
 			}else {
 				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
 						porukaGreskeDaNe)) {
@@ -1980,8 +1990,8 @@ public class Start {
 	private Raspored rasporedUnosPodataka(Raspored unos) {
 		int i;
 		OznakaUnosaURaspored oznaka = new OznakaUnosaURaspored();
-		oznakeUnosaURasporedIzlistanje();
-		i = Alati.ucitajBroj("Odaberite oznaku zapisa koju želite spremiti u zapis: ", 
+		oznakeUnosaURasporedIzlistanje(false);
+		i = Alati.ucitajBroj("Odaberite oznaku zapisa koju želite spremiti u promjenu zapisa: ", 
 				porukaGreskeIzboraAkcije, 1, oznakeUnosaURaspored.size())-1;
 		oznaka = oznakeUnosaURaspored.get(i);
 		unos.setOznakaUnosaURaspored(oznaka);
@@ -1997,12 +2007,13 @@ public class Start {
 		if(!rasporedi.isEmpty()) {
 			indeks  = rasporedPronalazakZapisa();			
 			unos = rasporedi.get(indeks);
+			Alati.ispisZaglavlja("Unos novih podataka za gornji zapis", false);
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
-			izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite spremiti u promjene unosa: ", 
+			izbor = Alati.ucitajBroj("Unesite broj korisnika kojeg želite spremiti u promjenu zapisa: ", 
 									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
 			indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
 			odabraniKorisnik = korisnici.get(indeksKorisnika);
-			datum = Alati.ucitajDatum("Unesite datum koji želite spremiti u promjenu unosa: ");
+			datum = Alati.ucitajDatum("Unesite datum koji želite spremiti u promjenu zapisa: ");
 			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum, unos)) {	
 				unos.setKorisnik(odabraniKorisnik);
 				unos.setDatum(datum);
@@ -2067,7 +2078,7 @@ public class Start {
 		pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);		
 		
 		Alati.ispisZaglavlja("Raspored za " + izabraniMjesec + ". mjesec " + izabranaGodina + ". godine", false);		
-		System.out.print(pocetniRazmak);
+		System.out.print("\n" + pocetniRazmak);
 		for(int i=1;i<=brojDanaUmjesecu;i++) {
 			if(i<10) {
 				System.out.print(i + "   ");
@@ -2093,13 +2104,19 @@ public class Start {
 					dan = Integer.parseInt(Alati.hrDan(r.getDatum()));
 					if(r.getKorisnik().equals(k) && godina.equals(izabranaGodina) 
 							&& mjesec.equals(izabraniMjesec) && dan.equals(d)) {
-						zapis = r.getOznakaUnosaURaspored().getSkracenica() + "   ";
+						zapis = r.getOznakaUnosaURaspored().getSkracenica();
+						if(r.isRadSaPauzom()) {
+							zapis += "   ";
+						}else {
+							zapis += "*  ";
+						}
 					}
 				}
 				System.out.print(zapis);
 			}
 			System.out.println();
 		}
+		System.out.println("\n*rad bez pauze");
 		rasporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
 	}
 	
@@ -2329,7 +2346,7 @@ public class Start {
 		izborUnosa = Alati.ucitajBroj("Unesite broj ispreg datuma za odabir unosa: ", 
 				"Unos ne smije biti prazan", 1, rasporedPoKorisnikuMjesecuIGodini.size())-1;
 		izabraniUnos = rasporedPoKorisnikuMjesecuIGodini.get(izborUnosa);
-		System.out.println("\nDetalji odabranog unosa: ");
+		Alati.ispisZaglavlja("Detalji odabranog unosa",false);
 		izabraniUnos.ispisiDetalje();
 		return rasporedIndeksUnosaIzIzvorneListe(izabraniUnos);
 	}
