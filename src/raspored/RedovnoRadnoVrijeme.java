@@ -167,4 +167,52 @@ public class RedovnoRadnoVrijeme {
 		System.out.println("Radno vrijeme nedjeljom: " + Alati.hrVrijeme(this.nedjeljaOd) + " - " + Alati.hrVrijeme(this.nedjeljaDo));		
 	}
 	
+	public String radnoVrijemePonedjeljak() {
+		return Alati.hrVrijeme(this.ponedjeljakOd) + " - " + Alati.hrVrijeme(this.ponedjeljakDo);
+	}
+	
+	public String radnoVrijemeUtorak() {
+		return Alati.hrVrijeme(this.utorakOd) + " - " + Alati.hrVrijeme(this.utorakDo);
+	}
+	
+	public String radnoVrijemeSrijeda() {
+		return Alati.hrVrijeme(this.srijedaOd) + " - " + Alati.hrVrijeme(this.srijedaDo);
+	}
+	
+	public String radnoVrijemeCetvrtak() {
+		return Alati.hrVrijeme(this.cetvrtakOd) + " - " + Alati.hrVrijeme(this.cetvrtakDo);
+	}
+	
+	public String radnoVrijemePetak() {
+		return Alati.hrVrijeme(this.petakOd) + " - " + Alati.hrVrijeme(this.petakDo);
+	}
+	
+	public String radnoVrijemeSubota() {
+		return Alati.hrVrijeme(this.subotaOd) + " - " + Alati.hrVrijeme(this.subotaDo);
+	}
+	
+	public String radnoVrijemeNedjelja() {
+		return Alati.hrVrijeme(this.nedjeljaOd) + " - " + Alati.hrVrijeme(this.nedjeljaDo);
+	}
+	
+	public boolean isValid() {
+	    return this.vrijediOd != null 
+	    		&& this.vrijediDo != null 
+	    		&& this.ponedjeljakOd != null
+	    		&& this.ponedjeljakDo != null
+	    		&& this.utorakOd != null
+	    		&& this.utorakDo != null
+	    		&& this.srijedaOd != null
+	    		&& this.srijedaDo != null
+	    		&& this.cetvrtakOd != null
+	    		&& this.cetvrtakDo != null
+	    		&& this.petakOd != null
+	    		&& this.petakDo != null
+	    		&& this.subotaOd != null
+	    		&& this.subotaDo != null
+	    		&& this.nedjeljaOd != null
+	    		&& this.nedjeljaDo != null
+	    		&& this.trajanjePauzeUMinutama != null;
+	  }
+	
 }

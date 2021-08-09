@@ -1346,6 +1346,19 @@ public class Start {
 		return valjanost;
 	}
 	
+	private RedovnoRadnoVrijeme redovnaRadnaVremenaDetaljiPoDatumu(final Date datum) {	
+		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();
+		for(RedovnoRadnoVrijeme rrv : redovnaRadnaVremena) {
+			if((rrv.getVrijediOd().before(datum) || rrv.getVrijediOd().equals(datum)) 
+					& (rrv.getVrijediDo().after(datum) || rrv.getVrijediDo().equals(datum))) {
+				redovnoRadnoVrijeme = rrv;
+				break;
+			}
+			continue;
+		}	
+		return redovnoRadnoVrijeme;
+	}
+	
 	private RedovnoRadnoVrijeme redovnaRadnaVremenaUnesiOstaleVrijednosti(RedovnoRadnoVrijeme redovnoRadnoVrijeme) {
 		redovnoRadnoVrijeme.setPonedjeljakOd(Alati.ucitajVrijeme("Početak redovnog radog vremena ponedjeljkom: "));
 		redovnoRadnoVrijeme.setPonedjeljakDo(Alati.ucitajVrijeme("Kraj redovnog radnog vremena ponedjeljkom: "));
@@ -1921,17 +1934,19 @@ public class Start {
 		System.out.println("2 za izmjenu postojećeg unosa u rasporedu");
 		System.out.println("3 za brisanje postojećeg unosa u rasporedu");
 		System.out.println("4 za prikaz rasporeda za određeni mjesec u određenoj godini");
-		System.out.println("5 za povratak u glavni korisnički izbornik");
+		System.out.println("5 za prikaz detalja rasporeda na određeni datum");
+		System.out.println("6 za povratak u glavni korisnički izbornik");
 		rasporedOdabirAkcije();
 	}
 
 	private void  rasporedOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 5)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
 			case 1 -> rasporedNoviUnos();
 			case 2 -> rasporedIzmjena();
 			case 3 -> rasporedBrisanje();
 			case 4 -> rasporedPregledPoMjesecu();
-			case 5 -> autentificiraniKorisnikGlavniIzbornik();
+			case 5 -> rasporedPregledPoDanu();
+			case 6 -> autentificiraniKorisnikGlavniIzbornik();
 		}		
 	}
 
@@ -1940,7 +1955,7 @@ public class Start {
 		Date datum;
 		Korisnik odabraniKorisnik = new Korisnik();
 		Raspored unos = new Raspored();
-		if(rasporedPostojanjeAktivnihKorisnika() && raposredPostojanjeOznakaUnosa()) {			
+		if(rasporedPostojanjeAktivnihKorisnika() && rasporedPostojanjeOznakaUnosa()) {			
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
 			izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
 									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
@@ -2085,7 +2100,78 @@ public class Start {
 			}
 			System.out.println();
 		}
-		raporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
+		rasporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
+	}
+	
+	private void rasporedPregledPoDanu() {
+		int izborGodine, izabranaGodina, izborMjeseca, izabraniMjesec, izborDatuma;
+		Date izabraniDatum;
+		List<Integer> aktivneGodine = new ArrayList<Integer>();
+		List<Integer> aktivniMjeseci = new ArrayList<Integer>();
+		List<Date> aktivniDatumi = new ArrayList<Date>();
+		if(!rasporedi.isEmpty()) {			
+			aktivneGodine = rasporedAktivneGodine();		
+			izborGodine = Alati.ucitajBroj("Unesite broj ispreg godine za koju želite pogledati raposred: ", 
+					"Unos ne smije biti prazan", 1, aktivneGodine.size())-1;
+			izabranaGodina = aktivneGodine.get(izborGodine);
+			aktivniMjeseci = rasporedAktivniMjeseciUGodini(izabranaGodina);
+			izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca za koji želite pogledati raposred: ", 
+					"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
+			izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
+			aktivniDatumi = rasporedAktivniDatumi(izabranaGodina,izabraniMjesec);
+			izborDatuma = Alati.ucitajBroj("Unesite broj ispreg datuma za koji želite pogledati raposred: ", 
+					"Unos ne smije biti prazan", 1, aktivniDatumi.size())-1;
+			izabraniDatum = aktivniDatumi.get(izborDatuma);
+			rasporedIspisZaDatum(izabraniDatum);
+			rasporedIzbornik();
+		}else {
+			System.out.println(porukaGreskeNemaZapisaURasporedu);
+		}	
+	}
+
+	private void rasporedIspisZaDatum(Date izabraniDatum) {
+		String radnoVrijeme;
+		int trajanjePauzeUMinutama = 0;
+		RedovnoRadnoVrijeme redovnoRadnoVrijeme = new RedovnoRadnoVrijeme();
+		int danUTjednu;
+		radnoVrijeme = "Za " + Alati.hrDatum(izabraniDatum) + " nije unešeno radno vrijeme";
+		Alati.ispisZaglavlja("Detalji rasporeda za datum " + Alati.hrDatum(izabraniDatum), false);
+		redovnoRadnoVrijeme = redovnaRadnaVremenaDetaljiPoDatumu(izabraniDatum);
+		danUTjednu = Integer.parseInt(Alati.hrDanUTjednu(izabraniDatum));		
+		if(redovnoRadnoVrijeme.isValid()) {
+			radnoVrijeme = rasporedRadnoVrijemeNaDatum(redovnoRadnoVrijeme,danUTjednu);
+			trajanjePauzeUMinutama = redovnoRadnoVrijeme.getTrajanjePauzeUMinutama();
+		}
+		for(IznimnoRadnoVrijeme irv : iznimnaRadnaVremena) {
+			if(irv.getDatum().equals(izabraniDatum)) {
+				radnoVrijeme = irv.radnoVrijeme();
+				trajanjePauzeUMinutama = irv.getPauza();
+			}
+		}	
+		System.out.println("Radno vrijeme: " + radnoVrijeme);
+		System.out.println("Trajanje pauze u minutama: " + trajanjePauzeUMinutama);
+		rasporedKorisniciNaDatum(izabraniDatum);	
+	}
+
+	private void rasporedKorisniciNaDatum(Date izabraniDatum) {
+		List<Korisnik> korisniciNaDatum = new ArrayList<Korisnik>();
+		for(Raspored r : rasporedi) {
+			if(r.getDatum().equals(izabraniDatum) 
+					&& r.getOznakaUnosaURaspored().getSkracenica().equals("R")
+					&& !korisniciNaDatum.contains(r.getKorisnik())) {
+				korisniciNaDatum.add(r.getKorisnik());
+			}
+		}
+		if(!korisniciNaDatum.isEmpty()) {
+			int counter = 1;
+			System.out.print("Osobe koje rade:");
+			for(Korisnik k :korisniciNaDatum) {
+				System.out.println("\n\t" + counter + " " + k.imeIPrezime());
+				counter++;
+			}
+		}else {
+			System.out.println("Niti jedna osoba ne radi taj dan");
+		}
 	}
 
 	// POMOĆNE FUNKCIJE RASPOREDA
@@ -2122,7 +2208,7 @@ public class Start {
 		return valjanost;
 	}
 	
-	private boolean raposredPostojanjeOznakaUnosa() {
+	private boolean rasporedPostojanjeOznakaUnosa() {
 		boolean valjanost = true;
 		if(oznakeUnosaURaspored.isEmpty()) {
 			System.out.println("\nU bazi mora postojati barem jedna oznaka unosa u raspored za nastavak ove radnje.");
@@ -2193,6 +2279,28 @@ public class Start {
 			counter++;
 		}
 		return aktivniMjeseci;
+	}
+	
+	private List<Date> rasporedAktivniDatumi(Integer aktivnaGodina, Integer aktivniMjesec){
+		int counter;
+		List<Date> aktivniDatumi = new ArrayList<Date>();
+		counter = 1;
+		Alati.ispisZaglavlja("Za " + aktivnaGodina + "." + aktivniMjesec + ". u bazi postoje zapisi u rasporedu sa idućim datumima", false);
+		for (Raspored r : rasporedi) {
+			Integer godina,mjesec;
+			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
+			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
+			if(!aktivniDatumi.contains(r.getDatum()) 
+					&& aktivnaGodina.equals(godina) && aktivniMjesec.equals(mjesec)) {
+				aktivniDatumi.add(r.getDatum());
+			}			
+		}
+		Collections.sort(aktivniDatumi);
+		for(Date d : aktivniDatumi) {
+			System.out.println(counter + " " + Alati.hrDatum(d));
+			counter++;
+		}
+		return aktivniDatumi;
 	}
 	
 	private int rasporedPronalazakZapisa() {
@@ -2277,7 +2385,7 @@ public class Start {
 		return rasporedi.indexOf(raspored);
 	}
 	
-	private void raporedIspisNapomena(Integer izabranaGodina, Integer izabraniMjesec, int brojDanaUmjesecu) {
+	private void rasporedIspisNapomena(Integer izabranaGodina, Integer izabraniMjesec, int brojDanaUmjesecu) {
 		Date datum = null;
 		int brojPotrebnihRadnika = 0, brojUpisanihRadnika = 0;
 		int danUTjednu;
@@ -2352,6 +2460,34 @@ public class Start {
 				}
 		}
 		return brojRadnika;
+	}
+	
+	private String rasporedRadnoVrijemeNaDatum(RedovnoRadnoVrijeme redovnoRadnoVrijeme, int danUTjednu) {
+		String radnoVrijeme = "";
+		switch(danUTjednu) {
+		case 1 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemePonedjeljak();
+				}
+		case 2 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemeUtorak();
+				}
+		case 3 ->{
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemeSrijeda();
+				}
+		case 4 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemeCetvrtak();
+				}
+		case 5 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemePetak();
+				}
+		case 6 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemeSubota();
+				}
+		case 7 -> {
+				radnoVrijeme = redovnoRadnoVrijeme.radnoVrijemeNedjelja();
+				}
+		}
+		return radnoVrijeme;
 	}
 
 	private Integer rasporedBrojRazmaka(List<Korisnik> aktivniKorisniciZaGodiniIMjesec) {

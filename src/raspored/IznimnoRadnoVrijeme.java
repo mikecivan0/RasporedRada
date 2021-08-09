@@ -64,5 +64,8 @@ public class IznimnoRadnoVrijeme {
 		System.out.println("Trajanje pauze u minutama: " + this.getPauza());
 		System.out.println("Napomena/oznaka: " + this.napomena);
 	}
-
+	
+	public String radnoVrijeme() {
+		return Alati.hrVrijeme(this.pocetak) + " " + Alati.hrVrijeme(this.kraj);
+	}
 }
