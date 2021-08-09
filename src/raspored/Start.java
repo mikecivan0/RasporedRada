@@ -196,11 +196,6 @@ public class Start {
 					formatDatuma.parse("6.4.2020."),
 					true));
 			rasporedi.add(new Raspored(
-					korisnici.get(0),
-					oznakeUnosaURaspored.get(2),
-					formatDatuma.parse("07.04.2020."),
-					true));
-			rasporedi.add(new Raspored(
 					korisnici.get(1),
 					oznakeUnosaURaspored.get(2),
 					formatDatuma.parse("8.4.2020."),
