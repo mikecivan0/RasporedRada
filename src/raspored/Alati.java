@@ -12,12 +12,14 @@ public class Alati {
 	public static final String FORMAT_GODINE = "yyyy";
 	public static final String FORMAT_MJESECA = "M";
 	public static final String FORMAT_DANA = "d";
+	public static final String FORMAT_DANA_U_TJEDNU = "u";
 	private static SimpleDateFormat formatDatuma;
 	private static SimpleDateFormat formatVremena;
 	private static SimpleDateFormat formatGodine;
 	private static SimpleDateFormat formatMjeseca;
 	private static SimpleDateFormat formatDana;
-	
+	private static SimpleDateFormat formatDanaUTjednu;
+
 	public static Date ucitajDatum(String poruka) {
 
 		formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
@@ -78,12 +80,11 @@ public class Alati {
 			System.out.print(poruka);
 
 			unos = scanner.nextLine();
-			if(unos.trim().equals("")) {
+			if (unos.trim().equals("")) {
 				System.out.println(porukaGreske);
 			}
 			if (unos.length() < minLength || unos.length() > maxLength) {
-				System.out.println("Najmanji dopušteni broj znakova je " + minLength + ", a najveći "
-						+ maxLength);
+				System.out.println("Najmanji dopušteni broj znakova je " + minLength + ", a najveći " + maxLength);
 				continue;
 			}
 			break;
@@ -91,18 +92,18 @@ public class Alati {
 
 		return unos;
 	}
-	
+
 	public static boolean daNe(String poruka, String porukaGreske) {
 		String unos;
-		
-		while(true) {
+
+		while (true) {
 			System.out.print(poruka);
-			
+
 			unos = scanner.nextLine().trim().toLowerCase();
-			if(unos.equals("da")) {
+			if (unos.equals("da")) {
 				return true;
 			}
-			if(unos.equals("ne")) {
+			if (unos.equals("ne")) {
 				return false;
 			}
 			System.out.println(porukaGreske);
@@ -112,47 +113,51 @@ public class Alati {
 	public static void ispisZaglavlja(String naslov, boolean unesite) {
 		naslov = "-" + naslov + "-";
 		String crtice = "";
-		for(int i=1;i<=naslov.length();i++) {
-			crtice+="-";
+		for (int i = 1; i <= naslov.length(); i++) {
+			crtice += "-";
 		}
 		System.out.println();
 		System.out.println(crtice);
 		System.out.println(naslov);
 		System.out.println(crtice);
-		if(unesite) {
+		if (unesite) {
 			System.out.println("Unesite");
 		}
-		
+
 	}
-	
+
 	public static String hrGodina(Date datum) {
 		formatGodine = new SimpleDateFormat(FORMAT_GODINE);
 		return formatGodine.format(datum);
 	}
-	
+
 	public static String hrMjesec(Date datum) {
 		formatMjeseca = new SimpleDateFormat(FORMAT_MJESECA);
 		return formatMjeseca.format(datum);
 	}
-	
+
 	public static String hrDan(Date datum) {
 		formatDana = new SimpleDateFormat(FORMAT_DANA);
 		return formatDana.format(datum);
 	}
-	
+
 	public static String hrDatum(Date datum) {
 		formatDatuma = new SimpleDateFormat(FORMAT_DATUMA);
 		return formatDatuma.format(datum);
 	}
-	
+
 	public static String hrVrijeme(Date datum) {
 		formatDatuma = new SimpleDateFormat(FORMAT_VREMENA);
 		return formatDatuma.format(datum);
 	}
 	
+	public static String hrDanUTjednu(Date datum) {
+		formatDanaUTjednu = new SimpleDateFormat(FORMAT_DANA_U_TJEDNU);
+		return formatDanaUTjednu.format(datum);
+	}
+
 	public static String parseBool(boolean bool) {
 		return (bool) ? "da" : "ne";
 	}
-	
-	
+
 }

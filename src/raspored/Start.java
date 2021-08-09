@@ -36,8 +36,8 @@ public class Start {
 	private String porukaGreskeNemaOznakaUnosaURaspored ="\nU bazi nema niti jedne oznake unosa u raspored";
 	private String porukaGreskeNemaZapisaURasporedu ="\nU bazi nema niti jedan zapis u rasporedu";
 	private String porukaGreskeKorisnikJeURasporedu ="\nNije moguće obrisati korisnika jer se nalazi u rasporedu";
-	SimpleDateFormat formatDatuma;
-	SimpleDateFormat formatVremena;
+	SimpleDateFormat formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
+	SimpleDateFormat formatVremena= new SimpleDateFormat("HH:mm");
 
 	public Start() {
 		korisnici = new ArrayList<Korisnik>();
@@ -64,8 +64,7 @@ public class Start {
 		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true));
 		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));
 		
-		formatDatuma = new SimpleDateFormat("dd.MM.yyyy.");
-		formatVremena = new SimpleDateFormat("HH:mm");
+		
 		
 		// probni podaci redovnog radnog vremena
 		try {
@@ -148,13 +147,13 @@ public class Start {
 			brojeviRadnikaPoDanima.add(new BrojRadnikaPoDanima(
 					formatDatuma.parse("1.4.2020."),
 					formatDatuma.parse("1.6.2020."),
-					8,
-					6,
-					7,
-					7,
-					6,
-					9,
-					6));
+					1,
+					1,
+					1,
+					1,
+					1,
+					1,
+					1));
 		} catch (ParseException e) {
 			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
 		}
@@ -192,9 +191,19 @@ public class Start {
 					formatDatuma.parse("5.4.2020."),
 					true));
 			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("6.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
 					korisnici.get(0),
 					oznakeUnosaURaspored.get(2),
 					formatDatuma.parse("07.04.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("8.4.2020."),
 					true));
 			rasporedi.add(new Raspored(
 					korisnici.get(0),
@@ -205,6 +214,106 @@ public class Start {
 					korisnici.get(1),
 					oznakeUnosaURaspored.get(2),
 					formatDatuma.parse("10.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("11.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("12.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("13.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("14.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("15.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("16.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("17.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("18.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("19.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("20.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("21.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("22.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("23.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("24.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("25.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("26.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("27.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("28.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("29.4.2020."),
+					true));
+			rasporedi.add(new Raspored(
+					korisnici.get(1),
+					oznakeUnosaURaspored.get(2),
+					formatDatuma.parse("30.4.2020."),
 					true));
 			rasporedi.add(new Raspored(
 					korisnici.get(0),
@@ -1523,8 +1632,8 @@ public class Start {
 		while(true) {
 			datumPocetkaPrimjene = Alati.ucitajDatum("Od kada će početi vrijediti novi unos: ");
 			datumKrajaPrimjene = Alati.ucitajDatum("Do kada će vrijediti novi unos: ");
-			if(!brojRadnikaPoDanimaProvjeriPreklapanje(datumPocetkaPrimjene, brojRadnikaPoDanima) 
-					&& !brojRadnikaPoDanimaProvjeriPreklapanje(datumKrajaPrimjene, brojRadnikaPoDanima)) {
+			if(brojRadnikaPoDanimaProvjeriPreklapanje(datumPocetkaPrimjene, brojRadnikaPoDanima) 
+					&& brojRadnikaPoDanimaProvjeriPreklapanje(datumKrajaPrimjene, brojRadnikaPoDanima)) {
 				brojRadnikaPoDanima.setVrijediOd(datumPocetkaPrimjene);
 				brojRadnikaPoDanima.setVrijediDo(datumKrajaPrimjene);
 				brojRadnikaPoDanima = brojRadnikaPoDanimaUnesiOstaleVrijednosti(brojRadnikaPoDanima);
@@ -1564,7 +1673,6 @@ public class Start {
 	private void brojRadnikaPoDanimaDetalji() {	
 		int i;
 		if(!brojeviRadnikaPoDanima.isEmpty()) {
-			brojRadnikaPoDanimaIzbornik();
 			brojRadnikaPoDanimaIzlistanje();
 			i = Alati.ucitajBroj("Unesite redni broj unosa koji želite detaljnije pogledati: ", porukaGreskeIzboraAkcije, 1,
 					brojeviRadnikaPoDanima.size()) - 1;
@@ -1595,26 +1703,39 @@ public class Start {
 	// provjera kod izmjene podataka
 	private boolean brojRadnikaPoDanimaProvjeriPreklapanje(final Date datum, final BrojRadnikaPoDanima brojRadnikaPoDanima) {	
 		boolean valjanost = true;
-		for(BrojRadnikaPoDanima brojRadnika : brojeviRadnikaPoDanima) {
-			if(!brojRadnika.equals(brojRadnikaPoDanima)) {
-				if((brojRadnika.getVrijediOd().before(datum) || brojRadnika.getVrijediOd().equals(datum)) 
-						& (brojRadnika.getVrijediDo().after(datum) || brojRadnika.getVrijediDo().equals(datum))) {
+		for(BrojRadnikaPoDanima br : brojeviRadnikaPoDanima) {
+			if(!br.equals(brojRadnikaPoDanima)
+					&& (br.getVrijediOd().before(datum) || br.getVrijediOd().equals(datum)) 
+						&& (br.getVrijediDo().after(datum) || br.getVrijediDo().equals(datum))
+						) {
 					valjanost = false;
 					break;
 				}
 			}
-		}
 		return valjanost;	
 	}
 	
+	private BrojRadnikaPoDanima brojRadnikaPoDanimaNadjiPoDatumu(final Date datum) {		
+		BrojRadnikaPoDanima brojRadnikaPoDanima = new BrojRadnikaPoDanima();
+		for(BrojRadnikaPoDanima brpd : brojeviRadnikaPoDanima) {
+			if((brpd.getVrijediOd().before(datum) || brpd.getVrijediOd().equals(datum)) 
+					& (brpd.getVrijediDo().after(datum) || brpd.getVrijediDo().equals(datum))) {
+				brojRadnikaPoDanima = brpd;
+				break;
+			}
+			continue;
+		}	
+		return brojRadnikaPoDanima;
+	}	
+	
 	private BrojRadnikaPoDanima brojRadnikaPoDanimaUnesiOstaleVrijednosti(BrojRadnikaPoDanima brojRadnikaPoDanima) {
-		brojRadnikaPoDanima.setPonedjeljak(Alati.ucitajBroj("Unesite broj radnika ponedjeljkom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setUtorak(Alati.ucitajBroj("Unesite broj radnika utorkom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setSrijeda(Alati.ucitajBroj("Unesite broj radnika srijedom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setCetvrtak(Alati.ucitajBroj("Unesite broj radnika četvrtkom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setPetak(Alati.ucitajBroj("Unesite broj radnika petkom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setSubota(Alati.ucitajBroj("Unesite broj radnika subotom: ", porukaGreskeUnosaCijelogBroja, 1, 30));
-		brojRadnikaPoDanima.setNedjelja(Alati.ucitajBroj("Unesite broj radnika nedjeljom: ", porukaGreskeUnosaCijelogBroja, 1, 30));		
+		brojRadnikaPoDanima.setPonedjeljak(Alati.ucitajBroj("Unesite broj radnika ponedjeljkom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setUtorak(Alati.ucitajBroj("Unesite broj radnika utorkom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setSrijeda(Alati.ucitajBroj("Unesite broj radnika srijedom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setCetvrtak(Alati.ucitajBroj("Unesite broj radnika četvrtkom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setPetak(Alati.ucitajBroj("Unesite broj radnika petkom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setSubota(Alati.ucitajBroj("Unesite broj radnika subotom: ", porukaGreskeUnosaCijelogBroja, 0, 10));
+		brojRadnikaPoDanima.setNedjelja(Alati.ucitajBroj("Unesite broj radnika nedjeljom: ", porukaGreskeUnosaCijelogBroja, 0, 10));		
 		return brojRadnikaPoDanima;
 	}
 	
@@ -1810,16 +1931,16 @@ public class Start {
 	}
 
 	private void  rasporedOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 6)) {
-			case 1 -> raposredNoviUnos();
-			case 2 -> raposredIzmjena();
-			case 3 -> raposredBrisanje();
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 5)) {
+			case 1 -> rasporedNoviUnos();
+			case 2 -> rasporedIzmjena();
+			case 3 -> rasporedBrisanje();
 			case 4 -> rasporedPregledPoMjesecu();
 			case 5 -> autentificiraniKorisnikGlavniIzbornik();
 		}		
 	}
 
-	private void raposredNoviUnos() {	
+	private void rasporedNoviUnos() {	
 		int izbor,indeksKorisnika;
 		Date datum;
 		Korisnik odabraniKorisnik = new Korisnik();
@@ -1839,7 +1960,7 @@ public class Start {
 			}else {
 				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
 						porukaGreskeDaNe)) {
-					raposredNoviUnos();				
+					rasporedNoviUnos();				
 				}
 			}
 		}		
@@ -1858,7 +1979,7 @@ public class Start {
 		return unos;	
 	}
 
-	private void raposredIzmjena() {
+	private void rasporedIzmjena() {
 		int indeks, izbor,indeksKorisnika;
 		Date datum;
 		Raspored unos = new Raspored();
@@ -1881,14 +2002,14 @@ public class Start {
 			}else {
 				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
 						porukaGreskeDaNe)) {
-					raposredNoviUnos();				
+					rasporedNoviUnos();				
 				}
 			}
 		}		
 		rasporedIzbornik();	
 	}
 	
-	private void raposredBrisanje() {
+	private void rasporedBrisanje() {
 		int indeks;
 		if(!rasporedi.isEmpty()) {
 			indeks  = rasporedPronalazakZapisa();
@@ -1934,6 +2055,7 @@ public class Start {
 		obj = YearMonth.of(izabranaGodina, izabraniMjesec);;
 		brojDanaUmjesecu = obj.lengthOfMonth();		
 		pocetniRazmak = rasporedIspisiRazmake(brojPocetnihRazmaka);		
+		
 		Alati.ispisZaglavlja("Raspored za " + izabraniMjesec + ". mjesec " + izabranaGodina + ". godine", false);		
 		System.out.print(pocetniRazmak);
 		for(int i=1;i<=brojDanaUmjesecu;i++) {
@@ -1967,9 +2089,10 @@ public class Start {
 				System.out.print(zapis);
 			}
 			System.out.println();
-		}		
+		}
+		raporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
 	}
-	
+
 	// POMOĆNE FUNKCIJE RASPOREDA
 
 	// provjera potojanja zapisa u rasporedu kod unosa novog
@@ -2103,28 +2226,30 @@ public class Start {
 		izborUnosa = Alati.ucitajBroj("Unesite broj ispreg datuma za odabir unosa: ", 
 				"Unos ne smije biti prazan", 1, rasporedPoKorisnikuMjesecuIGodini.size())-1;
 		izabraniUnos = rasporedPoKorisnikuMjesecuIGodini.get(izborUnosa);
+		System.out.println("\nDetalji odabranog unosa: ");
+		izabraniUnos.ispisiDetalje();
 		return rasporedIndeksUnosaIzIzvorneListe(izabraniUnos);
 	}
 	
 	private List<Korisnik> rasporedKorisniciUMjesecuIGodini(Integer izabranaGodina, Integer izabraniMjesec) {
 		int counter;
-		List<Korisnik> korisnici = new ArrayList<Korisnik>();
+		List<Korisnik> korisniciUMjesecuIGodini = new ArrayList<Korisnik>();
 		counter = 1;
 		Alati.ispisZaglavlja("U " + izabraniMjesec + "." + izabranaGodina + ". postoje unosi za sljedeće korisnike", false);
 		for (Raspored r : rasporedi) {
 			Integer godina,mjesec;
 			godina = Integer.parseInt(Alati.hrGodina(r.getDatum()));
 			mjesec = Integer.parseInt(Alati.hrMjesec(r.getDatum()));
-			if(izabranaGodina.equals(godina) && !izabraniMjesec.equals(mjesec) 
-					&& !korisnici.contains(r.getKorisnik())) {
-				korisnici.add(r.getKorisnik());
+			if(izabranaGodina.equals(godina) && izabraniMjesec.equals(mjesec) 
+					&& !korisniciUMjesecuIGodini.contains(r.getKorisnik())) {
+				korisniciUMjesecuIGodini.add(r.getKorisnik());
 			}			
 		}
-		for(Korisnik k : korisnici) {
+		for(Korisnik k : korisniciUMjesecuIGodini) {
 			System.out.println(counter + " " + k.imeIPrezime());
 			counter++;
 		}
-		return korisnici;
+		return korisniciUMjesecuIGodini;
 	}
 	
 	private List<Raspored> rasporedPoKorisnikuMjesecuIGodini(Integer izabranaGodina, Integer izabraniMjesec,
@@ -2157,6 +2282,83 @@ public class Start {
 		return rasporedi.indexOf(raspored);
 	}
 	
+	private void raporedIspisNapomena(Integer izabranaGodina, Integer izabraniMjesec, int brojDanaUmjesecu) {
+		Date datum = null;
+		int brojPotrebnihRadnika = 0, brojUpisanihRadnika = 0;
+		int danUTjednu;
+		String napomene = "";
+		BrojRadnikaPoDanima brojRadnikaPoDanima = new BrojRadnikaPoDanima();
+		for(int i=1;i<=brojDanaUmjesecu;i++) {
+			try {
+				datum = formatDatuma.parse(i + "." + izabraniMjesec + "." + izabranaGodina + ".");
+				brojRadnikaPoDanima = brojRadnikaPoDanimaNadjiPoDatumu(datum);
+				if(brojRadnikaPoDanima.isValid()) {
+					danUTjednu = Integer.parseInt(Alati.hrDanUTjednu(datum));
+					brojPotrebnihRadnika = rasporedNadjiBrojRadnikaPoDanuUTjednu(brojRadnikaPoDanima, danUTjednu);
+					brojUpisanihRadnika = rasporedNadjiBrojUpisanihRadnikaPoDatumu(datum);
+					if(brojPotrebnihRadnika!=brojUpisanihRadnika) {
+						napomene += "\n\t" +  Alati.hrDatum(datum)
+								+ ", potreban broj aktivnih radnika je " + brojPotrebnihRadnika 
+								+ ", a ima ih upisano " + brojUpisanihRadnika;
+					}					
+				}else {
+					napomene += "\n\t" + Alati.hrDatum(datum) + " nema upisano koliko radnika treba biti";
+				}
+			} catch (ParseException e) {
+				System.out.println("Problem sa formatom datuma");
+			}
+		}
+		if(napomene.length()>0) {
+			System.out.print("\nNapomene: ");
+			System.out.println(napomene);
+		}		
+	}
+	
+	private int rasporedNadjiBrojUpisanihRadnikaPoDatumu(Date datum) {
+		int brojRadnikaNaDan = 0;
+		for(Raspored r : rasporedi) {
+			if(r.getDatum().equals(datum) && r.getOznakaUnosaURaspored().getSkracenica().equals("R")){
+				brojRadnikaNaDan++;
+			}
+		}
+		return brojRadnikaNaDan;
+	}
+
+	private int rasporedNadjiBrojRadnikaPoDanuUTjednu(BrojRadnikaPoDanima brojRadnikaPoDanima, int danUTjednu) {
+		int brojRadnika = 0;
+		switch(danUTjednu) {
+			case 1 -> {
+				if(brojRadnikaPoDanima.getPonedjeljak()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getPonedjeljak();}
+				}
+			case 2 -> {
+				if(brojRadnikaPoDanima.getUtorak()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getUtorak();}
+				}
+			case 3 ->{
+				if(brojRadnikaPoDanima.getSrijeda()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getSrijeda();}
+				}
+			case 4 -> {
+				if(brojRadnikaPoDanima.getCetvrtak()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getCetvrtak();}
+				}
+			case 5 -> {
+				if(brojRadnikaPoDanima.getPetak()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getPetak();}
+				}
+			case 6 -> {
+				if(brojRadnikaPoDanima.getSubota()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getSubota();}
+				}
+			case 7 -> {
+				if(brojRadnikaPoDanima.getNedjelja()!=null) {
+					brojRadnika = brojRadnikaPoDanima.getNedjelja();}
+				}
+		}
+		return brojRadnika;
+	}
+
 	private Integer rasporedBrojRazmaka(List<Korisnik> aktivniKorisniciZaGodiniIMjesec) {
 		int brojRazmaka;
 		int maxLength;

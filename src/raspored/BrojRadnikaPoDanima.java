@@ -101,4 +101,14 @@ public class BrojRadnikaPoDanima {
 		System.out.println("Broj radnika subotom: " + this.subota);	
 		System.out.println("Broj radnika nedjeljom: " + this.nedjelja);	
 	}	
+	
+	public boolean isValid() {
+	    return this.ponedjeljak != null 
+	    		&& this.utorak != null 
+	    		&& this.srijeda != null
+	    		&& this.cetvrtak != null
+	    		&& this.petak != null
+	    		&& this.subota != null
+	    		&& this.nedjelja != null;
+	  }
 }
