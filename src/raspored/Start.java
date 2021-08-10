@@ -13,7 +13,8 @@ import java.util.Scanner;
 
 public class Start {
 
-	public static final String LINK_POVEZNICE = "https://github.com/mikecivan0/RasporedRada";
+	public static final String LINK_GITHUB = "https://github.com/mikecivan0/RasporedRada";
+	public static final String LINK_ER_DIJAGRAM = "https://github.com/mikecivan0/RasporedRada/blob/main/src/raspored_rada.png";
 	private List<Osoba> osobe;
 	private List<Korisnik> korisnici;
 	private List<Korisnik> aktivniKorisnici;
@@ -22,7 +23,8 @@ public class Start {
 	private List<BrojRadnikaPoDanima> brojeviRadnikaPoDanima;
 	private List<OznakaUnosaURaspored> oznakeUnosaURaspored;
 	private List<Raspored> rasporedi;
-	private boolean valjanost = false;
+	private Korisnik trenutniKorisnik;
+	private boolean valjanost;
 	private String porukaIzboraAkcije = "Unesite neku od gore ponuđenih stavki: ";
 	private String porukaGreskeIzboraAkcije = "Nepostojeći izbor";
 	private String porukaGreskePraznogUnosa = "Unos ne smije biti prazan";
@@ -48,8 +50,8 @@ public class Start {
 		brojeviRadnikaPoDanima = new ArrayList<BrojRadnikaPoDanima>();
 		oznakeUnosaURaspored = new ArrayList<OznakaUnosaURaspored>();
 		rasporedi = new ArrayList<Raspored>();
-		
-		
+		trenutniKorisnik = new Korisnik();
+		valjanost = false;	
 
 		/**
 		 *  početak probnih podataka
@@ -61,10 +63,8 @@ public class Start {
 		osobe.add(new Osoba("Netko1", "treći", "091", "email", "adresa"));
 
 		// probni podaci novog korisnika
-		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 1, true));
-		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));
-		
-		
+		korisnici.add(new Korisnik(osobe.get(0), "ja", "ja", "2-654", 2, true));
+		korisnici.add(new Korisnik(osobe.get(1), "on", "on", "2-6545", 1, true));		
 		
 		// probni podaci redovnog radnog vremena
 		try {
@@ -354,14 +354,19 @@ public class Start {
 		Alati.ispisZaglavlja("GLAVNI IZBORNIK", true);
 		System.out.println("1 ukoliko se želite prijaviti u aplikaciju");
 		System.out.println("2 ukoliko želite pogledati izvorni kod aplikacije na GitHub-u");
+		System.out.println("3 ukoliko želite pogledati ER dijagram baze podataka aplikacije");
 		glavniIzbornikOdabirAkcije();
 	}
 
 	private void glavniIzbornikOdabirAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 3)) {
 			case 1 -> login();
 			case 2 -> {
 				otvoriGithub();
+				glavniIzbornik();
+			}
+			case 3 -> {
+				otvoriErDijagram();
 				glavniIzbornik();
 			}
 		}
@@ -370,7 +375,16 @@ public class Start {
 	private void otvoriGithub() {
 		try {
 			Desktop desktop = java.awt.Desktop.getDesktop();
-			desktop.browse(new URI(LINK_POVEZNICE));
+			desktop.browse(new URI(LINK_GITHUB));
+		} catch (Exception e) {
+			System.out.println("Dogodila se greška. Pokušajte ponovno kasnije.");
+		}
+	}
+	
+	private void otvoriErDijagram() {
+		try {
+			Desktop desktop = java.awt.Desktop.getDesktop();
+			desktop.browse(new URI(LINK_ER_DIJAGRAM));
 		} catch (Exception e) {
 			System.out.println("Dogodila se greška. Pokušajte ponovno kasnije.");
 		}
@@ -389,23 +403,47 @@ public class Start {
 		Alati.ispisZaglavlja("Podaci za prijavu u aplikaciju", true);
 		korisnik.setKorisnickoIme(Alati.ucitajString("korisničko ime: ", porukaGreskePraznogUnosa, 1, 15));
 		korisnik.setLozinka(Alati.ucitajString("lozinka: ", porukaGreskePraznogUnosa, 1, 30));
-		korisniciProvjeraVjerodajnica(korisnik);
+		provjeraVjerodajnica(korisnik);
 	}
 
 	private void logout() {
 		valjanost = false;
 		glavniIzbornik();
 	}
+	
+	private void provjeraVjerodajnica(Korisnik k) {
+		valjanost = false;
+		for (Korisnik korisnik : korisnici) {
+			if (korisnik.getKorisnickoIme().equals(k.getKorisnickoIme()) 
+					&& korisnik.getLozinka().equals(k.getLozinka())
+					&& korisnik.isAktivan()) {
+				valjanost = true;
+				trenutniKorisnik = korisnik;
+				break;
+			}			
+		}
+
+		if (valjanost) {
+			if(trenutniKorisnik.getRazina().equals(1)) {
+				korisnikGlavniIzbornik();
+			}else {
+				adminGlavniIzbornik();
+			}
+		} else {
+			System.out.println("Nevaljana kombinacija korisničkog imena i lozinke");
+			logiranjePonovniPokusaj();
+		}
+	}
 
 	/**
 	 * 
 	 * GLAVNI IZBORNIK KRAJ
 	 * 
-	 * AUTENTIFICIRANI KORISNIK
+	 * ADMIN IZBORNIK
 	 * 
 	 */
 	
-	private void autentificiraniKorisnikGlavniIzbornik() {
+	private void adminGlavniIzbornik() {
 		Alati.ispisZaglavlja("IZBORNIK ZA KORISNIKE", true);
 		System.out.println("1 za rad sa osobama");
 		System.out.println("2 za rad sa korisnicima");
@@ -415,10 +453,10 @@ public class Start {
 		System.out.println("6 za rad sa oznakama unosa u raspored");
 		System.out.println("7 za rad sa rasporedom rada");
 		System.out.println("8 za odjavu i povratak u glavni izbornik");
-		autentificiraniKorisnikIzborGlavneAkcije();
+		adminGlavniIzbornikIzborAkcije();
 	}
 	
-	private void autentificiraniKorisnikIzborGlavneAkcije() {
+	private void adminGlavniIzbornikIzborAkcije() {
 		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 8)) {
 			case 1 -> osobeIzbornik();
 			case 2 -> korisniciIzbornik();
@@ -429,34 +467,37 @@ public class Start {
 			case 7 -> rasporedIzbornik();
 			case 8 -> logout();
 		}
-	}
-	
-	private void korisniciProvjeraVjerodajnica(Korisnik k) {
-		valjanost = false;
-		for (Korisnik korisnik : korisnici) {
-			if (korisnik.getKorisnickoIme().equals(k.getKorisnickoIme()) && korisnik.getLozinka().equals(k.getLozinka())) {
-				valjanost = true;
-				break;
-			}			
-		}
-
-		if (valjanost) {
-			autentificiraniKorisnikGlavniIzbornik();
-		} else {
-			System.out.println("Nevaljana kombinacija korisničkog imena i lozinke");
-			logiranjePonovniPokusaj();
-		}
-	}
-
-	
+	}	
 
 	/**
 	 * 
-	 * AUTENTIFICIRANI KORISNIK KRAJ
+	 * ADMIN IZBORNIK KRAJ
+	 * 
+	 * KORISNIK IZBORNIK
+	 * 
+	 */
+	
+	private void korisnikGlavniIzbornik() {
+		Alati.ispisZaglavlja("IZBORNIK ZA KORISNIKE", true);
+		System.out.println("1 za pregled rasporeda po odabranom mjesecu i godini");
+		System.out.println("2 za odjavu i povratak u glavni izbornik");
+		korisnikGlavniIzbornikIzborAkcije();
+	}
+	
+	private void korisnikGlavniIzbornikIzborAkcije() {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+			case 1 -> rasporedPregledPoMjesecu(false);
+			case 2 -> logout();
+		}
+	}	
+
+	/**
+	 * 
+	 * KORISNIK IZBORNIK KRAJ
 	 * 
 	 * OSOBE
 	 * 
-	 */
+	 */	
 	
 	// GLAVNI IZBORNIK OSOBA
 	private void osobeIzbornik() {
@@ -487,7 +528,7 @@ public class Start {
 				osobeDetalji();
 				osobeIzbornik();
 			}
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}
 
 	}
@@ -782,7 +823,7 @@ public class Start {
 				korisniciDetalji();
 				korisniciIzbornik();
 			}
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}		
 	}
 	
@@ -1099,7 +1140,7 @@ public class Start {
 	private Korisnik korisniciUnosOstalihPodataka(Korisnik korisnik) {		
 		korisnik.setLozinka(Alati.ucitajString("Unesite lozinku novoga korisnika: ", porukaGreskePraznogUnosa, 1, 100));
 		korisnik.setOsobniBroj(Alati.ucitajString("Unesite osobni broj novoga korisnika: ", porukaGreskePraznogUnosa, 1, 10));		
-		korisnik.setRazina(Alati.ucitajBroj("Unesite razinu korisnika (1 ili 2): ", porukaGreskeIzboraAkcije, 1, 2));
+		korisnik.setRazina(Alati.ucitajBroj("Unesite razinu korisnika (1 obični korisnik ili 2 admin): ", porukaGreskeIzboraAkcije, 1, 2));
 		korisnik.setAktivan(Alati.daNe("Hoće li korisnik biti aktivan (da/ne): ", porukaGreskeIzboraAkcije));		
 		return korisnik;
 	}
@@ -1212,7 +1253,7 @@ public class Start {
 				redovnaRadnaVremenaIzbornik();
 			}
 			case 5 -> redovnaRadnaVremenaDetalji();
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}
 		
 	}
@@ -1422,7 +1463,7 @@ public class Start {
 				iznimnaRadnaVremenaIzbornik();
 			}
 			case 5 -> iznimnaRadnaVremenaDetalji();
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}
 		
 	}
@@ -1589,7 +1630,7 @@ public class Start {
 				brojRadnikaPoDanimaIzbornik();
 			}
 			case 5 -> brojRadnikaPoDanimaDetalji();
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}
 		
 	}
@@ -1791,7 +1832,7 @@ public class Start {
 				oznakeUnosaURasporedIzbornik();
 			}
 			case 5 ->  oznakeUnosaURasporedDetalji();
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}		
 	}
 	
@@ -1953,9 +1994,9 @@ public class Start {
 			case 1 -> rasporedNoviUnos();
 			case 2 -> rasporedIzmjena();
 			case 3 -> rasporedBrisanje();
-			case 4 -> rasporedPregledPoMjesecu();
+			case 4 -> rasporedPregledPoMjesecu(true);
 			case 5 -> rasporedPregledPoDanu();
-			case 6 -> autentificiraniKorisnikGlavniIzbornik();
+			case 6 -> adminGlavniIzbornik();
 		}		
 	}
 
@@ -2044,7 +2085,7 @@ public class Start {
 		rasporedIzbornik();
 	}
 
-	private void rasporedPregledPoMjesecu() {
+	private void rasporedPregledPoMjesecu(boolean admin) {
 		int izborGodine, izabranaGodina, izborMjeseca, izabraniMjesec;
 		List<Integer> aktivneGodine = new ArrayList<Integer>();
 		List<Integer> aktivniMjeseci = new ArrayList<Integer>();
@@ -2058,7 +2099,12 @@ public class Start {
 					"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
 			izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
 			rasporedIspisZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
-			rasporedIzbornik();
+			if(admin) {
+				rasporedIzbornik();
+			}else {
+				korisnikGlavniIzbornik();
+			}
+			
 		}else {
 			System.out.println(porukaGreskeNemaZapisaURasporedu);
 		}	
