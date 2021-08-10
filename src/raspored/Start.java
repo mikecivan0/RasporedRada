@@ -480,14 +480,16 @@ public class Start {
 	private void korisnikGlavniIzbornik() {
 		Alati.ispisZaglavlja("IZBORNIK ZA KORISNIKE", true);
 		System.out.println("1 za pregled rasporeda po odabranom mjesecu i godini");
-		System.out.println("2 za odjavu i povratak u glavni izbornik");
+		System.out.println("2 za izmjenu svojih pristupnih podataka");
+		System.out.println("3 za odjavu i povratak u glavni izbornik");
 		korisnikGlavniIzbornikIzborAkcije();
 	}
 	
 	private void korisnikGlavniIzbornikIzborAkcije() {
-		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 2)) {
+		switch (Alati.ucitajBroj(porukaIzboraAkcije, porukaGreskeIzboraAkcije, 1, 3)) {
 			case 1 -> rasporedPregledPoMjesecu(false);
-			case 2 -> logout();
+			case 2 -> korisniciIzmjenaPodataka(trenutniKorisnik);
+			case 3 -> logout();
 		}
 	}	
 
@@ -975,6 +977,31 @@ public class Start {
 			}
 			korisniciAktualiziranjeListeAktivnihKorisnika();
 			korisniciIzbornik();
+			break;
+		}		
+	}
+	
+	// izmjena pristupnih podataka korisnika sa razinom 1
+	private void korisniciIzmjenaPodataka(Korisnik korisnik) {
+		String korisnickoIme;
+		String loznika;
+		int indeks;
+		while(true) {
+			korisnickoIme = Alati.ucitajString("Unesite novo korisničko ime: ", porukaGreskePraznogUnosa, 1, 50);
+			if(!korisniciProvjeriPostojanjeKorisnickogImena(korisnickoIme, korisnik)) {
+				korisnik.setKorisnickoIme(korisnickoIme);
+				loznika = Alati.ucitajString("Unesite novu lozinku: ", porukaGreskePraznogUnosa, 1, 50);
+				korisnik.setLozinka(loznika);
+				indeks = korisniciIndeksKorisnikaIzIzvorneListe(korisnik);
+				korisnici.set(indeks, korisnik);
+				trenutniKorisnik = korisnik;
+				System.out.println("\nIzmjene su spremljene");
+			}else {
+				if(Alati.daNe("Korisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
+					continue;
+				}
+			}
+			korisnikGlavniIzbornik();
 			break;
 		}		
 	}

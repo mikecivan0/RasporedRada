@@ -15,11 +15,11 @@ Rad sa aplikacijom je podijeljen na javni i korisnički dio. Korisnički dio ima
 2. Korsninički dio kojem pristupaju korisnici sa razinom ovlasti 1 - potebna je prijava u aplikaciju
 	U ovom dijelu je moguće:
 	- pregled plana rada po određenom mjesecu i godini
+	- izmijeniti svoje pristupne podatke (vrši se provjera je li je novo korisničko ime zauzeto)
 
 3. Administratorski dio kojem pristupaju korisnici sa razinom ovlasti 2 - potebna je prijava u aplikaciju
-	U ovom dijelu je moguće:
-	
-	
+
+	U ovom dijelu je moguće:	
 	- rad sa osobama
 		- podaci koje je moguće unositi: 
 			- ime
@@ -271,9 +271,5 @@ Rad sa aplikacijom je podijeljen na javni i korisnički dio. Korisnički dio ima
 			- vrši se provjera radnog vremena za taj datum u popisu redovnih radnih vremena
 			- vrši se provjera radnog vremena za taj datum u popisu izvanrednih radnih vremena
 			- ispisuje se od kada do kada se radi, koliko je trajanje pauze i tko sve radi taj dan
-			
-			
-			
-			
 			
 			
