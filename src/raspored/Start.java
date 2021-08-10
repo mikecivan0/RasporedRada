@@ -444,7 +444,7 @@ public class Start {
 	 */
 	
 	private void adminGlavniIzbornik() {
-		Alati.ispisZaglavlja("IZBORNIK ZA KORISNIKE", true);
+		Alati.ispisZaglavlja("IZBORNIK ZA ADMINISTRATORE", true);
 		System.out.println("1 za rad sa osobama");
 		System.out.println("2 za rad sa korisnicima");
 		System.out.println("3 za rad sa redovnim radnim vremenom");
