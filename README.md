@@ -1,4 +1,4 @@
-# RasporedRada
+# Raspored rada
 Završni rad za Edunovu
 
 Konzolna aplikacija za vođenje rasporeda rada

@@ -1,4 +1,4 @@
-package raspored;
+package mikec.rasporedrada;
 
 import java.util.Date;
 
