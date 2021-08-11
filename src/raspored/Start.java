@@ -2031,26 +2031,39 @@ public class Start {
 		int izbor,indeksKorisnika;
 		Date datum;
 		Korisnik odabraniKorisnik = new Korisnik();
-		Raspored unos = new Raspored();
+		Raspored unos;
+		int godina, mjesec;
 		if(rasporedPostojanjeAktivnihKorisnika() && rasporedPostojanjeOznakaUnosa()) {			
 			korisniciIzlistanjeAktivnihKorisnika("Aktivni korisnici koji se nalaze u bazi", aktivniKorisnici);
 			izbor = Alati.ucitajBroj("Unesite broj korisnika za kojeg želite stvoriti novi unos u rasporedu: ", 
 									"Unos ne smije biti prazan", 1, aktivniKorisnici.size())-1;
 			indeksKorisnika = korisniciIndeksKorisnikaIzIzvorneListe(korisnici.get(izbor));
 			odabraniKorisnik = korisnici.get(indeksKorisnika);
-			datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
-			if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum)) {				
-				unos.setKorisnik(odabraniKorisnik);
-				unos.setDatum(datum);
-				unos = rasporedUnosPodataka(unos);
-				rasporedi.add(unos);
-				System.out.println("\nZapis je unešen u  raspored");
-			}else {
-				if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
-						porukaGreskeDaNe)) {
-					rasporedNoviUnos();				
+			while(true) {
+				unos = new Raspored();
+				datum = Alati.ucitajDatum("Unesite datum za koji želite stvoriti novi unos u rasporedu: ");
+				mjesec = Integer.parseInt(Alati.hrMjesec(datum));
+				godina = Integer.parseInt(Alati.hrGodina(datum));				
+				if(rasporedProvjeriPostojanjeUnosa(odabraniKorisnik, datum)) {				
+					unos.setKorisnik(odabraniKorisnik);
+					unos.setDatum(datum);
+					unos = rasporedUnosPodataka(unos);
+					rasporedi.add(unos);
+					System.out.println("\nZapis je unešen u  raspored");					
+					System.out.println("\nRaspored trenutno izgleda ovako:");
+					rasporedIspisZaGodinuIMjesec(godina, mjesec,false);
+					if(Alati.daNe("\nŽelite li unijeti još jedan zapis u raspored za ovoga korisnika? (da/ne): ", porukaGreskeDaNe)) {
+						continue;
+					}else {
+						break;
+					}
+				}else {
+					if(Alati.daNe("Korisnik je već unešen u raspored sa tim datumom. Želite li pokušati opet? (da/ne): ", 
+							porukaGreskeDaNe)) {
+						rasporedNoviUnos();				
+					}
 				}
-			}
+			}			
 		}		
 		rasporedIzbornik();
 	}	
@@ -2125,7 +2138,7 @@ public class Start {
 			izborMjeseca = Alati.ucitajBroj("Unesite broj ispreg mjeseca za koji želite pogledati raposred: ", 
 					"Unos ne smije biti prazan", 1, aktivniMjeseci.size())-1;
 			izabraniMjesec = aktivniMjeseci.get(izborMjeseca);
-			rasporedIspisZaGodinuIMjesec(izabranaGodina,izabraniMjesec);
+			rasporedIspisZaGodinuIMjesec(izabranaGodina,izabraniMjesec,true);
 			if(admin) {
 				rasporedIzbornik();
 			}else {
@@ -2137,7 +2150,7 @@ public class Start {
 		}	
 	}
 
-	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec) {		
+	private void rasporedIspisZaGodinuIMjesec(Integer izabranaGodina, Integer izabraniMjesec, boolean ispisNapomena) {		
 		List<Raspored> rasporedZaGodinuIMjesec = new ArrayList<Raspored>();
 		List<Korisnik> korisniciZaGodinuIMjesec = new ArrayList<Korisnik>();
 		YearMonth obj;
@@ -2190,7 +2203,9 @@ public class Start {
 			System.out.println();
 		}
 		System.out.println("\n*rad bez pauze");
-		rasporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
+		if(ispisNapomena) {
+			rasporedIspisNapomena(izabranaGodina,izabraniMjesec,brojDanaUmjesecu);
+		}		
 	}
 	
 	private void rasporedPregledPoDanu() {

@@ -237,6 +237,8 @@ Rad sa aplikacijom je podijeljen na javni i korisnički dio. Korisnički dio ima
 		Ovdje je moguće:
 		- unos novog zapisa
 			- vrši se provjera postojanja zapisa sa željenim korisnikom na željeni datum
+			- nakon unosa zapisa u raspored prikazuje se plan rada za mjesec i godinu vezano za prethodno unešeni zapis, ali bez napomena
+			- nudi se mogućnost ponovnog unosa zapisa u raspored za istoga korisnika
 		- izmjena zapisa
 			- ukoliko nema niti jednog zapisa u rasporedu dobija se poruka
 			- vrši se provjera postojanja zapisa sa željenim korisnikom na željeni datum
