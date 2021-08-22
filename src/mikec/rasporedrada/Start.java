@@ -108,29 +108,7 @@ public class Start {
 			System.out.println("Nesto je pošlo po zlu sa unosom redovnog radnog vremena");
 		}
 		
-		// probni podaci iznimnog radnog vremena
-		try {
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("1.1.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Nova Godina 2020.",
-					30));
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("1.3.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Neki blagdan 2020.",
-					30));
-			iznimnaRadnaVremena.add(new IznimnoRadnoVrijeme(
-					formatDatuma.parse("1.5.2020."),
-					formatVremena.parse("02:00"),
-					formatVremena.parse("04:00"),
-					"Praznik rada 2020.",
-					30));
-		} catch (ParseException e) {
-			System.out.println("Nesto je pošlo po zlu unosom iznimnog radnog vremena");
-		}
+		
 		
 		// probni podaci broja radnika po danima u tjednu
 		try {
@@ -860,7 +838,7 @@ public class Start {
 						korisnik.setKorisnickoIme(korisnickoIme);
 						korisnik = korisniciUnosOstalihPodataka(korisnik);
 						korisnici.add(korisnik);
-						System.out.println("\nNova osoba je unešena i postavljena kao novi korisnik");
+						System.out.println("\nOsoba je postavljena kao novi korisnik");
 					}else {
 						if(Alati.daNe("\nKorisničko ime je zauzeto. Želite li pokušati ponovno? (da/ne): ", porukaGreskeDaNe)) {
 							continue;
