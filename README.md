@@ -1,4 +1,4 @@
-# Raspored rada
+# Raspored rada console
 Konzolna aplikacija
 
 Konzolna aplikacija za vođenje rasporeda rada
