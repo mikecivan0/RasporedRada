@@ -1,5 +1,5 @@
 # Raspored rada
-Završni rad za Edunovu
+Konzolna aplikacija
 
 Konzolna aplikacija za vođenje rasporeda rada
 
